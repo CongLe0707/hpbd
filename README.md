@@ -2,6 +2,8 @@
 
 Dự án website chúc mừng sinh nhật được nâng cấp toàn diện, tráng lệ và lãng mạn dành riêng cho **Bảo Trân**, lấy cảm hứng từ hoa hồng Sophia vương giả với tông hồng phấn, trắng kem và mạ vàng ấm áp.
 
+🔗 **Link xem trực tiếp**: **[https://congle0707.github.io/hpbd/](https://congle0707.github.io/hpbd/)**
+
 ---
 
 ## 🌹 Cấu trúc thư mục
