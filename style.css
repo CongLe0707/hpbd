@@ -1,6 +1,7 @@
 /* ==========================================================================
    CHÚC MỪNG SINH NHẬT - STYLESHEET HOÀNG GIA & LÃNG MẠN
    Chủ đề: Hoa hồng Sophia, tông hồng phấn và trắng kem lộng lẫy
+   Tối ưu hóa tuyệt đối cho cả Điện Thoại (iOS/Android) và Máy Tính
    ========================================================================== */
 
 :root {
@@ -66,14 +67,37 @@ body {
   font-family: var(--font-sans);
   color: var(--text-primary);
   background-color: var(--cream-soft);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --------------------------------------------------------------------------
+   Ảnh Nền Cố Định (Khắc phục triệt để lỗi fixed background trên iOS Safari)
+   -------------------------------------------------------------------------- */
+.site-background {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 0;
   background-image: url('assets/sophia-rose-bg.jpg');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  pointer-events: none;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  transition: background-image 0.4s ease;
+}
+
+@media (max-width: 768px) {
+  .site-background {
+    background-image: url('assets/sophia-rose-bg-mobile.jpg');
+    background-position: center center;
+    background-size: cover;
+  }
 }
 
 /* Lớp phủ ánh sáng nền khuếch tán tạo chiều sâu điện ảnh */
@@ -84,9 +108,9 @@ body {
   z-index: 1;
   background: radial-gradient(
     ellipse at center,
-    rgba(255, 253, 249, 0.72) 0%,
-    rgba(255, 248, 243, 0.58) 55%,
-    rgba(251, 235, 238, 0.3) 100%
+    rgba(255, 253, 249, 0.55) 0%,
+    rgba(255, 248, 243, 0.35) 60%,
+    rgba(251, 235, 238, 0.15) 100%
   );
 }
 
@@ -97,7 +121,7 @@ body {
   width: 70vw;
   height: 70vh;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(254, 222, 230, 0.45) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(254, 222, 230, 0.35) 0%, transparent 70%);
   filter: blur(50px);
   pointer-events: none;
   z-index: 1;
@@ -136,6 +160,8 @@ body {
   z-index: 5;
   width: 100%;
   max-width: 650px;
+  min-height: 100vh;
+  min-height: 100dvh;
   padding: 30px 18px;
   display: flex;
   justify-content: center;
@@ -151,7 +177,7 @@ body {
   border: var(--card-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--card-shadow);
-  padding: 44px 36px;
+  padding: 42px 36px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -249,7 +275,7 @@ body {
    -------------------------------------------------------------------------- */
 .gift-box-wrapper {
   position: relative;
-  margin: 18px 0 32px;
+  margin: 18px 0 30px;
   cursor: pointer;
   perspective: 800px;
 }
@@ -323,7 +349,6 @@ body {
   transition: transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
 }
 
-/* Hiệu ứng rung mở hộp quà bùng nổ */
 .gift-box.opening {
   animation: boxRumble 0.7s ease-in-out forwards !important;
 }
@@ -552,7 +577,7 @@ body {
   background: linear-gradient(135deg, #e67d93 0%, #cb5270 100%);
   color: #ffffff;
   box-shadow: 0 10px 26px rgba(203, 82, 112, 0.38);
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .btn-candle:hover {
@@ -591,7 +616,7 @@ body {
    GIAI ĐOẠN 2: Lời Chúc, Bó Hoa & Bánh Sinh Nhật
    -------------------------------------------------------------------------- */
 .wishes-header {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .sub-badge {
@@ -620,7 +645,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin: 12px auto 0;
+  margin: 10px auto 0;
   width: 80%;
 }
 
@@ -649,7 +674,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 12px 0 24px;
+  margin: 10px 0 20px;
   cursor: pointer;
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -679,7 +704,7 @@ body {
 
 .bouquet-img {
   position: relative;
-  width: 240px;
+  width: 230px;
   max-width: 80%;
   height: auto;
   object-fit: contain;
@@ -694,12 +719,12 @@ body {
 }
 
 .bouquet-caption {
-  margin-top: 8px;
+  margin-top: 6px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 4px 14px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(235, 185, 198, 0.5);
   border-radius: 20px;
   font-family: var(--font-sans);
@@ -715,11 +740,11 @@ body {
    ========================================================================== */
 .wishes-content-box {
   position: relative;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.78);
   border: 1px dashed rgba(226, 115, 141, 0.45);
   border-radius: var(--radius-md);
-  padding: 24px 32px;
-  margin: 0 auto 28px;
+  padding: 22px 30px;
+  margin: 0 auto 24px;
   width: 100%;
   box-shadow: inset 0 2px 10px rgba(226, 115, 141, 0.06),
               0 4px 16px rgba(226, 115, 141, 0.08);
@@ -772,7 +797,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   cursor: pointer;
 }
 
@@ -780,7 +805,7 @@ body {
 .candle {
   position: relative;
   width: 14px;
-  height: 42px;
+  height: 40px;
   margin-bottom: -4px;
   z-index: 4;
 }
@@ -906,14 +931,14 @@ body {
 
 .tier-top {
   width: 148px;
-  height: 54px;
+  height: 52px;
   z-index: 2;
   margin-bottom: -6px;
 }
 
 .tier-bottom {
   width: 200px;
-  height: 62px;
+  height: 60px;
   z-index: 1;
 }
 
@@ -976,7 +1001,7 @@ body {
 }
 
 .cake-plate {
-  width: 240px;
+  width: 236px;
   height: 14px;
   background: linear-gradient(90deg, #eaeaea, #ffffff 50%, #e2e2e2);
   border-radius: 20px;
@@ -986,8 +1011,8 @@ body {
 
 /* Lời chúc sau khi thổi nến - Thiết kế Hoàng Gia */
 .post-blow-message {
-  margin-top: 24px;
-  padding: 18px 26px;
+  margin-top: 20px;
+  padding: 16px 24px;
   background: linear-gradient(135deg, rgba(254, 243, 246, 0.96), rgba(255, 252, 248, 0.96));
   border-radius: var(--radius-md);
   border: 1.5px solid var(--rose-blush);
@@ -1043,92 +1068,234 @@ body {
   display: none !important;
 }
 
-/* --------------------------------------------------------------------------
-   Responsive & Mobile Friendly
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   TỐI ƯU HÓA HOÀNG GIA CHO ĐIỆN THOẠI (MOBILE OPTIMIZATIONS)
+   Phù hợp tuyệt đối với iPhone & Android, bố cục thanh thoát, không cuộn tràn
+   ========================================================================== */
 @media (max-width: 640px) {
   .main-wrapper {
-    padding: 18px 12px;
+    padding: 12px 14px;
+    align-items: center;
   }
 
+  /* Thẻ thiệp chúc mừng thon gọn, để lộ viền hoa hồng 4 góc lãng mạn */
   .card-container {
-    padding: 34px 18px;
-    border-radius: 24px;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    padding: 24px 18px 20px;
+    border-radius: 22px;
+    background: rgba(255, 253, 249, 0.86);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 14px 40px rgba(184, 74, 101, 0.2),
+                0 4px 12px rgba(0, 0, 0, 0.04);
   }
 
-  .birthday-title {
-    font-size: 1.8rem;
+  .card-corner {
+    width: 16px;
+    height: 16px;
   }
 
-  .bouquet-img {
-    width: 200px;
+  .card-corner.top-left { top: 10px; left: 10px; }
+  .card-corner.top-right { top: 10px; right: 10px; }
+  .card-corner.bottom-left { bottom: 10px; left: 10px; }
+  .card-corner.bottom-right { bottom: 10px; right: 10px; }
+
+  /* Giai đoạn 1: Hộp quà tinh gọn, vừa khít khung nhìn điện thoại */
+  .stage-tag {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+
+  .gift-box-wrapper {
+    margin: 12px 0 20px;
+  }
+
+  .gift-box {
+    width: 110px;
+    height: 102px;
+  }
+
+  .gift-lid {
+    width: 124px;
+    height: 30px;
+  }
+
+  .ribbon-bow {
+    top: -20px;
+    width: 50px;
+    height: 24px;
+  }
+
+  .bow-loop {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bow-center {
+    width: 11px;
+    height: 11px;
+    top: 7px;
+  }
+
+  .gift-body {
+    width: 106px;
+    height: 72px;
+  }
+
+  .ribbon-vertical { width: 20px; }
+  .ribbon-horizontal { height: 16px; }
+
+  .gift-glow {
+    width: 135px;
+    height: 135px;
+  }
+
+  .gift-aura {
+    width: 165px;
+    height: 165px;
   }
 
   .gift-prompt {
-    font-size: 1.2rem;
-  }
-
-  .wishes-content-box {
-    padding: 20px 16px;
-    margin-bottom: 22px;
-  }
-
-  .wishes-text {
-    font-size: 1.12rem;
-    line-height: 1.8;
-  }
-
-  .quote-mark {
-    font-size: 3rem;
-  }
-
-  .quote-mark.open {
-    top: 2px;
-    left: 6px;
-  }
-
-  .quote-mark.close {
-    bottom: -12px;
-    right: 6px;
-  }
-
-  .tier-top {
-    width: 130px;
-    height: 48px;
-  }
-
-  .tier-bottom {
-    width: 175px;
-    height: 54px;
-  }
-
-  .cake-plate {
-    width: 205px;
+    font-size: 1.18rem;
+    margin-bottom: 20px;
   }
 
   .btn {
-    padding: 13px 28px;
-    font-size: 1rem;
+    padding: 12px 28px;
+    font-size: 0.98rem;
     width: 100%;
-    max-width: 300px;
+    max-width: 250px;
+    border-radius: 30px;
   }
 
-  .blessing-text {
-    font-size: 1.15rem;
+  /* Giai đoạn 2: Lời chúc & Bó hoa thanh nhã trên điện thoại */
+  .wishes-header {
+    margin-bottom: 8px;
   }
-}
 
-@media (max-width: 380px) {
+  .sub-badge {
+    font-size: 1.35rem;
+    margin-bottom: 0px;
+  }
+
   .birthday-title {
-    font-size: 1.55rem;
+    font-size: 1.45rem;
+    line-height: 1.25;
+  }
+
+  .floral-divider {
+    margin: 6px auto 10px;
+    width: 85%;
+    gap: 10px;
+  }
+
+  .divider-flower {
+    font-size: 1rem;
+  }
+
+  /* Bó hoa Sophia tỷ lệ chuẩn mobile */
+  .bouquet-showcase {
+    margin: 4px 0 12px;
   }
 
   .bouquet-img {
-    width: 170px;
+    width: 125px;
+    max-width: 125px;
+  }
+
+  .bouquet-halo {
+    width: 130px;
+    height: 130px;
+  }
+
+  .bouquet-caption {
+    font-size: 0.74rem;
+    padding: 2px 10px;
+    margin-top: 4px;
+  }
+
+  /* Hộp lời chúc thanh thoát, vừa mắt */
+  .wishes-content-box {
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    border-radius: 14px;
   }
 
   .wishes-text {
-    font-size: 1.02rem;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .quote-mark {
+    font-size: 2.2rem;
+  }
+
+  .quote-mark.open {
+    top: 0px;
+    left: 4px;
+  }
+
+  .quote-mark.close {
+    bottom: -10px;
+    right: 6px;
+  }
+
+  /* Bánh sinh nhật & Nến tỷ lệ cân đối */
+  .cake-wrapper {
+    margin-bottom: 10px;
+    transform: scale(0.8);
+    transform-origin: center bottom;
+  }
+
+  .btn-candle {
+    margin-top: 8px;
+    padding: 11px 22px;
+    font-size: 0.92rem;
+  }
+
+  .post-blow-message {
+    margin-top: 10px;
+    padding: 12px 16px;
+    border-radius: 14px;
+  }
+
+  .blessing-badge {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+
+  .blessing-text {
+    font-size: 1.05rem;
+  }
+}
+
+/* Màn hình điện thoại siêu nhỏ (iPhone SE, màn hình < 360px) */
+@media (max-width: 360px) {
+  .card-container {
+    max-width: 310px;
+    padding: 20px 14px 16px;
+  }
+
+  .birthday-title {
+    font-size: 1.3rem;
+  }
+
+  .bouquet-img {
+    width: 105px;
+    max-width: 105px;
+  }
+
+  .wishes-text {
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .cake-wrapper {
+    transform: scale(0.72);
   }
 }
 

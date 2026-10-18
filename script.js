@@ -17,8 +17,9 @@ const BIRTHDAY_CONFIG = {
   // 4. Thông điệp sau khi thổi nến
   postBlowWish: "Mong mọi điều tốt đẹp sẽ đến với bạn! 🌷",
 
-  // 5. Đường dẫn ảnh nền hoa hồng Sophia & Bó hoa
+  // 5. Đường dẫn ảnh nền hoa hồng Sophia (máy tính & điện thoại riêng biệt)
   bgImage: "assets/sophia-rose-bg.jpg",
+  bgImageMobile: "assets/sophia-rose-bg-mobile.jpg",
   bouquetImage: "assets/sophia-bouquet.png",
 
   // 6. Cấu hình hiệu ứng cánh hoa rơi
@@ -41,10 +42,17 @@ const BIRTHDAY_CONFIG = {
    KHỞI TẠO VÀ RENDER NỘI DUNG TỪ CONFIG
    ============================================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Áp dụng ảnh nền từ cấu hình nếu có
-  if (BIRTHDAY_CONFIG.bgImage) {
-    document.body.style.backgroundImage = `url('${BIRTHDAY_CONFIG.bgImage}')`;
-  }
+  // Áp dụng ảnh nền chuyên dụng theo kích cỡ màn hình
+  const siteBg = document.getElementById('site-background');
+  const updateBg = () => {
+    if (siteBg) {
+      const isMobile = window.innerWidth <= 768;
+      const bgUrl = isMobile && BIRTHDAY_CONFIG.bgImageMobile ? BIRTHDAY_CONFIG.bgImageMobile : BIRTHDAY_CONFIG.bgImage;
+      siteBg.style.backgroundImage = `url('${bgUrl}')`;
+    }
+  };
+  updateBg();
+  window.addEventListener('resize', updateBg);
 
   // Cập nhật tiêu đề trang và các đoạn văn bản
   const titleEl = document.querySelector('#birthday-title .title-text') || document.getElementById('birthday-title');
