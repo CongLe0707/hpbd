@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chúc Mừng Sinh Nhật Bảo Trân 🌸</title>
+  <meta name="description" content="Trang web chúc mừng sinh nhật lãng mạn, tinh tế dành tặng Bảo Trân">
+
+  <!-- Google Fonts hỗ trợ Tiếng Việt đầy đủ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas hiệu ứng cánh hoa hồng Sophia rơi nhẹ nhàng -->
+  <canvas id="petal-canvas" aria-hidden="true"></canvas>
+
+  <!-- Canvas vệt sao lấp lánh khi di chuột hoặc chạm màn hình -->
+  <canvas id="stardust-canvas" aria-hidden="true"></canvas>
+
+  <!-- Canvas pháo hoa & confetti hoành tráng khi mở quà và thổi nến -->
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <!-- Lớp phủ ánh sáng nền tạo sự thoáng và làm nổi bật nội dung -->
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <!-- Container chính -->
+  <main class="main-wrapper">
+    <!-- Thẻ chứa nội dung chính với phong cách Glassmorphism hoàng gia tinh tế -->
+    <div class="card-container" id="card-container">
+      
+      <!-- Góc hoa văn vàng kim trang trí cổ điển -->
+      <div class="card-corner top-left" aria-hidden="true"></div>
+      <div class="card-corner top-right" aria-hidden="true"></div>
+      <div class="card-corner bottom-left" aria-hidden="true"></div>
+      <div class="card-corner bottom-right" aria-hidden="true"></div>
+
+      <!-- ===================================================================
+           GIAI ĐOẠN 1: Hộp Quà Sinh Nhật Sang Trọng
+           =================================================================== -->
+      <section id="gift-stage" class="stage active" aria-label="Món quà bất ngờ">
+        <div class="stage-tag">✦ A Special Surprise ✦</div>
+        
+        <div class="gift-box-wrapper" id="gift-box-wrapper" title="Bấm vào để mở quà">
+          <div class="gift-glow" aria-hidden="true"></div>
+          <div class="gift-aura" aria-hidden="true"></div>
+          
+          <!-- Hộp quà 3D với ruy băng vàng kim & nơ lụa hồng phấn -->
+          <div class="gift-box" id="gift-box" role="button" tabindex="0" aria-label="Hộp quà sinh nhật">
+            <!-- Nắp hộp quà -->
+            <div class="gift-lid" id="gift-lid">
+              <div class="ribbon-bow">
+                <span class="bow-loop left"></span>
+                <span class="bow-loop right"></span>
+                <span class="bow-center"></span>
+                <span class="ribbon-tail left"></span>
+                <span class="ribbon-tail right"></span>
+              </div>
+              <div class="lid-top"></div>
+            </div>
+            
+            <!-- Thân hộp quà -->
+            <div class="gift-body">
+              <div class="ribbon-vertical"></div>
+              <div class="ribbon-horizontal"></div>
+              <div class="gift-shimmer" aria-hidden="true"></div>
+              
+              <!-- Ánh sáng lấp lánh quanh hộp quà -->
+              <div class="sparkles-container" aria-hidden="true">
+                <span class="sparkle s1">✨</span>
+                <span class="sparkle s2">🌸</span>
+                <span class="sparkle s3">✨</span>
+                <span class="sparkle s4">💖</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="gift-prompt" id="gift-prompt">Có một món quà dành cho bạn!</p>
+
+        <button type="button" class="btn btn-primary" id="btn-open-gift" aria-label="Mở hộp quà">
+          <span class="btn-icon">🎁</span>
+          <span class="btn-text">Mở quà</span>
+        </button>
+      </section>
+
+      <!-- ===================================================================
+           GIAI ĐOẠN 2: Lời Chúc, Bó Hoa & Bánh Sinh Nhật
+           =================================================================== -->
+      <section id="wishes-stage" class="stage hidden" aria-label="Lời chúc sinh nhật">
+        
+        <!-- Tiêu đề chúc mừng sinh nhật dát vàng hồng -->
+        <header class="wishes-header">
+          <span class="sub-badge">Happy Birthday</span>
+          <h1 class="birthday-title" id="birthday-title">
+            <span class="title-text">Chúc mừng sinh nhật Bảo Trân!</span>
+          </h1>
+          <div class="floral-divider" aria-hidden="true">
+            <span class="divider-line"></span>
+            <span class="divider-flower">🌸</span>
+            <span class="divider-line"></span>
+          </div>
+        </header>
+
+        <!-- Bó hoa hồng Sophia "Bó hoa em thích" bay bổng -->
+        <div class="bouquet-showcase" id="bouquet-showcase" title="Chạm vào bó hoa để nhận thêm điều ước">
+          <div class="bouquet-halo" aria-hidden="true"></div>
+          <img src="assets/sophia-bouquet.png" 
+               alt="Bó hoa hồng Sophia tuyệt đẹp" 
+               class="bouquet-img" 
+               id="bouquet-img"
+               loading="eager"
+               onerror="this.src='assets/sophia-bouquet.jpg'">
+          <div class="bouquet-caption">
+            <span class="caption-flower">💐</span>
+            <span class="caption-text">Bó hoa hồng Sophia dành riêng cho em</span>
+          </div>
+        </div>
+
+        <!-- Khung lời chúc trang trọng bằng văn bản thật -->
+        <article class="wishes-content-box">
+          <div class="quote-mark open" aria-hidden="true">“</div>
+          <div class="wishes-text" id="wishes-text">
+            Anh không đến đây 1 mình,<br>
+            anh đến đây với bó hoa mà em thích,<br>
+            chúc em xin nhật vui vẻ
+          </div>
+          <div class="quote-mark close" aria-hidden="true">”</div>
+        </article>
+
+        <!-- Khu vực bánh sinh nhật hoàng gia và ngọn nến lung linh -->
+        <div class="cake-section" id="cake-section">
+          <div class="cake-wrapper" id="cake-interactive-wrapper" title="Bấm vào ngọn nến để thổi tắt">
+            <!-- Nến sinh nhật với ngọn lửa chuyển động chân thực -->
+            <div class="candle" id="candle" aria-label="Nến sinh nhật">
+              <div class="flame" id="flame">
+                <div class="flame-inner"></div>
+                <div class="flame-glow"></div>
+              </div>
+              <div class="smoke" id="smoke" aria-hidden="true"></div>
+              <div class="wick"></div>
+              <div class="candle-stick"></div>
+            </div>
+
+            <!-- Bánh sinh nhật phong cách hoa hồng Sophia kem pastel -->
+            <div class="cake">
+              <div class="cake-tier tier-top">
+                <div class="frosting-drops">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="cream-roses">
+                  <span class="cream-rose">🌹</span>
+                  <span class="cream-rose">🌸</span>
+                  <span class="cream-rose">🌹</span>
+                </div>
+              </div>
+              <div class="cake-tier tier-bottom">
+                <div class="frosting-pearls">
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="cake-gold-ribbon"></div>
+              </div>
+              <div class="cake-plate"></div>
+            </div>
+          </div>
+
+          <!-- Thông điệp sau khi nến đã thổi tắt -->
+          <div class="post-blow-message hidden" id="post-blow-message" role="status" aria-live="polite">
+            <div class="blessing-badge">✨ Phép Màu Đã Bắt Đầu ✨</div>
+            <p class="blessing-text" id="blessing-text">Mong mọi điều tốt đẹp sẽ đến với bạn! 🌷</p>
+          </div>
+
+          <!-- Nhóm nút hành động -->
+          <div class="action-buttons">
+            <button type="button" class="btn btn-candle" id="btn-blow-candle" aria-label="Ước một điều và thổi nến">
+              <span class="btn-icon">🕯️</span>
+              <span class="btn-text">Ước một điều và thổi nến</span>
+            </button>
+
+            <button type="button" class="btn btn-secondary hidden" id="btn-replay" aria-label="Xem lại từ đầu">
+              <span class="btn-icon">↺</span>
+              <span class="btn-text">Xem lại</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
