@@ -1,6 +1,6 @@
 # Website Chúc Mừng Sinh Nhật Hoàng Gia & Lãng Mạn 🌸
 
-Dự án website chúc mừng sinh nhật được nâng cấp toàn diện, tráng lệ và lãng mạn dành riêng cho **Bảo Trân**, lấy cảm hứng từ hoa hồng Sophia vương giả với tông hồng phấn, trắng kem và mạ vàng ấm áp.
+Dự án website chúc mừng sinh nhật được nâng cấp toàn diện, tráng lệ và lãng mạn dành riêng cho **người ấy**, lấy cảm hứng từ hoa hồng Sophia vương giả với tông hồng phấn, trắng kem và mạ vàng ấm áp.
 
 🔗 **Link xem trực tiếp**: **[https://congle0707.github.io/hpbd/](https://congle0707.github.io/hpbd/)**
 
@@ -16,7 +16,9 @@ hpbd/
 ├── assets/
 │   ├── sophia-rose-bg.jpg  # Hình nền hoa hồng Sophia viền 4 góc tinh xảo
 │   ├── sophia-bouquet.png  # Bó hoa hồng Sophia tách nền trong suốt cực đẹp
-│   └── sophia-bouquet.jpg  # Bản dự phòng chất lượng cao
+│   ├── sophia-rose-pink.png# Đóa hoa hồng Sophia màu nước hồng phấn
+│   ├── sophia-rose-cream.png# Đóa hoa hồng Sophia màu nước vàng kem
+│   └── sophia-rose-bud.png # Nụ hoa hồng Sophia e ấp
 └── README.md               # Tài liệu hướng dẫn chi tiết
 ```
 
@@ -48,10 +50,10 @@ hpbd/
    - Trên màn hình máy tính, thẻ nội dung tương tác nhẹ theo vị trí chuột, tạo cảm giác thẻ thiệp chúc mừng cao cấp có chiều sâu thật.
 
 7. **Vườn hoa hồng Sophia diệu kỳ (Enchanted Sophia Rose Meadow)**:
-   - Đóa hoa hồng Sophia trung tâm đung đưa lắc lư tự nhiên theo làn gió với cánh hoa đa tầng, nhụy vàng kim lấp lánh và huy hiệu mời chạm.
-   - Khi bấm vào đóa hoa, hàng chục đóa hoa hồng Sophia thuộc 5 dáng hoa hoàng gia khác nhau (*Grand Rose, Deep Cup, Quartered Rosette, Tender Bud, Classic Spiral*) cùng thi nhau chồi lên từ đáy màn hình vươn cao với các nhánh lá răng cưa và bung cánh rực rỡ.
+   - Đóa hoa hồng Sophia màu nước trung tâm đung đưa lắc lư tự nhiên theo làn gió với cánh hoa đa tầng, nhụy vàng kim lấp lánh và huy hiệu mời chạm.
+   - Chỉ khi người dùng tự tay bấm vào đóa hoa ở giữa, hàng chục đóa hoa hồng Sophia màu nước chuẩn mẫu (*Hồng phấn, Vàng kem, Nụ hoa e ấp*) mới đồng loạt chồi lên từ đáy màn hình vươn cao và bung cánh rực rỡ.
    - Hiệu ứng âm thanh chuông ngân diệu kỳ (Web Audio API Pentatonic Chime) cùng mưa cánh hoa hồng Sophia rơi chao liệng trong gió.
-   - Bảng đếm hoa tự động cập nhật số đóa hoa, hỗ trợ bấm nút nở thêm hoa hoặc chạm vào bất kỳ điểm nào trên màn hình để gieo hoa.
+   - Bảng đếm hoa tự động cập nhật số lượng hoa, hỗ trợ nút "Nở thêm hoa" và nút thông minh "🧹 Xóa hết hoa" (chỉ xuất hiện khi có nhiều hoa, cho phép thu gọn toàn bộ hoa lùi xuống đất êm dịu).
 
 ---
 
@@ -60,7 +62,7 @@ hpbd/
 ```javascript
 const BIRTHDAY_CONFIG = {
   // 1. Tên người nhận sinh nhật
-  recipientName: "Bảo Trân",
+  recipientName: "người ấy",
 
   // 2. Lời chúc sinh nhật (dùng \n để xuống dòng)
   wishes: "Anh không đến đây 1 mình,\nanh đến đây với bó hoa mà em thích,\nchúc em sinh nhật vui vẻ",
