@@ -15,7 +15,10 @@ chúc em sinh nhật thật nhiều niềm vui và bình yên!
 
 Bước sang một tuổi mới, chúc em luôn giữ vững niềm tin và sự kiên định trên con đường mình đã chọn.
 Cuộc đời là một hành trình dài của trải nghiệm và trưởng thành, không cần phải vội vã so mình với bất kỳ ai, bởi mỗi loài hoa đều có thời khắc rực rỡ của riêng mình.
-Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều bình dị, luôn an nhiên trước mọi biến chuyển, can đảm đón nhận mọi thử thách, và tự tin tỏa sáng bằng chính bản lĩnh, sự tự do cùng năng lượng rạng ngời nhất của em.`,
+
+Và hơn hết, em đừng ép bản thân mình trở nên hoàn hảo theo bất kỳ thước đo hay kỳ vọng nào. Có những ngày rực rỡ, nhưng cũng sẽ có những lúc chông chênh, mệt mỏi có thể dừng lại nghỉ ngơi, khi lắng lo hãy cứ kiên nhẫn và bao dung với chính mình. Được là một phiên bản chân thực, tự tại và biết trân quý bản thân đã là một điều vô cùng đáng tự hào.
+
+Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều bình dị, luôn an nhiên trước mọi biến chuyển, can đảm đón nhận mọi thử thách, và tự tin tỏa sáng bằng chính bản lĩnh, sự tự do cùng nguồn năng lượng rạng ngời nhất của em.`,
 
   // 3. Thông điệp trên hộp quà ban đầu
   giftPrompt: "Có một món quà dành cho bạn!",
@@ -173,7 +176,7 @@ function startWishesTypewriter(forceRestart = false) {
         wishesEl.insertBefore(textNode, cursorSpan);
       }
 
-      let delay = 22;
+      let delay = 20;
       if (ch === '.' || ch === '!' || ch === '?') {
         delay = 240;
       } else if (ch === ',' || ch === ';') {
