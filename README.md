@@ -101,6 +101,14 @@ Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều
   // 7. Cấu hình vệt sao stardust theo con trỏ
   stardust: {
     enabled: true
+  },
+
+  // 8. Cấu hình tốc độ gõ chữ từ từ cho lời chúc (chậm rãi, sâu lắng)
+  typewriter: {
+    charDelay: 48,        // Tốc độ gõ từng chữ (ms) - số càng lớn càng chậm rãi
+    sentencePause: 540,   // Khoảng dừng lắng đọng sau dấu chấm, chấm than, hỏi (ms)
+    commaPause: 220,      // Khoảng dừng nhịp sau dấu phẩy (ms)
+    newlinePause: 460     // Khoảng dừng khi ngắt dòng (ms)
   }
 };
 ```

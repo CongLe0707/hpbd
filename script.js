@@ -53,6 +53,14 @@ Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều
     soundEnabled: true,
     title: "Vườn Hoa Hồng Sophia Của Em 🌸",
     blessingText: "“Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia bừng nở rạng ngời gửi trọn những điều tuyệt vời nhất đến người ấy.”"
+  },
+
+  // 9. Cấu hình tốc độ gõ chữ từ từ cho lời chúc (chậm rãi, sâu lắng)
+  typewriter: {
+    charDelay: 48,        // Tốc độ gõ từng chữ (ms) - số càng lớn chữ hiện càng chậm rãi
+    sentencePause: 540,   // Khoảng dừng lắng đọng sau dấu chấm, chấm than, hỏi (ms)
+    commaPause: 220,      // Khoảng dừng nhịp sau dấu phẩy, chấm phẩy (ms)
+    newlinePause: 460     // Khoảng dừng khi chuyển dòng/đoạn mới (ms)
   }
 };
 
@@ -176,13 +184,20 @@ function startWishesTypewriter(forceRestart = false) {
         wishesEl.insertBefore(textNode, cursorSpan);
       }
 
-      let delay = 20;
+      const tw = BIRTHDAY_CONFIG.typewriter || {
+        charDelay: 48,
+        sentencePause: 540,
+        commaPause: 220,
+        newlinePause: 460
+      };
+
+      let delay = tw.charDelay;
       if (ch === '.' || ch === '!' || ch === '?') {
-        delay = 240;
-      } else if (ch === ',' || ch === ';') {
-        delay = 95;
+        delay = tw.sentencePause;
+      } else if (ch === ',' || ch === ';' || ch === ':') {
+        delay = tw.commaPause;
       } else if (ch === '\n') {
-        delay = 260;
+        delay = tw.newlinePause;
       }
 
       wishesTypewriterTimer = setTimeout(typeChar, delay);
