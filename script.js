@@ -807,6 +807,16 @@ function initSwayingFlowerGarden() {
     }
   };
 
+  // ẢNH HOA HỒNG SOPHIA MÀU NƯỚC CHUẨN MẪU TỪ HÌNH ẢNH NGƯỜI DÙNG CUNG CẤP
+  const sophiaRoseImages = {
+    pink: new Image(),
+    cream: new Image(),
+    bud: new Image()
+  };
+  sophiaRoseImages.pink.src = 'assets/sophia-rose-pink.png';
+  sophiaRoseImages.cream.src = 'assets/sophia-rose-cream.png';
+  sophiaRoseImages.bud.src = 'assets/sophia-rose-bud.png';
+
   // Cánh hoa hồng Sophia rơi và chao liệng trong gió
   class SophiaRosePetalMote {
     constructor(x, y) {
@@ -821,7 +831,14 @@ function initSwayingFlowerGarden() {
       this.flipSpeed = 0.03 + Math.random() * 0.04;
       this.alpha = 1;
       this.decay = 0.009 + Math.random() * 0.014;
-      this.color = Math.random() > 0.4 ? 'rgba(247, 139, 167, ' : 'rgba(255, 204, 218, ';
+      
+      const petalColors = [
+        'rgba(247, 139, 167, ',
+        'rgba(255, 204, 218, ',
+        'rgba(254, 235, 195, ',
+        'rgba(255, 245, 220, '
+      ];
+      this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
     }
 
     update() {
@@ -870,13 +887,20 @@ function initSwayingFlowerGarden() {
       this.curvature = (Math.random() - 0.5) * (layer === 'back' ? 55 : 35);
       this.stemThickness = layer === 'back' ? (2.8 + Math.random() * 1.5) : (3.5 + Math.random() * 2.0);
 
-      // MỖI BÔNG HOA ĐỀU LÀ MỘT DÁNG HOA HỒNG SOPHIA LỘNG LẪY
-      const sophiaTypes = ['sophia-grand', 'sophia-classic', 'sophia-cup', 'sophia-rosette', 'sophia-bud', 'sophia-grand', 'sophia-classic'];
-      this.type = customOptions.type || sophiaTypes[Math.floor(Math.random() * sophiaTypes.length)];
+      // Tỉ lệ biến thể hoa hồng Sophia theo bó hoa mẫu (Hồng phấn chủ đạo, Vàng kem quý phái, Nụ e ấp)
+      const variantList = ['pink', 'pink', 'cream', 'pink', 'cream', 'bud'];
+      this.variant = customOptions.variant || variantList[Math.floor(Math.random() * variantList.length)];
+      this.tiltAngle = (Math.random() - 0.5) * 0.35; // Độ nghiêng tự nhiên của mỗi bông
 
-      const baseFlowerSize = layer === 'back' ? (22 + Math.random() * 10) : (28 + Math.random() * 14);
-      this.flowerSize = baseFlowerSize;
+      if (this.variant === 'bud') {
+        this.flowerSize = layer === 'back' ? (20 + Math.random() * 8) : (28 + Math.random() * 10);
+      } else {
+        this.flowerSize = layer === 'back' ? (32 + Math.random() * 14) : (48 + Math.random() * 18);
+      }
 
+      // Giữ kiểu vector làm dự phòng
+      const sophiaTypes = ['sophia-grand', 'sophia-classic', 'sophia-cup', 'sophia-rosette', 'sophia-bud'];
+      this.type = customOptions.type || (this.variant === 'bud' ? 'sophia-bud' : sophiaTypes[Math.floor(Math.random() * sophiaTypes.length)]);
       this.colors = sophiaRosePalettes[this.type] || sophiaRosePalettes['sophia-grand'];
 
       // Lá hoa hồng Sophia răng cưa mọc so le
@@ -1011,7 +1035,7 @@ function initSwayingFlowerGarden() {
 
         ctx.save();
         ctx.translate(tipX, tipY);
-        ctx.rotate(sway * 0.03);
+        ctx.rotate(sway * 0.03 + (this.tiltAngle || 0));
         ctx.scale(bloomScale, bloomScale);
 
         const size = this.flowerSize;
@@ -1022,20 +1046,32 @@ function initSwayingFlowerGarden() {
           const sAngle = (s * Math.PI * 2) / 5 + 0.32;
           ctx.beginPath();
           ctx.moveTo(0, 0);
-          const sx = Math.cos(sAngle) * size * 0.55;
-          const sy = Math.sin(sAngle) * size * 0.55;
-          const cpx = Math.cos(sAngle + 0.25) * size * 0.35;
-          const cpy = Math.sin(sAngle + 0.25) * size * 0.35;
+          const sx = Math.cos(sAngle) * size * 0.45;
+          const sy = Math.sin(sAngle) * size * 0.45;
+          const cpx = Math.cos(sAngle + 0.25) * size * 0.28;
+          const cpy = Math.sin(sAngle + 0.25) * size * 0.28;
           ctx.quadraticCurveTo(cpx, cpy, sx, sy);
           ctx.strokeStyle = '#43784c';
-          ctx.lineWidth = 2.2;
+          ctx.lineWidth = this.layer === 'back' ? 1.8 : 2.4;
           ctx.lineCap = 'round';
           ctx.stroke();
         }
         ctx.restore();
 
-        // VẼ TỪNG DÁNG HOA HỒNG SOPHIA TUYỆT ĐẸP
-        if (this.type === 'sophia-grand') {
+        // ƯU TIÊN VẼ HOA HỒNG SOPHIA MÀU NƯỚC CHUẨN ẢNH MẪU
+        const roseImg = sophiaRoseImages[this.variant] || sophiaRoseImages.pink;
+        if (roseImg && roseImg.complete && roseImg.naturalWidth > 0) {
+          const drawW = size * 2.2;
+          const drawH = (drawW * roseImg.naturalHeight) / roseImg.naturalWidth;
+          ctx.save();
+          ctx.shadowColor = this.variant === 'cream' ? 'rgba(215, 170, 90, 0.25)' : 'rgba(180, 50, 80, 0.30)';
+          ctx.shadowBlur = this.layer === 'back' ? 6 : 10;
+          ctx.shadowOffsetY = this.layer === 'back' ? 2 : 4;
+          ctx.drawImage(roseImg, -drawW / 2, -drawH * 0.72, drawW, drawH);
+          ctx.restore();
+        } else {
+          // VẼ VECTOR DỰ PHÒNG TỪNG DÁNG HOA HỒNG SOPHIA
+          if (this.type === 'sophia-grand') {
           // 1. Đóa Hồng Sophia Hoàng Gia Nở Rộ Viên Mãn (4 tầng cánh xếp xoắn ốc)
           // Tầng 1: Cánh ngoài xòe rộng
           for (let p = 0; p < 7; p++) {
@@ -1214,6 +1250,7 @@ function initSwayingFlowerGarden() {
           ctx.fillStyle = this.colors.stamen;
           ctx.fill();
         }
+        } // Đóng else fallback vector
 
         ctx.restore();
 
