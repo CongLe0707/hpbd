@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=4.0">
+  <link rel="stylesheet" href="style.css?v=5.0">
 </head>
 <body>
   <!-- Ảnh nền hoa hồng Sophia chuyên dụng (tối ưu tuyệt đối cho di động & máy tính) -->
@@ -95,7 +95,7 @@
       </section>
 
       <!-- Dải phân cách mạ vàng sang Bước 2 -->
-      <div class="step-divider" aria-hidden="true">
+      <div class="step-divider step-locked" id="divider-step-2" aria-hidden="true">
         <span class="step-divider-line"></span>
         <span class="step-divider-badge">💌 BƯỚC 2: LỜI CHÚC & THỔI NẾN</span>
         <span class="step-divider-line"></span>
@@ -104,7 +104,7 @@
       <!-- ===================================================================
            BƯỚC 2: Lời Chúc, Bó Hoa & Bánh Sinh Nhật
            =================================================================== -->
-      <section id="wishes-stage" class="stage" aria-label="Lời chúc sinh nhật">
+      <section id="wishes-stage" class="stage step-locked" aria-label="Lời chúc sinh nhật">
         
         <!-- Tiêu đề chúc mừng sinh nhật dát vàng hồng -->
         <header class="wishes-header">
@@ -201,7 +201,7 @@
       </section>
 
       <!-- Dải phân cách mạ vàng sang Bước 3 -->
-      <div class="step-divider" aria-hidden="true">
+      <div class="step-divider step-locked" id="divider-step-3" aria-hidden="true">
         <span class="step-divider-line"></span>
         <span class="step-divider-badge">🎟️ BƯỚC 3: THẺ CÀO MAY MẮN</span>
         <span class="step-divider-line"></span>
@@ -210,7 +210,7 @@
       <!-- ===================================================================
            BƯỚC 3: Thẻ Cào May Mắn (Interactive Lucky Scratch Card)
            =================================================================== -->
-      <section id="scratch-stage" class="stage" aria-label="Thẻ cào may mắn">
+      <section id="scratch-stage" class="stage step-locked" aria-label="Thẻ cào may mắn">
         <div class="stage-tag">✦ BƯỚC 3 • THẺ CÀO MAY MẮN ✦</div>
         
         <header class="scratch-header">
@@ -284,7 +284,7 @@
       </section>
 
       <!-- Dải phân cách mạ vàng sang Bước 4 -->
-      <div class="step-divider" aria-hidden="true">
+      <div class="step-divider step-locked" id="divider-step-4" aria-hidden="true">
         <span class="step-divider-line"></span>
         <span class="step-divider-badge">🌹 BƯỚC 4: VƯỜN HOA DIỆU KỲ</span>
         <span class="step-divider-line"></span>
@@ -293,7 +293,7 @@
       <!-- ===================================================================
            BƯỚC 4: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
            =================================================================== -->
-      <section id="garden-stage" class="stage" aria-label="Vườn hoa hồng Sophia diệu kỳ">
+      <section id="garden-stage" class="stage step-locked" aria-label="Vườn hoa hồng Sophia diệu kỳ">
         
         <header class="garden-header">
           <div class="stage-tag">✦ BƯỚC 4 • VƯỜN HOA DIỆU KỲ ✦</div>
@@ -419,6 +419,6 @@
   <!-- Canvas vườn hoa chồi lên tiền cảnh (lớp trước viền dưới) -->
   <canvas id="garden-canvas-front" aria-hidden="true"></canvas>
 
-  <script src="script.js?v=4.0"></script>
+  <script src="script.js?v=5.0"></script>
 </body>
 </html>

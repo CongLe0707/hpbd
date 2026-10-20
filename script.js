@@ -542,26 +542,60 @@ function initStageInteractions() {
   const cakeWrapper = document.getElementById('cake-interactive-wrapper');
   const postBlowMessage = document.getElementById('post-blow-message');
 
-  // Cuộn mượt mà xuống từng bước (Step-by-step smooth scroll)
-  const scrollToStep = (targetStage) => {
-    const el = stages[targetStage] || document.getElementById(`${targetStage}-stage`);
-    if (!el) return;
+  // Mở khóa từng bước một cách tuần tự (Progressive Step Unlocking)
+  const unlockStep = (stepNumber) => {
+    let stageEl = null;
+    let dividerEl = null;
 
-    el.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
+    if (stepNumber === 2) {
+      dividerEl = document.getElementById('divider-step-2');
+      stageEl = stages.wishes;
+    } else if (stepNumber === 3) {
+      dividerEl = document.getElementById('divider-step-3');
+      stageEl = stages.scratch;
+    } else if (stepNumber === 4) {
+      dividerEl = document.getElementById('divider-step-4');
+      stageEl = stages.garden;
+    }
 
-    if (targetStage === 'wishes') {
-      if (!isWishesTyping && !hasWishesFinished) {
-        startWishesTypewriter();
-      }
+    if (dividerEl) {
+      dividerEl.classList.remove('step-locked');
+      dividerEl.classList.add('step-reveal');
+    }
+
+    if (stageEl) {
+      stageEl.classList.remove('step-locked');
+      stageEl.classList.add('step-reveal');
+    }
+
+    // Tác vụ mượt mà và hiệu ứng đặc thù cho từng bước
+    if (stepNumber === 2) {
+      setTimeout(() => {
+        if (stageEl) {
+          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        startWishesTypewriter(true);
+      }, 150);
+    } else if (stepNumber === 3) {
+      setTimeout(() => {
+        if (stageEl) {
+          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        drawScratchCover();
+      }, 150);
+    } else if (stepNumber === 4) {
+      setTimeout(() => {
+        if (stageEl) {
+          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        if (window.onGardenStageActivated) {
+          window.onGardenStageActivated();
+        }
+      }, 150);
     }
   };
 
-  scrollToStepGlobal = scrollToStep;
-
-  // Bước 1: Mở hộp quà hoành tráng & tự động cuộn xuống Bước 2
+  // Bước 1: Mở hộp quà hoành tráng -> Chỉ khi mở quà xong mới hiện Bước 2
   const handleOpenGift = () => {
     if (!giftBox.classList.contains('opening') && !giftBox.classList.contains('opened')) {
       giftBox.classList.add('opening');
@@ -571,10 +605,12 @@ function initStageInteractions() {
 
       setTimeout(() => {
         giftBox.classList.add('opened');
-        scrollToStep('wishes');
+        unlockStep(2);
       }, 650);
     } else {
-      scrollToStep('wishes');
+      if (stages.wishes) {
+        stages.wishes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 
@@ -601,7 +637,7 @@ function initStageInteractions() {
       triggerGrandFireworks();
       setTimeout(triggerGrandFireworks, 400);
 
-      // Hiện lời chúc tốt đẹp và nút dẫn cuộn xuống thẻ cào bí mật
+      // Hiện lời chúc tốt đẹp và nút dẫn mở khóa Bước 3
       setTimeout(() => {
         if (postBlowMessage) postBlowMessage.classList.remove('hidden');
         if (btnBlowCandle) btnBlowCandle.classList.add('hidden');
@@ -617,25 +653,25 @@ function initStageInteractions() {
     cakeWrapper.addEventListener('click', handleBlowCandle);
   }
 
-  // Bước 2 -> Bước 3: Nút cuộn xuống Thẻ Cào May Mắn
+  // Bước 2 -> Bước 3: Nhấn nút xong mới mở khóa & hiện Bước 3
   if (btnGotoScratch) {
     btnGotoScratch.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      scrollToStep('scratch');
+      unlockStep(3);
     });
   }
 
-  // Bước 3 -> Bước 4: Nút cuộn xuống Vườn Hoa Sophia
+  // Bước 3 -> Bước 4: Nhấn nút xong mới mở khóa & hiện Bước 4
   if (btnScratchToGarden) {
     btnScratchToGarden.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      scrollToStep('garden');
+      unlockStep(4);
     });
   }
 
@@ -646,23 +682,10 @@ function initStageInteractions() {
         e.preventDefault();
         e.stopPropagation();
       }
-      scrollToStep('gift');
+      if (stages.gift) {
+        stages.gift.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
-  }
-
-  // Tự động kích hoạt gõ chữ khi người dùng kéo cuộn màn hình xuống Bước 2
-  if ('IntersectionObserver' in window) {
-    const wishesStageEl = stages.wishes;
-    if (wishesStageEl) {
-      const wishesObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isWishesTyping && !hasWishesFinished) {
-            startWishesTypewriter();
-          }
-        });
-      }, { threshold: 0.20 });
-      wishesObserver.observe(wishesStageEl);
-    }
   }
 }
 

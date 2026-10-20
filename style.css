@@ -296,6 +296,27 @@ body {
   scroll-margin-top: 36px;
 }
 
+/* Ẩn hoàn toàn bước và dải phân cách khi chưa chạm/hoàn thành bước trước */
+.step-locked {
+  display: none !important;
+}
+
+/* Hoạt cảnh bừng nở mượt mà khi mở khóa bước tiếp theo */
+.step-reveal {
+  animation: stepRevealFadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes stepRevealFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .stage-tag {
   font-family: var(--font-sans);
   font-size: 0.78rem;
