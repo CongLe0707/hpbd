@@ -14,7 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=6.0">
+  <link rel="stylesheet" href="style.css?v=7.0">
 </head>
 
 <body>
@@ -213,11 +213,15 @@
           </p>
         </div>
 
-        <!-- Nút tiếp tục sang Bước 3 (Lời chúc) -->
+        <!-- Nút tiếp tục sang Bước 3 (Lời chúc) & Nút quay lại -->
         <div class="action-buttons calendar-actions">
           <button type="button" class="btn btn-primary" id="btn-goto-wishes" aria-label="Đọc lời chúc sinh nhật">
             <span class="btn-icon">💌</span>
             <span class="btn-text">Tiếp tục: Đọc Lời Chúc & Thổi Nến 👇</span>
+          </button>
+          <button type="button" class="btn btn-back-step" id="btn-back-to-step-1" aria-label="Quay lại hộp quà">
+            <span class="btn-icon">←</span>
+            <span class="btn-text">Quay lại Hộp Quà</span>
           </button>
         </div>
       </section>
@@ -321,11 +325,16 @@
               <span class="btn-text">Ước một điều và thổi nến</span>
             </button>
 
-            <!-- Nút cuộn xuống cào thẻ may mắn -->
+            <!-- Nút tiếp tục sang Bước 4 (Thẻ cào) -->
             <button type="button" class="btn btn-scratch hidden" id="btn-goto-scratch"
-              aria-label="Kéo xuống cào thẻ may mắn">
+              aria-label="Sang thẻ cào may mắn">
               <span class="btn-icon">🎟️</span>
               <span class="btn-text">Tiếp tục: Cào Thẻ May Mắn 👇</span>
+            </button>
+
+            <button type="button" class="btn btn-back-step" id="btn-back-to-step-2" aria-label="Quay lại bảng lịch">
+              <span class="btn-icon">←</span>
+              <span class="btn-text">Quay lại Bảng Lịch 23/10</span>
             </button>
           </div>
         </div>
@@ -417,12 +426,16 @@
           </button>
         </div>
 
-        <!-- Nút tiếp tục sang Bước 5 -->
+        <!-- Nút tiếp tục sang Bước 5 & Nút quay lại -->
         <div class="action-buttons scratch-actions">
           <button type="button" class="btn btn-primary btn-garden-entry" id="btn-scratch-to-garden"
             aria-label="Đến vườn hoa hồng Sophia">
             <span class="btn-icon">🌸</span>
             <span class="btn-text">Tiếp tục: Bước vào Vườn Hoa Sophia 👇</span>
+          </button>
+          <button type="button" class="btn btn-back-step" id="btn-back-to-step-3" aria-label="Quay lại lời chúc">
+            <span class="btn-icon">←</span>
+            <span class="btn-text">Quay lại Lời Chúc & Thổi Nến</span>
           </button>
         </div>
       </section>
@@ -564,10 +577,16 @@
             <span class="btn-text">Xóa hết hoa</span>
           </button>
 
-          <!-- Nút cuộn mượt lên đầu trang -->
-          <button type="button" class="btn btn-secondary" id="btn-scroll-top" aria-label="Lên đầu trang">
-            <span class="btn-icon">↺</span>
-            <span class="btn-text">Lên đầu trang & Xem lại</span>
+          <!-- Nút quay lại bước 4 -->
+          <button type="button" class="btn btn-back-step" id="btn-back-to-step-4" aria-label="Quay lại thẻ cào">
+            <span class="btn-icon">←</span>
+            <span class="btn-text">Quay lại Thẻ Cào May Mắn</span>
+          </button>
+
+          <!-- Nút xem lại từ đầu (quay về bước 1) -->
+          <button type="button" class="btn btn-secondary" id="btn-scroll-top" aria-label="Xem lại từ đầu">
+            <span class="btn-icon">🎁</span>
+            <span class="btn-text">Xem lại từ đầu (Bước 1)</span>
           </button>
         </div>
 

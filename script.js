@@ -544,52 +544,60 @@ function initStageInteractions() {
   const cakeWrapper = document.getElementById('cake-interactive-wrapper');
   const postBlowMessage = document.getElementById('post-blow-message');
 
-  // Mở khóa từng bước một cách tuần tự (Progressive Step Unlocking sang từng khung riêng biệt)
-  const unlockStep = (stepNumber) => {
-    const dividerEl = document.getElementById(`divider-step-${stepNumber}`);
-    const frameEl = frames[stepNumber];
+  // Nút quay lại (Back buttons)
+  const btnBackStep1 = document.getElementById('btn-back-to-step-1');
+  const btnBackStep2 = document.getElementById('btn-back-to-step-2');
+  const btnBackStep3 = document.getElementById('btn-back-to-step-3');
+  const btnBackStep4 = document.getElementById('btn-back-to-step-4');
 
-    if (dividerEl) {
-      dividerEl.classList.remove('step-locked');
-      dividerEl.classList.add('step-reveal');
-    }
-
-    if (frameEl) {
-      frameEl.classList.remove('step-locked');
-      frameEl.classList.add('step-reveal');
-    }
-
-    // Tự động nhảy khung mượt mà sang bước tiếp theo
-    if (stepNumber === 2) {
-      setTimeout(() => {
-        if (frameEl) {
-          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Chuyển sang bước mới: ẨN HOÀN TOÀN TẤT CẢ các bước khác, CHỈ HIỂN THỊ DUY NHẤT bước hiện tại
+  const switchToStep = (targetStep) => {
+    for (let i = 1; i <= 5; i++) {
+      const frameEl = frames[i];
+      if (frameEl) {
+        if (i === targetStep) {
+          frameEl.classList.remove('step-locked');
+          frameEl.classList.remove('step-reveal');
+          // Buộc browser tính lại layout để kích hoạt animation bừng sáng mượt mà
+          void frameEl.offsetWidth;
+          frameEl.classList.add('step-reveal');
+        } else {
+          frameEl.classList.add('step-locked');
+          frameEl.classList.remove('step-reveal');
         }
+      }
+
+      const dividerEl = document.getElementById(`divider-step-${i}`);
+      if (dividerEl) {
+        dividerEl.classList.add('step-locked');
+        dividerEl.classList.remove('step-reveal');
+      }
+    }
+
+    // Cuộn mượt lên đỉnh để khung mới nằm trọn vẹn trong tầm mắt
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Kích hoạt các hiệu ứng đặc thù theo từng bước
+    if (targetStep === 1) {
+      // Khi trở về Bước 1, nếu hộp quà đã mở sẵn có thể nhấn để mở lại
+    } else if (targetStep === 2) {
+      setTimeout(() => {
         // Kích hoạt nét vẽ khoanh tròn nghệ thuật ngày 23/10
         const day23 = document.getElementById('calendar-day-23');
         if (day23) {
           day23.classList.add('draw-active');
         }
       }, 180);
-    } else if (stepNumber === 3) {
+    } else if (targetStep === 3) {
       setTimeout(() => {
-        if (frameEl) {
-          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
         startWishesTypewriter(true);
       }, 180);
-    } else if (stepNumber === 4) {
+    } else if (targetStep === 4) {
       setTimeout(() => {
-        if (frameEl) {
-          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
         drawScratchCover();
       }, 180);
-    } else if (stepNumber === 5) {
+    } else if (targetStep === 5) {
       setTimeout(() => {
-        if (frameEl) {
-          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
         if (window.onGardenStageActivated) {
           window.onGardenStageActivated();
         }
@@ -597,7 +605,7 @@ function initStageInteractions() {
     }
   };
 
-  // Bước 1: Mở hộp quà -> Mở khóa & Nhảy sang Khung 2 (Lịch Ngày Đặc Biệt 23/10)
+  // Bước 1: Mở hộp quà -> Ẩn Bước 1 & Nhảy sang duy nhất Bước 2 (Lịch 23/10)
   const handleOpenGift = () => {
     if (!giftBox.classList.contains('opening') && !giftBox.classList.contains('opened')) {
       giftBox.classList.add('opening');
@@ -607,12 +615,10 @@ function initStageInteractions() {
 
       setTimeout(() => {
         giftBox.classList.add('opened');
-        unlockStep(2);
+        switchToStep(2);
       }, 650);
     } else {
-      if (frames[2]) {
-        frames[2].scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      switchToStep(2);
     }
   };
 
@@ -640,14 +646,25 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 2 -> Bước 3: Nút chuyển từ Lịch sang Khung Lời chúc & Thổi nến
+  // Bước 2 -> Bước 3: Nút chuyển từ Lịch sang duy nhất Khung Lời chúc & Thổi nến
   if (btnGotoWishes) {
     btnGotoWishes.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      unlockStep(3);
+      switchToStep(3);
+    });
+  }
+
+  // Bước 2 -> Quay lại Bước 1 (Hộp quà)
+  if (btnBackStep1) {
+    btnBackStep1.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchToStep(1);
     });
   }
 
@@ -661,7 +678,7 @@ function initStageInteractions() {
       triggerGrandFireworks();
       setTimeout(triggerGrandFireworks, 400);
 
-      // Hiện lời chúc tốt đẹp và nút dẫn mở khóa Khung 4
+      // Hiện lời chúc tốt đẹp và nút dẫn chuyển sang Bước 4
       setTimeout(() => {
         if (postBlowMessage) postBlowMessage.classList.remove('hidden');
         if (btnBlowCandle) btnBlowCandle.classList.add('hidden');
@@ -677,38 +694,72 @@ function initStageInteractions() {
     cakeWrapper.addEventListener('click', handleBlowCandle);
   }
 
-  // Bước 3 -> Bước 4: Nhấn nút xong mới mở khóa & nhảy sang Khung 4 (Thẻ cào)
+  // Bước 3 -> Bước 4: Nhấn nút xong ẩn Bước 3 & nhảy sang duy nhất Bước 4 (Thẻ cào)
   if (btnGotoScratch) {
     btnGotoScratch.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      unlockStep(4);
+      switchToStep(4);
     });
   }
 
-  // Bước 4 -> Bước 5: Nhấn nút xong mới mở khóa & nhảy sang Khung 5 (Vườn hoa)
+  // Bước 3 -> Quay lại Bước 2 (Lịch 23/10)
+  if (btnBackStep2) {
+    btnBackStep2.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchToStep(2);
+    });
+  }
+
+  // Bước 4 -> Bước 5: Nhấn nút xong ẩn Bước 4 & nhảy sang duy nhất Bước 5 (Vườn hoa)
   if (btnScratchToGarden) {
     btnScratchToGarden.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      unlockStep(5);
+      switchToStep(5);
     });
   }
 
-  // Bước 5: Nút cuộn mượt lên Khung 1 đầu trang để xem lại
+  // Bước 4 -> Quay lại Bước 3 (Lời chúc & Thổi nến)
+  if (btnBackStep3) {
+    btnBackStep3.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchToStep(3);
+    });
+  }
+
+  // Bước 5 -> Quay lại Bước 4 (Thẻ cào)
+  if (btnBackStep4) {
+    btnBackStep4.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchToStep(4);
+    });
+  }
+
+  // Bước 5: Nút xem lại từ đầu -> Ẩn Bước 5 & quay lại duy nhất Bước 1
   if (btnScrollTop) {
     btnScrollTop.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      if (frames[1]) {
-        frames[1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (giftBox) {
+        giftBox.classList.remove('opening', 'opened');
       }
+      switchToStep(1);
     });
   }
 }
