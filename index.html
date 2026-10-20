@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +10,13 @@
   <!-- Google Fonts hỗ trợ Tiếng Việt đầy đủ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
+    rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=5.0">
+  <link rel="stylesheet" href="style.css?v=6.0">
 </head>
+
 <body>
   <!-- Ảnh nền hoa hồng Sophia chuyên dụng (tối ưu tuyệt đối cho di động & máy tính) -->
   <div class="site-background" id="site-background" aria-hidden="true"></div>
@@ -38,7 +42,7 @@
   <main class="main-wrapper">
     <!-- Thẻ chứa nội dung chính với phong cách Glassmorphism hoàng gia tinh tế -->
     <div class="card-container" id="card-container">
-      
+
       <!-- Góc hoa văn vàng kim trang trí cổ điển -->
       <div class="card-corner top-left" aria-hidden="true"></div>
       <div class="card-corner top-right" aria-hidden="true"></div>
@@ -50,11 +54,11 @@
            =================================================================== -->
       <section id="gift-stage" class="stage" aria-label="Món quà bất ngờ">
         <div class="stage-tag">✦ BƯỚC 1 • MÓN QUÀ BẤT NGỜ ✦</div>
-        
+
         <div class="gift-box-wrapper" id="gift-box-wrapper" title="Bấm vào để mở quà">
           <div class="gift-glow" aria-hidden="true"></div>
           <div class="gift-aura" aria-hidden="true"></div>
-          
+
           <!-- Hộp quà 3D với ruy băng vàng kim & nơ lụa hồng phấn -->
           <div class="gift-box" id="gift-box" role="button" tabindex="0" aria-label="Hộp quà sinh nhật">
             <!-- Nắp hộp quà -->
@@ -68,13 +72,13 @@
               </div>
               <div class="lid-top"></div>
             </div>
-            
+
             <!-- Thân hộp quà -->
             <div class="gift-body">
               <div class="ribbon-vertical"></div>
               <div class="ribbon-horizontal"></div>
               <div class="gift-shimmer" aria-hidden="true"></div>
-              
+
               <!-- Ánh sáng lấp lánh quanh hộp quà -->
               <div class="sparkles-container" aria-hidden="true">
                 <span class="sparkle s1">✨</span>
@@ -90,22 +94,140 @@
 
         <button type="button" class="btn btn-primary" id="btn-open-gift" aria-label="Mở hộp quà">
           <span class="btn-icon">🎁</span>
-          <span class="btn-text">Chạm để mở quà & Đọc lời chúc 👇</span>
+          <span class="btn-text">Chạm để mở quà & Khám phá ngày đặc biệt 👇</span>
         </button>
       </section>
 
-      <!-- Dải phân cách mạ vàng sang Bước 2 -->
+      <!-- Dải phân cách mạ vàng sang Bước 2: Ngày Đặc Biệt -->
       <div class="step-divider step-locked" id="divider-step-2" aria-hidden="true">
         <span class="step-divider-line"></span>
-        <span class="step-divider-badge">💌 BƯỚC 2: LỜI CHÚC & THỔI NẾN</span>
+        <span class="step-divider-badge">🗓️ BƯỚC 2: NGÀY ĐẶC BIỆT • 23/10</span>
         <span class="step-divider-line"></span>
       </div>
 
       <!-- ===================================================================
-           BƯỚC 2: Lời Chúc, Bó Hoa & Bánh Sinh Nhật
+           BƯỚC 2: Bảng Lịch Ngày Đặc Biệt 23/10 (Special Birthday Date Calendar)
+           =================================================================== -->
+      <section id="calendar-stage" class="stage step-locked" aria-label="Lịch ngày đặc biệt 23/10">
+        <div class="stage-tag">✦ BƯỚC 2 • NGÀY ĐẶC BIỆT ✦</div>
+
+        <header class="calendar-header">
+          <h2 class="calendar-title">Một Ngày Thật Đẹp Trong Năm ✨</h2>
+          <p class="calendar-subtitle">
+            Có những khoảnh khắc sinh ra để được ghi nhớ, và hôm nay là ngày của Bảo Trân.
+          </p>
+        </header>
+
+        <!-- Khung tờ lịch hoàng gia cao cấp -->
+        <div class="calendar-card" id="calendar-card">
+          <!-- Gáy xoắn và nhãn tháng -->
+          <div class="calendar-sheet-header">
+            <div class="sheet-binder-rings" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="month-year-badge">
+              <span class="month-name">THÁNG 10</span>
+              <span class="year-name">OCTOBER</span>
+            </div>
+          </div>
+
+          <!-- Các thứ trong tuần -->
+          <div class="calendar-grid-weekdays" aria-hidden="true">
+            <span>T2</span>
+            <span>T3</span>
+            <span>T4</span>
+            <span>T5</span>
+            <span>T6</span>
+            <span>T7</span>
+            <span class="sunday">CN</span>
+          </div>
+
+          <!-- Lưới các ngày trong tháng 10 -->
+          <div class="calendar-grid-days">
+            <span class="day-cell other-month">28</span>
+            <span class="day-cell other-month">29</span>
+            <span class="day-cell other-month">30</span>
+            <span class="day-cell">1</span>
+            <span class="day-cell">2</span>
+            <span class="day-cell weekend">3</span>
+            <span class="day-cell weekend sunday">4</span>
+
+            <span class="day-cell">5</span>
+            <span class="day-cell">6</span>
+            <span class="day-cell">7</span>
+            <span class="day-cell">8</span>
+            <span class="day-cell">9</span>
+            <span class="day-cell weekend">10</span>
+            <span class="day-cell weekend sunday">11</span>
+
+            <span class="day-cell">12</span>
+            <span class="day-cell">13</span>
+            <span class="day-cell">14</span>
+            <span class="day-cell">15</span>
+            <span class="day-cell">16</span>
+            <span class="day-cell weekend">17</span>
+            <span class="day-cell weekend sunday">18</span>
+
+            <span class="day-cell">19</span>
+            <span class="day-cell">20</span>
+            <span class="day-cell">21</span>
+            <span class="day-cell">22</span>
+
+            <!-- NGÀY 23/10 ĐƯỢC KHOANH TRÒN VẼ TAY NGHỆ THUẬT -->
+            <div class="day-cell special-day" id="calendar-day-23" aria-label="Ngày 23 tháng 10 - Sinh nhật Bảo Trân">
+              <span class="day-number">23</span>
+              <svg class="hand-drawn-circle" viewBox="0 0 64 64" aria-hidden="true">
+                <path class="circle-path"
+                  d="M 32,7 C 50,6 61,18 60,34 C 59,50 44,59 28,58 C 12,57 4,44 5,28 C 6,12 20,4 36,5 C 50,6 59,17 58,30"
+                  fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" />
+              </svg>
+              <span class="special-day-pin" aria-hidden="true">🎂</span>
+            </div>
+
+            <span class="day-cell weekend">24</span>
+            <span class="day-cell weekend sunday">25</span>
+
+            <span class="day-cell">26</span>
+            <span class="day-cell">27</span>
+            <span class="day-cell">28</span>
+            <span class="day-cell">29</span>
+            <span class="day-cell">30</span>
+            <span class="day-cell weekend">31</span>
+            <span class="day-cell other-month weekend sunday">1</span>
+          </div>
+        </div>
+
+        <!-- Hộp thông điệp ngày 23/10 -->
+        <div class="special-date-card">
+          <div class="date-badge">✦ SAVE THE DATE • 23/10 ✦</div>
+          <h3 class="special-date-highlight">23 Tháng 10 🌸</h3>
+          <p class="special-date-message">
+            “Một ngày mùa thu thật dịu dàng – cột mốc đánh dấu sự xuất hiện của một cô gái kiên định, tự tin và ngập
+            tràn năng lượng tích cực. Chúc Bảo Trân đón tuổi mới thật rực rỡ và bình yên!”
+          </p>
+        </div>
+
+        <!-- Nút tiếp tục sang Bước 3 (Lời chúc) -->
+        <div class="action-buttons calendar-actions">
+          <button type="button" class="btn btn-primary" id="btn-goto-wishes" aria-label="Đọc lời chúc sinh nhật">
+            <span class="btn-icon">💌</span>
+            <span class="btn-text">Tiếp tục: Đọc Lời Chúc & Thổi Nến 👇</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Dải phân cách mạ vàng sang Bước 3 -->
+      <div class="step-divider step-locked" id="divider-step-3" aria-hidden="true">
+        <span class="step-divider-line"></span>
+        <span class="step-divider-badge">💌 BƯỚC 3: LỜI CHÚC & THỔI NẾN</span>
+        <span class="step-divider-line"></span>
+      </div>
+
+      <!-- ===================================================================
+           BƯỚC 3: Lời Chúc, Bó Hoa & Bánh Sinh Nhật
            =================================================================== -->
       <section id="wishes-stage" class="stage step-locked" aria-label="Lời chúc sinh nhật">
-        
+
         <!-- Tiêu đề chúc mừng sinh nhật dát vàng hồng -->
         <header class="wishes-header">
           <span class="sub-badge">Happy Birthday</span>
@@ -122,12 +244,8 @@
         <!-- Bó hoa hồng Sophia "Bó hoa em thích" bay bổng -->
         <div class="bouquet-showcase" id="bouquet-showcase" title="Chạm vào bó hoa để nhận thêm điều ước">
           <div class="bouquet-halo" aria-hidden="true"></div>
-          <img src="assets/sophia-bouquet.png" 
-               alt="Bó hoa hồng Sophia tuyệt đẹp" 
-               class="bouquet-img" 
-               id="bouquet-img"
-               loading="eager"
-               onerror="this.src='assets/sophia-bouquet.jpg'">
+          <img src="assets/sophia-bouquet.png" alt="Bó hoa hồng Sophia tuyệt đẹp" class="bouquet-img" id="bouquet-img"
+            loading="eager" onerror="this.src='assets/sophia-bouquet.jpg'">
           <div class="bouquet-caption">
             <span class="caption-flower">💐</span>
             <span class="caption-text">Bó hoa hồng Sophia dành riêng cho em</span>
@@ -191,7 +309,8 @@
             </button>
 
             <!-- Nút cuộn xuống cào thẻ may mắn -->
-            <button type="button" class="btn btn-scratch hidden" id="btn-goto-scratch" aria-label="Kéo xuống cào thẻ may mắn">
+            <button type="button" class="btn btn-scratch hidden" id="btn-goto-scratch"
+              aria-label="Kéo xuống cào thẻ may mắn">
               <span class="btn-icon">🎟️</span>
               <span class="btn-text">Tiếp tục: Cào Thẻ May Mắn 👇</span>
             </button>
@@ -200,19 +319,19 @@
 
       </section>
 
-      <!-- Dải phân cách mạ vàng sang Bước 3 -->
-      <div class="step-divider step-locked" id="divider-step-3" aria-hidden="true">
+      <!-- Dải phân cách mạ vàng sang Bước 4 -->
+      <div class="step-divider step-locked" id="divider-step-4" aria-hidden="true">
         <span class="step-divider-line"></span>
-        <span class="step-divider-badge">🎟️ BƯỚC 3: THẺ CÀO MAY MẮN</span>
+        <span class="step-divider-badge">🎟️ BƯỚC 4: THẺ CÀO MAY MẮN</span>
         <span class="step-divider-line"></span>
       </div>
 
       <!-- ===================================================================
-           BƯỚC 3: Thẻ Cào May Mắn (Interactive Lucky Scratch Card)
+           BƯỚC 4: Thẻ Cào May Mắn (Interactive Lucky Scratch Card)
            =================================================================== -->
       <section id="scratch-stage" class="stage step-locked" aria-label="Thẻ cào may mắn">
-        <div class="stage-tag">✦ BƯỚC 3 • THẺ CÀO MAY MẮN ✦</div>
-        
+        <div class="stage-tag">✦ BƯỚC 4 • THẺ CÀO MAY MẮN ✦</div>
+
         <header class="scratch-header">
           <h2 class="scratch-title">Thẻ Cào May Mắn ✨</h2>
           <p class="scratch-subtitle">
@@ -232,7 +351,8 @@
                 <div class="privilege-icon">🌟</div>
                 <div class="privilege-content">
                   <div class="privilege-title">Giải Đặc Biệt: 365 Ngày Bình Yên</div>
-                  <div class="privilege-desc">Một tuổi mới an nhiên, ăn ngon ngủ kỹ, ví tiền luôn rủng rỉnh và không có áp lực hay deadline nào làm phiền.</div>
+                  <div class="privilege-desc">Một tuổi mới an nhiên, ăn ngon ngủ kỹ, ví tiền luôn rủng rỉnh và không có
+                    áp lực hay deadline nào làm phiền.</div>
                 </div>
               </div>
 
@@ -240,7 +360,8 @@
                 <div class="privilege-icon">☕</div>
                 <div class="privilege-content">
                   <div class="privilege-title">Giải Nhất: Coupon "Đi Đâu Cũng Được"</div>
-                  <div class="privilege-desc">Bất cứ lúc nào mệt mỏi hay cần nạp năng lượng, em có quyền dùng vé này để đổi một buổi cà phê/ăn uống no say (anh tài trợ trọn gói!).</div>
+                  <div class="privilege-desc">Bất cứ lúc nào mệt mỏi hay cần nạp năng lượng, em có quyền dùng vé này để
+                    đổi một buổi cà phê/ăn uống no say (anh tài trợ trọn gói!).</div>
                 </div>
               </div>
 
@@ -248,7 +369,8 @@
                 <div class="privilege-icon">🚀</div>
                 <div class="privilege-content">
                   <div class="privilege-title">Giải May Mắn: Tự Do Tỏa Sáng</div>
-                  <div class="privilege-desc">Mọi dự định, công việc và ước mơ đều thuận buồm xuôi gió. Chúc em luôn kiên định, tự tin và rực rỡ theo cách của riêng mình!</div>
+                  <div class="privilege-desc">Mọi dự định, công việc và ước mơ đều thuận buồm xuôi gió. Chúc em luôn
+                    kiên định, tự tin và rực rỡ theo cách của riêng mình!</div>
                 </div>
               </div>
             </div>
@@ -256,7 +378,8 @@
             <div class="prize-quote-box">
               <span class="prize-quote-icon">💫</span>
               <p class="prize-quote-text">
-                “Điều khoản vé: Có giá trị sử dụng mãi mãi. Luôn ủng hộ và chúc em chạm tới những điều tuyệt vời nhất trong cuộc sống!”
+                “Điều khoản vé: Có giá trị sử dụng mãi mãi. Luôn ủng hộ và chúc em chạm tới những điều tuyệt vời nhất
+                trong cuộc sống!”
               </p>
             </div>
           </div>
@@ -276,27 +399,28 @@
 
         <!-- Nút tiếp tục sang Bước 4 -->
         <div class="action-buttons scratch-actions">
-          <button type="button" class="btn btn-primary btn-garden-entry" id="btn-scratch-to-garden" aria-label="Đến vườn hoa hồng Sophia">
+          <button type="button" class="btn btn-primary btn-garden-entry" id="btn-scratch-to-garden"
+            aria-label="Đến vườn hoa hồng Sophia">
             <span class="btn-icon">🌸</span>
             <span class="btn-text">Tiếp tục: Bước vào Vườn Hoa Sophia 👇</span>
           </button>
         </div>
       </section>
 
-      <!-- Dải phân cách mạ vàng sang Bước 4 -->
-      <div class="step-divider step-locked" id="divider-step-4" aria-hidden="true">
+      <!-- Dải phân cách mạ vàng sang Bước 5 -->
+      <div class="step-divider step-locked" id="divider-step-5" aria-hidden="true">
         <span class="step-divider-line"></span>
-        <span class="step-divider-badge">🌹 BƯỚC 4: VƯỜN HOA DIỆU KỲ</span>
+        <span class="step-divider-badge">🌹 BƯỚC 5: VƯỜN HOA DIỆU KỲ</span>
         <span class="step-divider-line"></span>
       </div>
 
       <!-- ===================================================================
-           BƯỚC 4: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
+           BƯỚC 5: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
            =================================================================== -->
       <section id="garden-stage" class="stage step-locked" aria-label="Vườn hoa hồng Sophia diệu kỳ">
-        
+
         <header class="garden-header">
-          <div class="stage-tag">✦ BƯỚC 4 • VƯỜN HOA DIỆU KỲ ✦</div>
+          <div class="stage-tag">✦ BƯỚC 5 • VƯỜN HOA DIỆU KỲ ✦</div>
           <h2 class="garden-title" id="garden-title">
             <span class="title-text">Vườn Hoa Hồng Sophia Của Em 🌸</span>
           </h2>
@@ -304,10 +428,11 @@
         </header>
 
         <!-- Khu vực bông hoa trung tâm lắc lư qua lại -->
-        <div class="swaying-flower-container" id="swaying-flower-interactive" role="button" tabindex="0" aria-label="Chạm vào hoa hồng Sophia để làm nở cả vườn hoa">
+        <div class="swaying-flower-container" id="swaying-flower-interactive" role="button" tabindex="0"
+          aria-label="Chạm vào hoa hồng Sophia để làm nở cả vườn hoa">
           <div class="flower-aura" aria-hidden="true"></div>
           <div class="flower-shockwave" id="flower-shockwave" aria-hidden="true"></div>
-          
+
           <!-- Huy hiệu mời chạm vui mắt -->
           <div class="touch-hint-badge" id="touch-hint-badge">
             <span class="hint-pulse" aria-hidden="true"></span>
@@ -320,51 +445,56 @@
           <div class="swaying-flower" id="swaying-flower">
             <!-- Cành và thân hoa uốn lượn mềm mại -->
             <div class="stem-wrapper">
-              <svg class="flower-stem-svg" viewBox="0 0 100 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <svg class="flower-stem-svg" viewBox="0 0 100 240" fill="none" xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true">
                 <defs>
                   <linearGradient id="mainStemGrad" x1="50" y1="240" x2="50" y2="40" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#3d6b45"/>
-                    <stop offset="40%" stop-color="#5a9662"/>
-                    <stop offset="85%" stop-color="#7eb886"/>
-                    <stop offset="100%" stop-color="#a4d8ab"/>
+                    <stop offset="0%" stop-color="#3d6b45" />
+                    <stop offset="40%" stop-color="#5a9662" />
+                    <stop offset="85%" stop-color="#7eb886" />
+                    <stop offset="100%" stop-color="#a4d8ab" />
                   </linearGradient>
                   <linearGradient id="mainLeafLeft" x1="10" y1="170" x2="50" y2="130" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#4a7c52"/>
-                    <stop offset="100%" stop-color="#8cd497"/>
+                    <stop offset="0%" stop-color="#4a7c52" />
+                    <stop offset="100%" stop-color="#8cd497" />
                   </linearGradient>
                   <linearGradient id="mainLeafRight" x1="90" y1="120" x2="50" y2="90" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#4a7c52"/>
-                    <stop offset="100%" stop-color="#8cd497"/>
+                    <stop offset="0%" stop-color="#4a7c52" />
+                    <stop offset="100%" stop-color="#8cd497" />
                   </linearGradient>
                 </defs>
                 <!-- Thân hoa cong duyên dáng -->
-                <path class="stem-path" d="M50 240 C48 180, 56 120, 50 40" stroke="url(#mainStemGrad)" stroke-width="7" stroke-linecap="round"/>
-                
+                <path class="stem-path" d="M50 240 C48 180, 56 120, 50 40" stroke="url(#mainStemGrad)" stroke-width="7"
+                  stroke-linecap="round" />
+
                 <!-- Lá trái mềm mại -->
                 <g class="swaying-leaf leaf-left">
-                  <path d="M49 155 C30 150, 10 135, 12 115 C28 116, 46 135, 49 155 Z" fill="url(#mainLeafLeft)"/>
-                  <path d="M49 155 C35 140, 20 128, 12 115" stroke="#aef0b8" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+                  <path d="M49 155 C30 150, 10 135, 12 115 C28 116, 46 135, 49 155 Z" fill="url(#mainLeafLeft)" />
+                  <path d="M49 155 C35 140, 20 128, 12 115" stroke="#aef0b8" stroke-width="1.5" stroke-linecap="round"
+                    opacity="0.75" />
                 </g>
 
                 <!-- Lá phải mềm mại -->
                 <g class="swaying-leaf leaf-right">
-                  <path d="M51 115 C70 105, 90 92, 88 72 C72 75, 54 95, 51 115 Z" fill="url(#mainLeafRight)"/>
-                  <path d="M51 115 C65 98, 78 85, 88 72" stroke="#aef0b8" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+                  <path d="M51 115 C70 105, 90 92, 88 72 C72 75, 54 95, 51 115 Z" fill="url(#mainLeafRight)" />
+                  <path d="M51 115 C65 98, 78 85, 88 72" stroke="#aef0b8" stroke-width="1.5" stroke-linecap="round"
+                    opacity="0.75" />
                 </g>
-                
+
                 <!-- Đài hoa xanh đỡ cánh hoa -->
-                <path d="M38 46 C45 36, 55 36, 62 46 C56 50, 44 50, 38 46 Z" fill="#4a7c52"/>
-                <path d="M35 44 C38 32, 42 28, 44 38" stroke="#5a9662" stroke-width="3" stroke-linecap="round"/>
-                <path d="M65 44 C62 32, 58 28, 56 38" stroke="#5a9662" stroke-width="3" stroke-linecap="round"/>
+                <path d="M38 46 C45 36, 55 36, 62 46 C56 50, 44 50, 38 46 Z" fill="#4a7c52" />
+                <path d="M35 44 C38 32, 42 28, 44 38" stroke="#5a9662" stroke-width="3" stroke-linecap="round" />
+                <path d="M65 44 C62 32, 58 28, 56 38" stroke="#5a9662" stroke-width="3" stroke-linecap="round" />
               </svg>
             </div>
 
             <!-- Đầu hoa bông hồng Sophia quý phái chuẩn ảnh mẫu người dùng -->
             <div class="flower-head" id="flower-head">
               <div class="flower-head-glow" aria-hidden="true"></div>
-              
+
               <div class="flower-blossom-img-wrapper">
-                <img src="assets/sophia-rose-pink.png" class="flower-blossom-img" alt="Bông hoa hồng Sophia kiêu sa" draggable="false">
+                <img src="assets/sophia-rose-pink.png" class="flower-blossom-img" alt="Bông hoa hồng Sophia kiêu sa"
+                  draggable="false">
               </div>
 
               <!-- Hạt bụi tiên lấp lánh xoay quanh đóa hoa -->
@@ -383,11 +513,13 @@
         <div class="garden-status-board">
           <div class="garden-counter-pill" id="garden-counter-pill">
             <span class="counter-icon">🌹</span>
-            <span class="counter-text" id="garden-counter-text">Chạm vào đóa hoa để hoa hồng Sophia chồi lên khoe sắc</span>
+            <span class="counter-text" id="garden-counter-text">Chạm vào đóa hoa để hoa hồng Sophia chồi lên khoe
+              sắc</span>
             <span class="counter-number" id="garden-counter-number"></span>
           </div>
           <p class="garden-blessing" id="garden-blessing">
-            “Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia bừng nở rạng ngời gửi trọn những điều tuyệt vời nhất đến Bảo Trân.”
+            “Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia bừng nở rạng ngời gửi trọn những điều tuyệt
+            vời nhất đến Bảo Trân.”
           </p>
         </div>
 
@@ -399,7 +531,8 @@
           </button>
 
           <!-- Nút xóa hết hoa: Chỉ tự động xuất hiện khi vườn có nhiều hoa -->
-          <button type="button" class="btn btn-clear-garden is-hidden" id="btn-clear-garden" aria-label="Xóa hết hoa hồng Sophia">
+          <button type="button" class="btn btn-clear-garden is-hidden" id="btn-clear-garden"
+            aria-label="Xóa hết hoa hồng Sophia">
             <span class="btn-icon">🧹</span>
             <span class="btn-text">Xóa hết hoa</span>
           </button>
@@ -419,6 +552,7 @@
   <!-- Canvas vườn hoa chồi lên tiền cảnh (lớp trước viền dưới) -->
   <canvas id="garden-canvas-front" aria-hidden="true"></canvas>
 
-  <script src="script.js?v=5.0"></script>
+  <script src="script.js?v=6.0"></script>
 </body>
+
 </html>

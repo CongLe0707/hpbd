@@ -383,8 +383,8 @@ function drawScratchCover() {
 
   // Hạt bụi kim tuyến & ánh sao lấp lánh ngẫu nhiên
   for (let i = 0; i < 80; i++) {
-    sctx.fillStyle = i % 3 === 0 
-      ? 'rgba(255, 255, 255, 0.85)' 
+    sctx.fillStyle = i % 3 === 0
+      ? 'rgba(255, 255, 255, 0.85)'
       : (i % 3 === 1 ? 'rgba(216, 162, 67, 0.4)' : 'rgba(201, 24, 74, 0.22)');
     sctx.beginPath();
     sctx.arc(Math.random() * w, Math.random() * h, 1 + Math.random() * 2.5, 0, Math.PI * 2);
@@ -522,11 +522,12 @@ function playScratchUnlockChime() {
 /* ============================================================================
    LOGIC CHUYỂN ĐỔI GIAI ĐOẠN & TƯƠNG TÁC NGƯỜI DÙNG (STAGE MANAGER)
    ============================================================================ */
-let scrollToStepGlobal = (stageName) => {};
+let scrollToStepGlobal = (stageName) => { };
 
 function initStageInteractions() {
   const stages = {
     gift: document.getElementById('gift-stage'),
+    calendar: document.getElementById('calendar-stage'),
     wishes: document.getElementById('wishes-stage'),
     scratch: document.getElementById('scratch-stage'),
     garden: document.getElementById('garden-stage')
@@ -534,6 +535,7 @@ function initStageInteractions() {
 
   const giftBox = document.getElementById('gift-box');
   const btnOpenGift = document.getElementById('btn-open-gift');
+  const btnGotoWishes = document.getElementById('btn-goto-wishes');
   const btnBlowCandle = document.getElementById('btn-blow-candle');
   const btnGotoScratch = document.getElementById('btn-goto-scratch');
   const btnScratchToGarden = document.getElementById('btn-scratch-to-garden');
@@ -549,12 +551,15 @@ function initStageInteractions() {
 
     if (stepNumber === 2) {
       dividerEl = document.getElementById('divider-step-2');
-      stageEl = stages.wishes;
+      stageEl = stages.calendar;
     } else if (stepNumber === 3) {
       dividerEl = document.getElementById('divider-step-3');
-      stageEl = stages.scratch;
+      stageEl = stages.wishes;
     } else if (stepNumber === 4) {
       dividerEl = document.getElementById('divider-step-4');
+      stageEl = stages.scratch;
+    } else if (stepNumber === 5) {
+      dividerEl = document.getElementById('divider-step-5');
       stageEl = stages.garden;
     }
 
@@ -574,16 +579,27 @@ function initStageInteractions() {
         if (stageEl) {
           stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        startWishesTypewriter(true);
+        // Kích hoạt nét vẽ khoanh tròn nghệ thuật ngày 23/10
+        const day23 = document.getElementById('calendar-day-23');
+        if (day23) {
+          day23.classList.add('draw-active');
+        }
       }, 150);
     } else if (stepNumber === 3) {
       setTimeout(() => {
         if (stageEl) {
           stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        drawScratchCover();
+        startWishesTypewriter(true);
       }, 150);
     } else if (stepNumber === 4) {
+      setTimeout(() => {
+        if (stageEl) {
+          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        drawScratchCover();
+      }, 150);
+    } else if (stepNumber === 5) {
       setTimeout(() => {
         if (stageEl) {
           stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -595,7 +611,7 @@ function initStageInteractions() {
     }
   };
 
-  // Bước 1: Mở hộp quà hoành tráng -> Chỉ khi mở quà xong mới hiện Bước 2
+  // Bước 1: Mở hộp quà -> Mở khóa Bước 2 (Lịch Ngày Đặc Biệt 23/10)
   const handleOpenGift = () => {
     if (!giftBox.classList.contains('opening') && !giftBox.classList.contains('opened')) {
       giftBox.classList.add('opening');
@@ -608,8 +624,8 @@ function initStageInteractions() {
         unlockStep(2);
       }, 650);
     } else {
-      if (stages.wishes) {
-        stages.wishes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (stages.calendar) {
+        stages.calendar.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   };
@@ -627,7 +643,29 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 2: Thổi nến hoành tráng & mở nút dẫn sang Bước 3
+  // Tương tác chạm vào ngày 23 trên lịch để bắn hoa lấp lánh
+  const day23 = document.getElementById('calendar-day-23');
+  if (day23) {
+    day23.addEventListener('click', () => {
+      const rect = day23.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      triggerSoftSparkleConfetti(cx, cy);
+    });
+  }
+
+  // Bước 2 -> Bước 3: Nút chuyển từ Lịch sang Lời chúc & Thổi nến
+  if (btnGotoWishes) {
+    btnGotoWishes.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      unlockStep(3);
+    });
+  }
+
+  // Bước 3: Thổi nến hoành tráng & mở nút dẫn sang Bước 4 (Thẻ cào)
   const handleBlowCandle = () => {
     if (!candle.classList.contains('extinguished')) {
       candle.classList.add('extinguished');
@@ -637,7 +675,7 @@ function initStageInteractions() {
       triggerGrandFireworks();
       setTimeout(triggerGrandFireworks, 400);
 
-      // Hiện lời chúc tốt đẹp và nút dẫn mở khóa Bước 3
+      // Hiện lời chúc tốt đẹp và nút dẫn mở khóa Bước 4
       setTimeout(() => {
         if (postBlowMessage) postBlowMessage.classList.remove('hidden');
         if (btnBlowCandle) btnBlowCandle.classList.add('hidden');
@@ -653,20 +691,9 @@ function initStageInteractions() {
     cakeWrapper.addEventListener('click', handleBlowCandle);
   }
 
-  // Bước 2 -> Bước 3: Nhấn nút xong mới mở khóa & hiện Bước 3
+  // Bước 3 -> Bước 4: Nhấn nút xong mới mở khóa & hiện Bước 4 (Thẻ cào)
   if (btnGotoScratch) {
     btnGotoScratch.addEventListener('click', (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      unlockStep(3);
-    });
-  }
-
-  // Bước 3 -> Bước 4: Nhấn nút xong mới mở khóa & hiện Bước 4
-  if (btnScratchToGarden) {
-    btnScratchToGarden.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -675,7 +702,18 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 4: Nút cuộn mượt lên đầu trang để xem lại
+  // Bước 4 -> Bước 5: Nhấn nút xong mới mở khóa & hiện Bước 5 (Vườn hoa)
+  if (btnScratchToGarden) {
+    btnScratchToGarden.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      unlockStep(5);
+    });
+  }
+
+  // Bước 5: Nút cuộn mượt lên đầu trang để xem lại
   if (btnScrollTop) {
     btnScrollTop.addEventListener('click', (e) => {
       if (e) {
@@ -701,7 +739,7 @@ function initBouquetInteractions() {
     const x = rect.left + rect.width / 2;
     const y = rect.top + rect.height / 2;
     triggerSoftSparkleConfetti(x, y);
-    
+
     // Hiệu ứng nhún nhẹ vui mắt
     bouquet.style.transform = 'scale(1.08)';
     setTimeout(() => {
@@ -793,7 +831,7 @@ function initPetalAnimation() {
       this.oscillationSpeed = 0.02 + Math.random() * 0.03;
       this.oscillationAngle = Math.random() * Math.PI * 2;
       this.oscillationDistance = 0.9 + Math.random() * 1.6;
-      
+
       this.rotation = Math.random() * 360;
       this.rotationSpeed = (Math.random() - 0.5) * 1.2;
       this.flip = Math.random() * Math.PI;
@@ -957,9 +995,9 @@ function initStardustTrail() {
 /* ============================================================================
    HIỆU ỨNG PHÁO HOA & CONFETTI ĐẠI TIỆC HOÀNG GIA (CONFETTI CANNON)
    ============================================================================ */
-let triggerConfettiBurst = () => {};
-let triggerSoftSparkleConfetti = () => {};
-let triggerGrandFireworks = () => {};
+let triggerConfettiBurst = () => { };
+let triggerSoftSparkleConfetti = () => { };
+let triggerGrandFireworks = () => { };
 
 function initConfetti() {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1244,7 +1282,7 @@ function initSwayingFlowerGarden() {
       this.flipSpeed = 0.03 + Math.random() * 0.04;
       this.alpha = 1;
       this.decay = 0.009 + Math.random() * 0.014;
-      
+
       const petalColors = [
         'rgba(247, 139, 167, ',
         'rgba(255, 204, 218, ',
@@ -1428,7 +1466,7 @@ function initSwayingFlowerGarden() {
           ctx.moveTo(0, 0);
           ctx.bezierCurveTo(leaf.length * 0.35, -leaf.length * 0.35, leaf.length * 0.75, -leaf.length * 0.25, leaf.length, 0);
           ctx.bezierCurveTo(leaf.length * 0.75, leaf.length * 0.25, leaf.length * 0.35, leaf.length * 0.35, 0, 0);
-          
+
           const leafGrad = ctx.createLinearGradient(0, 0, leaf.length, 0);
           leafGrad.addColorStop(0, '#3e7d48');
           leafGrad.addColorStop(0.7, '#5ea869');
@@ -1491,184 +1529,184 @@ function initSwayingFlowerGarden() {
         } else {
           // VẼ VECTOR DỰ PHÒNG TỪNG DÁNG HOA HỒNG SOPHIA
           if (this.type === 'sophia-grand') {
-          // 1. Đóa Hồng Sophia Hoàng Gia Nở Rộ Viên Mãn (4 tầng cánh xếp xoắn ốc)
-          // Tầng 1: Cánh ngoài xòe rộng
-          for (let p = 0; p < 7; p++) {
-            const pAngle = (p * Math.PI * 2) / 7;
-            ctx.save();
-            ctx.rotate(pAngle);
+            // 1. Đóa Hồng Sophia Hoàng Gia Nở Rộ Viên Mãn (4 tầng cánh xếp xoắn ốc)
+            // Tầng 1: Cánh ngoài xòe rộng
+            for (let p = 0; p < 7; p++) {
+              const pAngle = (p * Math.PI * 2) / 7;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.48, size * 0.44, size * 0.36, 0, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.outer;
+              ctx.fill();
+              ctx.restore();
+            }
+            // Tầng 2: Cánh giữa cúp tròn mềm mại
+            for (let p = 0; p < 6; p++) {
+              const pAngle = (p * Math.PI * 2) / 6 + 0.28;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.34, size * 0.36, size * 0.28, 0, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.mid;
+              ctx.fill();
+              ctx.restore();
+            }
+            // Tầng 3: Cánh trong xoắn ốc hoa hồng
+            for (let p = 0; p < 5; p++) {
+              const pAngle = (p * Math.PI * 2) / 5 + 0.55;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.22, size * 0.26, size * 0.20, 0, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.inner;
+              ctx.fill();
+              ctx.restore();
+            }
+            // Tầng 4: Lõi nụ hoa hồng & nhụy vàng ấm
             ctx.beginPath();
-            ctx.ellipse(0, -size * 0.48, size * 0.44, size * 0.36, 0, 0, Math.PI * 2);
-            ctx.fillStyle = this.colors.outer;
-            ctx.fill();
-            ctx.restore();
-          }
-          // Tầng 2: Cánh giữa cúp tròn mềm mại
-          for (let p = 0; p < 6; p++) {
-            const pAngle = (p * Math.PI * 2) / 6 + 0.28;
-            ctx.save();
-            ctx.rotate(pAngle);
-            ctx.beginPath();
-            ctx.ellipse(0, -size * 0.34, size * 0.36, size * 0.28, 0, 0, Math.PI * 2);
-            ctx.fillStyle = this.colors.mid;
-            ctx.fill();
-            ctx.restore();
-          }
-          // Tầng 3: Cánh trong xoắn ốc hoa hồng
-          for (let p = 0; p < 5; p++) {
-            const pAngle = (p * Math.PI * 2) / 5 + 0.55;
-            ctx.save();
-            ctx.rotate(pAngle);
-            ctx.beginPath();
-            ctx.ellipse(0, -size * 0.22, size * 0.26, size * 0.20, 0, 0, Math.PI * 2);
-            ctx.fillStyle = this.colors.inner;
-            ctx.fill();
-            ctx.restore();
-          }
-          // Tầng 4: Lõi nụ hoa hồng & nhụy vàng ấm
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.18, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.core;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.10, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.stamen;
-          ctx.fill();
-
-        } else if (this.type === 'sophia-cup') {
-          // 2. Đóa Hồng Sophia Dáng Chén Sâu (Deep-Cupped English Sophia Rose)
-          // Lớp cánh chén ôm đáy
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.52, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.outer;
-          ctx.fill();
-
-          // Các vạt cánh cúp xếp lượn sóng
-          for (let p = 0; p < 6; p++) {
-            const pAngle = (p * Math.PI * 2) / 6;
-            ctx.save();
-            ctx.rotate(pAngle);
-            ctx.beginPath();
-            ctx.ellipse(0, -size * 0.36, size * 0.38, size * 0.28, 0.1, 0, Math.PI * 2);
-            ctx.fillStyle = this.colors.mid;
-            ctx.fill();
-            ctx.restore();
-          }
-
-          // Cánh xoáy sâu bên trong chén hoa
-          for (let p = 0; p < 4; p++) {
-            const pAngle = (p * Math.PI * 2) / 4 + 0.4;
-            ctx.save();
-            ctx.rotate(pAngle);
-            ctx.beginPath();
-            ctx.ellipse(0, -size * 0.20, size * 0.28, size * 0.18, -0.15, 0, Math.PI * 2);
-            ctx.fillStyle = this.colors.inner;
-            ctx.fill();
-            ctx.restore();
-          }
-
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.14, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.core;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.08, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.stamen;
-          ctx.fill();
-
-        } else if (this.type === 'sophia-rosette') {
-          // 3. Đóa Hồng Sophia Dáng Nếp Gấp Lụa Hoàng Gia (Quartered Rosette)
-          // Vòng cánh ngoài xòe rộng màu hồng phấn
-          for (let p = 0; p < 8; p++) {
-            const pAngle = (p * Math.PI * 2) / 8;
-            ctx.save();
-            ctx.rotate(pAngle);
-            ctx.beginPath();
-            ctx.ellipse(0, -size * 0.46, size * 0.34, size * 0.32, 0, 0, Math.PI * 2);
-            ctx.fillStyle = this.colors.outer;
-            ctx.fill();
-            ctx.restore();
-          }
-
-          // 4 góc xoáy cánh hoa hồng Anh Quốc
-          for (let q = 0; q < 4; q++) {
-            const qAngle = (q * Math.PI) / 2;
-            const qx = Math.cos(qAngle) * size * 0.18;
-            const qy = Math.sin(qAngle) * size * 0.18;
-            ctx.beginPath();
-            ctx.arc(qx, qy, size * 0.16, 0, Math.PI * 2);
-            ctx.fillStyle = this.colors.inner;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(qx, qy, size * 0.08, 0, Math.PI * 2);
+            ctx.arc(0, 0, size * 0.18, 0, Math.PI * 2);
             ctx.fillStyle = this.colors.core;
             ctx.fill();
-          }
 
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.09, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.stamen;
-          ctx.fill();
-
-        } else if (this.type === 'sophia-bud') {
-          // 4. Nụ Hoa Hồng Sophia Chúm Chím Hé Nở (Tender Sophia Rosebud)
-          // Thân nụ hoa hồng thon dài
-          ctx.beginPath();
-          ctx.ellipse(0, -size * 0.36, size * 0.28, size * 0.44, 0, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.outer;
-          ctx.fill();
-
-          // Cánh xoắn hé nở ở đỉnh nụ
-          ctx.beginPath();
-          ctx.ellipse(-size * 0.08, -size * 0.40, size * 0.18, size * 0.38, -0.22, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.mid;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.ellipse(size * 0.08, -size * 0.40, size * 0.18, size * 0.38, 0.22, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.inner;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.ellipse(0, -size * 0.48, size * 0.12, size * 0.24, 0, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.rim;
-          ctx.fill();
-
-        } else {
-          // 5. Hoa Hồng Sophia Duyên Dáng Truyền Thống (Classic Spiral Sophia Rose)
-          for (let p = 0; p < 6; p++) {
-            const pAngle = (p * Math.PI) / 3;
-            ctx.save();
-            ctx.rotate(pAngle);
             ctx.beginPath();
-            ctx.ellipse(0, -size * 0.44, size * 0.44, size * 0.32, 0, 0, Math.PI * 2);
+            ctx.arc(0, 0, size * 0.10, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.stamen;
+            ctx.fill();
+
+          } else if (this.type === 'sophia-cup') {
+            // 2. Đóa Hồng Sophia Dáng Chén Sâu (Deep-Cupped English Sophia Rose)
+            // Lớp cánh chén ôm đáy
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.52, 0, Math.PI * 2);
             ctx.fillStyle = this.colors.outer;
             ctx.fill();
-            ctx.restore();
-          }
-          for (let p = 0; p < 5; p++) {
-            const pAngle = (p * Math.PI * 2) / 5 + 0.32;
-            ctx.save();
-            ctx.rotate(pAngle);
+
+            // Các vạt cánh cúp xếp lượn sóng
+            for (let p = 0; p < 6; p++) {
+              const pAngle = (p * Math.PI * 2) / 6;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.36, size * 0.38, size * 0.28, 0.1, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.mid;
+              ctx.fill();
+              ctx.restore();
+            }
+
+            // Cánh xoáy sâu bên trong chén hoa
+            for (let p = 0; p < 4; p++) {
+              const pAngle = (p * Math.PI * 2) / 4 + 0.4;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.20, size * 0.28, size * 0.18, -0.15, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.inner;
+              ctx.fill();
+              ctx.restore();
+            }
+
             ctx.beginPath();
-            ctx.ellipse(0, -size * 0.30, size * 0.34, size * 0.24, 0, 0, Math.PI * 2);
+            ctx.arc(0, 0, size * 0.14, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.core;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.08, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.stamen;
+            ctx.fill();
+
+          } else if (this.type === 'sophia-rosette') {
+            // 3. Đóa Hồng Sophia Dáng Nếp Gấp Lụa Hoàng Gia (Quartered Rosette)
+            // Vòng cánh ngoài xòe rộng màu hồng phấn
+            for (let p = 0; p < 8; p++) {
+              const pAngle = (p * Math.PI * 2) / 8;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.46, size * 0.34, size * 0.32, 0, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.outer;
+              ctx.fill();
+              ctx.restore();
+            }
+
+            // 4 góc xoáy cánh hoa hồng Anh Quốc
+            for (let q = 0; q < 4; q++) {
+              const qAngle = (q * Math.PI) / 2;
+              const qx = Math.cos(qAngle) * size * 0.18;
+              const qy = Math.sin(qAngle) * size * 0.18;
+              ctx.beginPath();
+              ctx.arc(qx, qy, size * 0.16, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.inner;
+              ctx.fill();
+
+              ctx.beginPath();
+              ctx.arc(qx, qy, size * 0.08, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.core;
+              ctx.fill();
+            }
+
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.09, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.stamen;
+            ctx.fill();
+
+          } else if (this.type === 'sophia-bud') {
+            // 4. Nụ Hoa Hồng Sophia Chúm Chím Hé Nở (Tender Sophia Rosebud)
+            // Thân nụ hoa hồng thon dài
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.36, size * 0.28, size * 0.44, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.outer;
+            ctx.fill();
+
+            // Cánh xoắn hé nở ở đỉnh nụ
+            ctx.beginPath();
+            ctx.ellipse(-size * 0.08, -size * 0.40, size * 0.18, size * 0.38, -0.22, 0, Math.PI * 2);
             ctx.fillStyle = this.colors.mid;
             ctx.fill();
-            ctx.restore();
-          }
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.20, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.inner;
-          ctx.fill();
 
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.10, 0, Math.PI * 2);
-          ctx.fillStyle = this.colors.stamen;
-          ctx.fill();
-        }
+            ctx.beginPath();
+            ctx.ellipse(size * 0.08, -size * 0.40, size * 0.18, size * 0.38, 0.22, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.inner;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.48, size * 0.12, size * 0.24, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.rim;
+            ctx.fill();
+
+          } else {
+            // 5. Hoa Hồng Sophia Duyên Dáng Truyền Thống (Classic Spiral Sophia Rose)
+            for (let p = 0; p < 6; p++) {
+              const pAngle = (p * Math.PI) / 3;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.44, size * 0.44, size * 0.32, 0, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.outer;
+              ctx.fill();
+              ctx.restore();
+            }
+            for (let p = 0; p < 5; p++) {
+              const pAngle = (p * Math.PI * 2) / 5 + 0.32;
+              ctx.save();
+              ctx.rotate(pAngle);
+              ctx.beginPath();
+              ctx.ellipse(0, -size * 0.30, size * 0.34, size * 0.24, 0, 0, Math.PI * 2);
+              ctx.fillStyle = this.colors.mid;
+              ctx.fill();
+              ctx.restore();
+            }
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.20, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.inner;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, size * 0.10, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.stamen;
+            ctx.fill();
+          }
         } // Đóng else fallback vector
 
         ctx.restore();
@@ -1900,7 +1938,7 @@ function initSwayingFlowerGarden() {
           osc.stop(now + idx * 0.06 + 0.32);
         });
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // Bắn một đợt hạt bụi tiên/cánh hoa nhỏ
     if (container) {
