@@ -6,10 +6,16 @@
  */
 const BIRTHDAY_CONFIG = {
   // 1. Tên người nhận sinh nhật
-  recipientName: "Bảo Trân",
+  recipientName: "người ấy",
 
-  // 2. Lời chúc sinh nhật (xuống dòng bằng dấu \n)
-  wishes: "Anh không đến đây 1 mình,\nanh đến đây với bó hoa mà em thích,\nchúc em sinh nhật vui vẻ",
+  // 2. Lời chúc sinh nhật giàu triết lý, niềm tin và hy vọng (không nhắc đến yêu thương)
+  wishes: `Anh không đến đây 1 mình,
+anh đến đây với bó hoa mà em thích,
+chúc em sinh nhật thật nhiều niềm vui và bình yên!
+
+Bước sang một tuổi mới, chúc em luôn giữ vững niềm tin và sự kiên định trên con đường mình đã chọn.
+Cuộc đời là một hành trình dài của trải nghiệm và trưởng thành, không cần phải vội vã so mình với bất kỳ ai, bởi mỗi loài hoa đều có thời khắc rực rỡ của riêng mình.
+Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều bình dị, luôn an nhiên trước mọi biến chuyển, can đảm đón nhận mọi thử thách, và tự tin tỏa sáng bằng chính bản lĩnh, sự tự do cùng năng lượng rạng ngời nhất của em.`,
 
   // 3. Thông điệp trên hộp quà ban đầu
   giftPrompt: "Có một món quà dành cho bạn!",
@@ -43,7 +49,7 @@ const BIRTHDAY_CONFIG = {
     moreBatchCount: 28,
     soundEnabled: true,
     title: "Vườn Hoa Hồng Sophia Của Em 🌸",
-    blessingText: "“Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia chồi lên gửi trọn yêu thương đến Bảo Trân.”"
+    blessingText: "“Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia bừng nở rạng ngời gửi trọn những điều tuyệt vời nhất đến người ấy.”"
   }
 };
 
@@ -80,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (wishesEl) {
-    wishesEl.innerHTML = escapeHtml(BIRTHDAY_CONFIG.wishes).replace(/\n/g, '<br>');
+    wishesEl.innerHTML = '';
   }
 
   if (blessingEl) {
@@ -121,6 +127,109 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+/* ============================================================================
+   HIỆU ỨNG GÕ CHỮ TỪNG KÝ TỰ CHO LỜI CHÚC (WISHES TYPEWRITER EFFECT)
+   Chữ từ từ hiện ra tự nhiên, sâu lắng, không xuất hiện ồ ạt cùng lúc
+   ============================================================================ */
+let wishesTypewriterTimer = null;
+let isWishesTyping = false;
+let hasWishesFinished = false;
+
+function startWishesTypewriter(forceRestart = false) {
+  const wishesEl = document.getElementById('wishes-text');
+  if (!wishesEl) return;
+
+  if (hasWishesFinished && !forceRestart) return;
+
+  if (wishesTypewriterTimer) {
+    clearTimeout(wishesTypewriterTimer);
+    wishesTypewriterTimer = null;
+  }
+
+  const rawText = BIRTHDAY_CONFIG.wishes;
+  wishesEl.innerHTML = '';
+  isWishesTyping = true;
+  hasWishesFinished = false;
+
+  const cursorSpan = document.createElement('span');
+  cursorSpan.className = 'typewriter-cursor';
+  cursorSpan.setAttribute('aria-hidden', 'true');
+  wishesEl.appendChild(cursorSpan);
+
+  let charIndex = 0;
+
+  function typeChar() {
+    if (charIndex < rawText.length) {
+      const ch = rawText[charIndex];
+      charIndex++;
+
+      if (ch === '\n') {
+        const br = document.createElement('br');
+        wishesEl.insertBefore(br, cursorSpan);
+      } else {
+        const textNode = document.createTextNode(ch);
+        wishesEl.insertBefore(textNode, cursorSpan);
+      }
+
+      let delay = 22;
+      if (ch === '.' || ch === '!' || ch === '?') {
+        delay = 240;
+      } else if (ch === ',' || ch === ';') {
+        delay = 95;
+      } else if (ch === '\n') {
+        delay = 260;
+      }
+
+      wishesTypewriterTimer = setTimeout(typeChar, delay);
+    } else {
+      isWishesTyping = false;
+      hasWishesFinished = true;
+      wishesTypewriterTimer = null;
+
+      setTimeout(() => {
+        cursorSpan.classList.add('fade-out');
+        setTimeout(() => {
+          if (cursorSpan.parentNode) {
+            cursorSpan.parentNode.removeChild(cursorSpan);
+          }
+        }, 500);
+      }, 1800);
+    }
+  }
+
+  wishesTypewriterTimer = setTimeout(typeChar, 320);
+
+  // Nhấn vào khung lời chúc để hiện ngay lập tức toàn bộ
+  const wishesBox = document.querySelector('.wishes-content-box');
+  if (wishesBox && !wishesBox._hasSkipHandler) {
+    wishesBox._hasSkipHandler = true;
+    wishesBox.addEventListener('click', () => {
+      if (isWishesTyping) {
+        if (wishesTypewriterTimer) {
+          clearTimeout(wishesTypewriterTimer);
+          wishesTypewriterTimer = null;
+        }
+        wishesEl.innerHTML = escapeHtml(rawText).replace(/\n/g, '<br>');
+        isWishesTyping = false;
+        hasWishesFinished = true;
+      }
+    });
+  }
+}
+
+function resetWishesTypewriter() {
+  if (wishesTypewriterTimer) {
+    clearTimeout(wishesTypewriterTimer);
+    wishesTypewriterTimer = null;
+  }
+  isWishesTyping = false;
+  hasWishesFinished = false;
+  const wishesEl = document.getElementById('wishes-text');
+  if (wishesEl) {
+    wishesEl.innerHTML = '';
+  }
 }
 
 /* ============================================================================
@@ -176,6 +285,7 @@ function initStageInteractions() {
     // Kích hoạt pháo hoa hoặc hiệu ứng đặc thù
     if (targetStage === 'wishes') {
       triggerGrandFireworks();
+      startWishesTypewriter(true);
     } else if (targetStage === 'garden') {
       if (window.onGardenStageActivated) {
         window.onGardenStageActivated(!hasVisitedGarden);
@@ -277,6 +387,7 @@ function initStageInteractions() {
     btnBlowCandle.classList.remove('hidden');
     if (btnGotoGarden) btnGotoGarden.classList.add('hidden');
     btnReplay.classList.add('hidden');
+    resetWishesTypewriter();
 
     // Chuyển về giai đoạn hộp quà
     giftBox.classList.remove('opening', 'opened');

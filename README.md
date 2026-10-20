@@ -55,6 +55,10 @@ hpbd/
    - Hiệu ứng âm thanh chuông ngân diệu kỳ (Web Audio API Pentatonic Chime) cùng mưa cánh hoa hồng Sophia rơi chao liệng trong gió.
    - Bảng đếm hoa tự động cập nhật số lượng hoa, hỗ trợ nút "Nở thêm hoa" và nút thông minh "🧹 Xóa hết hoa" (chỉ xuất hiện khi có nhiều hoa, cho phép thu gọn toàn bộ hoa lùi xuống đất êm dịu).
 
+8. **Hiệu ứng gõ chữ từ từ cho lời chúc (Typewriter Effect)**:
+   - Đoạn văn chúc mừng giàu triết lý, hy vọng và niềm tin từ từ xuất hiện từng ký tự với con trỏ lấp lánh như được nắn nót viết tay, tạo cảm xúc sâu lắng, không hiện ồ ạt cả đoạn cùng lúc.
+   - Hỗ trợ chạm vào khung lời chúc để hoàn thành ngay lập tức nếu muốn đọc nhanh.
+
 ---
 
 ## ⚙️ Cấu hình tập trung trong [`script.js`](script.js)
@@ -64,8 +68,14 @@ const BIRTHDAY_CONFIG = {
   // 1. Tên người nhận sinh nhật
   recipientName: "người ấy",
 
-  // 2. Lời chúc sinh nhật (dùng \n để xuống dòng)
-  wishes: "Anh không đến đây 1 mình,\nanh đến đây với bó hoa mà em thích,\nchúc em sinh nhật vui vẻ",
+  // 2. Lời chúc sinh nhật giàu triết lý, niềm tin và hy vọng
+  wishes: `Anh không đến đây 1 mình,
+anh đến đây với bó hoa mà em thích,
+chúc em sinh nhật thật nhiều niềm vui và bình yên!
+
+Bước sang một tuổi mới, chúc em luôn giữ vững niềm tin và sự kiên định trên con đường mình đã chọn.
+Cuộc đời là một hành trình dài của trải nghiệm và trưởng thành, không cần phải vội vã so mình với bất kỳ ai, bởi mỗi loài hoa đều có thời khắc rực rỡ của riêng mình.
+Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều bình dị, luôn an nhiên trước mọi biến chuyển, can đảm đón nhận mọi thử thách, và tự tin tỏa sáng bằng chính bản lĩnh, sự tự do cùng năng lượng rạng ngời nhất của em.`,
 
   // 3. Thông điệp trên hộp quà ban đầu
   giftPrompt: "Có một món quà dành cho bạn!",

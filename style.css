@@ -855,14 +855,37 @@ body {
 
 .wishes-text {
   font-family: var(--font-serif);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-style: italic;
   font-weight: 500;
   color: var(--text-secondary);
-  line-height: 1.95;
+  line-height: 1.9;
   letter-spacing: 0.25px;
   white-space: pre-line;
   word-break: break-word;
+}
+
+/* Con trỏ gõ chữ lung linh màu hồng ánh kim */
+.typewriter-cursor {
+  display: inline-block;
+  width: 2.5px;
+  height: 1.18em;
+  background-color: var(--rose-primary, #e2738d);
+  vertical-align: -0.15em;
+  margin-left: 3px;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(226, 115, 141, 0.7);
+  animation: typewriterBlink 0.75s ease-in-out infinite;
+}
+
+.typewriter-cursor.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+@keyframes typewriterBlink {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0; transform: scaleY(0.65); }
 }
 
 /* --------------------------------------------------------------------------
