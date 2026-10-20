@@ -48,8 +48,8 @@ Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều
 
   // 8. Cấu hình Vườn hoa hồng Sophia diệu kỳ & Đóa hoa lắc lư
   garden: {
-    initialBatchCount: 45,
-    moreBatchCount: 28,
+    initialBatchCount: 3, // Mỗi lần chạm chỉ nở 3 - 4 bông nhẹ nhàng, tinh tế
+    moreBatchCount: 3,    // Bấm nở thêm cũng 3 - 4 bông
     soundEnabled: true,
     title: "Vườn Hoa Hồng Sophia Của Em 🌸",
     blessingText: "“Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia bừng nở rạng ngời gửi trọn những điều tuyệt vời nhất đến Bảo Trân.”"
@@ -1725,8 +1725,8 @@ function initSwayingFlowerGarden() {
     requestAnimationFrame(gardenLoop);
   }
 
-  // Hàm kích hoạt đợt hoa hồng Sophia chồi lên ngoạn mục từ phía dưới
-  function sproutGardenBatch(count = 42) {
+  // Hàm kích hoạt đợt hoa hồng Sophia chồi lên nhẹ nhàng (3 - 4 hoa mỗi lần chạm, tránh rối mắt)
+  function sproutGardenBatch(count) {
     resize();
     if (!isGardenRunning) {
       isGardenRunning = true;
@@ -1734,26 +1734,30 @@ function initSwayingFlowerGarden() {
       requestAnimationFrame(gardenLoop);
     }
 
-    const backCount = Math.floor(count * 0.62);
-    const frontCount = count - backCount;
+    // Mỗi lần chạm chỉ nở ngẫu nhiên 3 hoặc 4 đóa hoa thanh lịch, tinh tế
+    const spawnCount = (typeof count === 'number' && count > 0 && count <= 5)
+      ? count
+      : (Math.random() > 0.5 ? 4 : 3);
 
-    // Tạo hoa hồng Sophia lớp nền (trải đều khắp bề ngang màn hình)
-    for (let i = 0; i < backCount; i++) {
-      const x = (i / backCount) * width + (Math.random() - 0.5) * (width / backCount * 0.9);
-      flowersBack.push(new BotanicalFlower(x, 'back', {
-        delay: Math.random() * 1200
+    // Tính toán phân bổ vị trí x tự nhiên, thoáng đãng khắp màn hình
+    const padding = Math.max(30, width * 0.08);
+    const availableWidth = width - padding * 2;
+
+    for (let i = 0; i < spawnCount; i++) {
+      // Phân bổ đều và tạo độ lệch ngẫu nhiên nhẹ nhàng
+      const baseRatio = (i + 0.5) / spawnCount;
+      const jitter = (Math.random() - 0.5) * (availableWidth / spawnCount * 0.75);
+      const x = Math.max(25, Math.min(width - 25, padding + baseRatio * availableWidth + jitter));
+
+      const isBack = Math.random() > 0.45;
+      const targetArray = isBack ? flowersBack : flowersFront;
+
+      targetArray.push(new BotanicalFlower(x, isBack ? 'back' : 'front', {
+        delay: i * 160 + Math.random() * 100 // Từng bông vươn lên so le mềm mại
       }));
     }
 
-    // Tạo hoa hồng Sophia lớp tiền cảnh (tập trung tôn lên phần chân thẻ)
-    for (let i = 0; i < frontCount; i++) {
-      const x = (i / frontCount) * width + (Math.random() - 0.5) * (width / frontCount * 0.9);
-      flowersFront.push(new BotanicalFlower(x, 'front', {
-        delay: 200 + Math.random() * 1100
-      }));
-    }
-
-    totalBloomedCount += count;
+    totalBloomedCount += spawnCount;
     updateCounterBadge();
   }
 
@@ -1775,8 +1779,8 @@ function initSwayingFlowerGarden() {
     updateCounterBadge();
   }
 
-  // Ngưỡng hoa để tự động kích hoạt hiển thị nút Xóa hết hoa (khi nhiều hoa quá)
-  const MANY_FLOWERS_THRESHOLD = 20;
+  // Ngưỡng hoa để tự động kích hoạt hiển thị nút Xóa hết hoa (khi vườn có từ 8 bông trở lên)
+  const MANY_FLOWERS_THRESHOLD = 8;
 
   function updateClearButtonVisibility() {
     const currentCount = flowersBack.length + flowersFront.length;
@@ -1839,8 +1843,9 @@ function initSwayingFlowerGarden() {
     const cy = rect.top + rect.height * 0.35;
     triggerSoftSparkleConfetti(cx, cy);
 
-    // Kích hoạt toàn bộ vườn hoa chồi lên từ dưới màn hình!
-    sproutGardenBatch(BIRTHDAY_CONFIG.garden ? BIRTHDAY_CONFIG.garden.initialBatchCount : 45);
+    // Kích hoạt đợt hoa (3 - 4 hoa)
+    const countToBloom = (Math.random() > 0.5) ? 4 : 3;
+    sproutGardenBatch(countToBloom);
 
     // Rung phản hồi cảm ứng trên điện thoại
     if (navigator.vibrate) {
@@ -1861,11 +1866,12 @@ function initSwayingFlowerGarden() {
     }
   });
 
-  // Bấm nút "Nở thêm hoa"
+  // Bấm nút "Nở thêm hoa" (3 - 4 hoa nhẹ nhàng)
   if (btnBloomMore) {
     btnBloomMore.addEventListener('click', () => {
       playBloomChime();
-      sproutGardenBatch(BIRTHDAY_CONFIG.garden ? BIRTHDAY_CONFIG.garden.moreBatchCount : 28);
+      const countToBloom = (Math.random() > 0.5) ? 4 : 3;
+      sproutGardenBatch(countToBloom);
     });
   }
 
@@ -1926,7 +1932,7 @@ function initSwayingFlowerGarden() {
         counterNumber.textContent = '';
       }
       if (counterText) {
-        counterText.textContent = 'Chạm vào đóa hoa để ngàn hoa hồng Sophia bừng nở';
+        counterText.textContent = 'Chạm vào đóa hoa để hoa hồng Sophia chồi lên khoe sắc';
       }
       if (touchBadge) {
         const hint = touchBadge.querySelector('.hint-text');
