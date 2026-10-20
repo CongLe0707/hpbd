@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   init3DCardTilt();
   initBouquetInteractions();
   initTouchSparkleBurst();
+  initScratchCard();
   initSwayingFlowerGarden();
 });
 
@@ -349,7 +350,7 @@ function initScratchCard() {
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
-        if (!scratchRevealed && currentStageGlobal === 'scratch') {
+        if (!scratchRevealed) {
           drawScratchCover();
         }
       }, 150);
@@ -521,8 +522,7 @@ function playScratchUnlockChime() {
 /* ============================================================================
    LOGIC CHUYỂN ĐỔI GIAI ĐOẠN & TƯƠNG TÁC NGƯỜI DÙNG (STAGE MANAGER)
    ============================================================================ */
-let switchStageGlobal = (stageName) => {};
-let currentStageGlobal = 'gift';
+let scrollToStepGlobal = (stageName) => {};
 
 function initStageInteractions() {
   const stages = {
@@ -532,77 +532,36 @@ function initStageInteractions() {
     garden: document.getElementById('garden-stage')
   };
 
-  const navBtns = document.querySelectorAll('.stage-nav-btn');
   const giftBox = document.getElementById('gift-box');
   const btnOpenGift = document.getElementById('btn-open-gift');
   const btnBlowCandle = document.getElementById('btn-blow-candle');
   const btnGotoScratch = document.getElementById('btn-goto-scratch');
-  const btnGotoGarden = document.getElementById('btn-goto-garden');
-  const btnReplay = document.getElementById('btn-replay');
+  const btnScratchToGarden = document.getElementById('btn-scratch-to-garden');
+  const btnScrollTop = document.getElementById('btn-scroll-top');
   const candle = document.getElementById('candle');
   const cakeWrapper = document.getElementById('cake-interactive-wrapper');
   const postBlowMessage = document.getElementById('post-blow-message');
 
-  let currentStage = 'gift';
-  let hasVisitedGarden = false;
+  // Cuộn mượt mà xuống từng bước (Step-by-step smooth scroll)
+  const scrollToStep = (targetStage) => {
+    const el = stages[targetStage] || document.getElementById(`${targetStage}-stage`);
+    if (!el) return;
 
-  // Chuyển giai đoạn mượt mà với hoạt cảnh fade & scale
-  const switchStage = (targetStage) => {
-    if (!stages[targetStage] || currentStage === targetStage) return;
-
-    const prevEl = stages[currentStage];
-    if (prevEl) {
-      prevEl.classList.remove('active');
-      prevEl.classList.add('hidden');
-    }
-
-    navBtns.forEach((btn) => {
-      const stageAttr = btn.getAttribute('data-stage');
-      btn.classList.toggle('active', stageAttr === targetStage);
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
 
-    const nextEl = stages[targetStage];
-    if (nextEl) {
-      nextEl.classList.remove('hidden');
-      setTimeout(() => {
-        nextEl.classList.add('active');
-      }, 40);
-    }
-
-    currentStage = targetStage;
-    currentStageGlobal = targetStage;
-
-    // Kích hoạt pháo hoa hoặc hiệu ứng đặc thù
     if (targetStage === 'wishes') {
-      triggerGrandFireworks();
-      startWishesTypewriter(true);
-    } else if (targetStage === 'scratch') {
-      initScratchCard();
-    } else if (targetStage === 'garden') {
-      if (window.onGardenStageActivated) {
-        window.onGardenStageActivated(!hasVisitedGarden);
+      if (!isWishesTyping && !hasWishesFinished) {
+        startWishesTypewriter();
       }
-      hasVisitedGarden = true;
     }
   };
 
-  switchStageGlobal = switchStage;
+  scrollToStepGlobal = scrollToStep;
 
-  // Bắt sự kiện click trên thanh điều hướng tab
-  navBtns.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      const stage = btn.getAttribute('data-stage');
-      if (stage) {
-        switchStage(stage);
-      }
-    });
-  });
-
-  // Mở quà hoành tráng
+  // Bước 1: Mở hộp quà hoành tráng & tự động cuộn xuống Bước 2
   const handleOpenGift = () => {
     if (!giftBox.classList.contains('opening') && !giftBox.classList.contains('opened')) {
       giftBox.classList.add('opening');
@@ -612,108 +571,99 @@ function initStageInteractions() {
 
       setTimeout(() => {
         giftBox.classList.add('opened');
-        switchStage('wishes');
-      }, 700);
+        scrollToStep('wishes');
+      }, 650);
+    } else {
+      scrollToStep('wishes');
     }
   };
 
-  btnOpenGift.addEventListener('click', handleOpenGift);
-  giftBox.addEventListener('click', handleOpenGift);
-  giftBox.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleOpenGift();
-    }
-  });
+  if (btnOpenGift) {
+    btnOpenGift.addEventListener('click', handleOpenGift);
+  }
+  if (giftBox) {
+    giftBox.addEventListener('click', handleOpenGift);
+    giftBox.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleOpenGift();
+      }
+    });
+  }
 
-  // Thổi nến hoành tráng (có thể bấm nút hoặc bấm trực tiếp vào nến/bánh)
+  // Bước 2: Thổi nến hoành tráng & mở nút dẫn sang Bước 3
   const handleBlowCandle = () => {
     if (!candle.classList.contains('extinguished')) {
       candle.classList.add('extinguished');
-      btnBlowCandle.disabled = true;
+      if (btnBlowCandle) btnBlowCandle.disabled = true;
 
       // Pháo hoa đại tiệc bắn từ 2 góc dưới màn hình lên cao
       triggerGrandFireworks();
       setTimeout(triggerGrandFireworks, 400);
 
-      // Hiện lời chúc tốt đẹp, nút mở thẻ cào bí mật và nút mở vườn hoa
+      // Hiện lời chúc tốt đẹp và nút dẫn cuộn xuống thẻ cào bí mật
       setTimeout(() => {
-        postBlowMessage.classList.remove('hidden');
-        btnBlowCandle.classList.add('hidden');
+        if (postBlowMessage) postBlowMessage.classList.remove('hidden');
+        if (btnBlowCandle) btnBlowCandle.classList.add('hidden');
         if (btnGotoScratch) btnGotoScratch.classList.remove('hidden');
-        if (btnGotoGarden) btnGotoGarden.classList.remove('hidden');
-        btnReplay.classList.remove('hidden');
       }, 700);
     }
   };
 
-  btnBlowCandle.addEventListener('click', handleBlowCandle);
+  if (btnBlowCandle) {
+    btnBlowCandle.addEventListener('click', handleBlowCandle);
+  }
   if (cakeWrapper) {
     cakeWrapper.addEventListener('click', handleBlowCandle);
   }
 
-  // Chuyển sang thẻ cào bí mật từ nút ở Stage 2
+  // Bước 2 -> Bước 3: Nút cuộn xuống Thẻ Cào May Mắn
   if (btnGotoScratch) {
     btnGotoScratch.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      switchStage('scratch');
+      scrollToStep('scratch');
     });
   }
 
-  // Chuyển sang vườn hoa từ nút ở Stage 2
-  if (btnGotoGarden) {
-    btnGotoGarden.addEventListener('click', (e) => {
+  // Bước 3 -> Bước 4: Nút cuộn xuống Vườn Hoa Sophia
+  if (btnScratchToGarden) {
+    btnScratchToGarden.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      switchStage('garden');
+      scrollToStep('garden');
     });
   }
 
-  // Nút ở Stage Thẻ cào: Đi tới Vườn hoa
-  const btnScratchToGarden = document.getElementById('btn-scratch-to-garden');
-  if (btnScratchToGarden) {
-    btnScratchToGarden.addEventListener('click', () => {
-      switchStage('garden');
+  // Bước 4: Nút cuộn mượt lên đầu trang để xem lại
+  if (btnScrollTop) {
+    btnScrollTop.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      scrollToStep('gift');
     });
   }
 
-  // Nút ở Stage Thẻ cào: Quay lại Lời chúc
-  const btnScratchBackWishes = document.getElementById('btn-scratch-back-wishes');
-  if (btnScratchBackWishes) {
-    btnScratchBackWishes.addEventListener('click', () => {
-      switchStage('wishes');
-    });
+  // Tự động kích hoạt gõ chữ khi người dùng kéo cuộn màn hình xuống Bước 2
+  if ('IntersectionObserver' in window) {
+    const wishesStageEl = stages.wishes;
+    if (wishesStageEl) {
+      const wishesObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isWishesTyping && !hasWishesFinished) {
+            startWishesTypewriter();
+          }
+        });
+      }, { threshold: 0.20 });
+      wishesObserver.observe(wishesStageEl);
+    }
   }
-
-  // Nút quay lại lời chúc ở Stage 3 (Vườn hoa)
-  const btnGardenBack = document.getElementById('btn-garden-back');
-  if (btnGardenBack) {
-    btnGardenBack.addEventListener('click', () => {
-      switchStage('wishes');
-    });
-  }
-
-  // Xem lại (Bắt đầu lại từ đầu)
-  btnReplay.addEventListener('click', () => {
-    // Reset nến và lời chúc
-    candle.classList.remove('extinguished');
-    postBlowMessage.classList.add('hidden');
-    btnBlowCandle.disabled = false;
-    btnBlowCandle.classList.remove('hidden');
-    if (btnGotoScratch) btnGotoScratch.classList.add('hidden');
-    if (btnGotoGarden) btnGotoGarden.classList.add('hidden');
-    btnReplay.classList.add('hidden');
-    resetWishesTypewriter();
-
-    // Chuyển về giai đoạn hộp quà
-    giftBox.classList.remove('opening', 'opened');
-    switchStage('gift');
-  });
 }
 
 /* ============================================================================
@@ -1831,8 +1781,8 @@ function initSwayingFlowerGarden() {
     updateClearButtonVisibility();
   }
 
-  // Cờ kiểm soát: Chỉ cho phép click sau khi đã vào hẳn màn hình vườn hoa (chống tap-through từ nút chuyển màn hình)
-  let canInteractWithFlower = false;
+  // Cho phép tương tác click vào đóa hoa trung tâm
+  let canInteractWithFlower = true;
 
   // Xử lý khi nhấn vào đóa hoa trung tâm lắc lư
   const handleFlowerClick = (e) => {
@@ -1969,37 +1919,14 @@ function initSwayingFlowerGarden() {
   }
 
   // Callback khi người dùng chuyển sang giai đoạn Vườn Hoa
-  window.onGardenStageActivated = (isFirstTime) => {
+  window.onGardenStageActivated = () => {
     resize();
-
-    // 1. Tạm thời khóa tương tác click vào hoa để tránh hiện tượng chạm xuyên màn hình (tap-through/ghost click)
-    canInteractWithFlower = false;
-
-    // 2. Đảm bảo toàn bộ hoa được dọn sạch hoàn toàn khi mới vào màn hình, tuyệt đối không tự mọc hoa
-    flowersBack = [];
-    flowersFront = [];
-    pollenMotes = [];
-    totalBloomedCount = 0;
-    ctxBack.clearRect(0, 0, width, height);
-    ctxFront.clearRect(0, 0, width, height);
-
-    if (counterNumber) counterNumber.textContent = '';
-    if (counterText) counterText.textContent = 'Chạm vào đóa hoa để ngàn hoa hồng Sophia bừng nở';
-    if (touchBadge) {
-      const hint = touchBadge.querySelector('.hint-text');
-      if (hint) hint.textContent = 'Chạm vào đóa hoa để hoa bừng nở!';
-    }
-    updateClearButtonVisibility();
-
-    if (!isGardenRunning) {
-      isGardenRunning = true;
-      lastTime = performance.now();
-      requestAnimationFrame(gardenLoop);
-    }
-
-    // 3. Sau 500ms khi giao diện vườn hoa đã ổn định hoàn toàn, mới cho phép nhận click từ người dùng
-    setTimeout(() => {
-      canInteractWithFlower = true;
-    }, 500);
   };
+
+  // Khởi động vòng lặp render canvas vườn hoa
+  if (!isGardenRunning) {
+    isGardenRunning = true;
+    lastTime = performance.now();
+    requestAnimationFrame(gardenLoop);
+  }
 }

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=3.1">
+  <link rel="stylesheet" href="style.css?v=4.0">
 </head>
 <body>
   <!-- Ảnh nền hoa hồng Sophia chuyên dụng (tối ưu tuyệt đối cho di động & máy tính) -->
@@ -39,29 +39,6 @@
     <!-- Thẻ chứa nội dung chính với phong cách Glassmorphism hoàng gia tinh tế -->
     <div class="card-container" id="card-container">
       
-      <!-- Thanh điều hướng giai đoạn tinh tế -->
-      <!-- Thanh điều hướng giai đoạn tinh tế phong cách ứng dụng cao cấp -->
-      <nav class="stage-nav" id="stage-nav" aria-label="Điều hướng các màn hình">
-        <button type="button" class="stage-nav-btn active" data-stage="gift" aria-label="Chuyển đến màn hình Hộp Quà">
-          <span class="nav-icon">🎁</span>
-          <span class="nav-label">Quà</span>
-        </button>
-        <button type="button" class="stage-nav-btn" data-stage="wishes" aria-label="Chuyển đến màn hình Lời Chúc">
-          <span class="nav-icon">💌</span>
-          <span class="nav-label">Lời chúc</span>
-        </button>
-        <button type="button" class="stage-nav-btn" data-stage="scratch" aria-label="Chuyển đến màn hình Thẻ Cào May Mắn">
-          <span class="nav-icon">🎟️</span>
-          <span class="nav-label">Thẻ cào</span>
-          <span class="nav-badge-dot" aria-hidden="true"></span>
-        </button>
-        <button type="button" class="stage-nav-btn" data-stage="garden" aria-label="Chuyển đến màn hình Vườn Hoa Hồng">
-          <span class="nav-icon">🌸</span>
-          <span class="nav-label">Vườn hoa</span>
-          <span class="nav-badge-dot" aria-hidden="true"></span>
-        </button>
-      </nav>
-
       <!-- Góc hoa văn vàng kim trang trí cổ điển -->
       <div class="card-corner top-left" aria-hidden="true"></div>
       <div class="card-corner top-right" aria-hidden="true"></div>
@@ -69,10 +46,10 @@
       <div class="card-corner bottom-right" aria-hidden="true"></div>
 
       <!-- ===================================================================
-           GIAI ĐOẠN 1: Hộp Quà Sinh Nhật Sang Trọng
+           BƯỚC 1: Hộp Quà Sinh Nhật Sang Trọng
            =================================================================== -->
-      <section id="gift-stage" class="stage active" aria-label="Món quà bất ngờ">
-        <div class="stage-tag">✦ A Special Surprise ✦</div>
+      <section id="gift-stage" class="stage" aria-label="Món quà bất ngờ">
+        <div class="stage-tag">✦ BƯỚC 1 • MÓN QUÀ BẤT NGỜ ✦</div>
         
         <div class="gift-box-wrapper" id="gift-box-wrapper" title="Bấm vào để mở quà">
           <div class="gift-glow" aria-hidden="true"></div>
@@ -113,14 +90,21 @@
 
         <button type="button" class="btn btn-primary" id="btn-open-gift" aria-label="Mở hộp quà">
           <span class="btn-icon">🎁</span>
-          <span class="btn-text">Mở quà</span>
+          <span class="btn-text">Chạm để mở quà & Đọc lời chúc 👇</span>
         </button>
       </section>
 
+      <!-- Dải phân cách mạ vàng sang Bước 2 -->
+      <div class="step-divider" aria-hidden="true">
+        <span class="step-divider-line"></span>
+        <span class="step-divider-badge">💌 BƯỚC 2: LỜI CHÚC & THỔI NẾN</span>
+        <span class="step-divider-line"></span>
+      </div>
+
       <!-- ===================================================================
-           GIAI ĐOẠN 2: Lời Chúc, Bó Hoa & Bánh Sinh Nhật
+           BƯỚC 2: Lời Chúc, Bó Hoa & Bánh Sinh Nhật
            =================================================================== -->
-      <section id="wishes-stage" class="stage hidden" aria-label="Lời chúc sinh nhật">
+      <section id="wishes-stage" class="stage" aria-label="Lời chúc sinh nhật">
         
         <!-- Tiêu đề chúc mừng sinh nhật dát vàng hồng -->
         <header class="wishes-header">
@@ -206,32 +190,28 @@
               <span class="btn-text">Ước một điều và thổi nến</span>
             </button>
 
-            <!-- Nút mở thẻ cào bí mật -->
-            <button type="button" class="btn btn-scratch hidden" id="btn-goto-scratch" aria-label="Khám phá thẻ cào bí mật">
+            <!-- Nút cuộn xuống cào thẻ may mắn -->
+            <button type="button" class="btn btn-scratch hidden" id="btn-goto-scratch" aria-label="Kéo xuống cào thẻ may mắn">
               <span class="btn-icon">🎟️</span>
-              <span class="btn-text">Cào Thẻ Bí Mật ✨</span>
-            </button>
-
-            <!-- Nút bước sang vườn hoa hồng Sophia kỳ diệu -->
-            <button type="button" class="btn btn-primary btn-garden-entry hidden" id="btn-goto-garden" aria-label="Khám phá vườn hoa hồng Sophia">
-              <span class="btn-icon">🌹</span>
-              <span class="btn-text">Vườn Hoa Sophia ✨</span>
-            </button>
-
-            <button type="button" class="btn btn-secondary hidden" id="btn-replay" aria-label="Xem lại từ đầu">
-              <span class="btn-icon">↺</span>
-              <span class="btn-text">Xem lại từ đầu</span>
+              <span class="btn-text">Tiếp tục: Cào Thẻ May Mắn 👇</span>
             </button>
           </div>
         </div>
 
       </section>
 
+      <!-- Dải phân cách mạ vàng sang Bước 3 -->
+      <div class="step-divider" aria-hidden="true">
+        <span class="step-divider-line"></span>
+        <span class="step-divider-badge">🎟️ BƯỚC 3: THẺ CÀO MAY MẮN</span>
+        <span class="step-divider-line"></span>
+      </div>
+
       <!-- ===================================================================
-           GIAI ĐOẠN 2.5: Thẻ Cào Bí Mật (Interactive Secret Scratch Card)
+           BƯỚC 3: Thẻ Cào May Mắn (Interactive Lucky Scratch Card)
            =================================================================== -->
-      <section id="scratch-stage" class="stage hidden" aria-label="Thẻ cào bí mật">
-        <div class="stage-tag">✦ Secret Lucky Card ✦</div>
+      <section id="scratch-stage" class="stage" aria-label="Thẻ cào may mắn">
+        <div class="stage-tag">✦ BƯỚC 3 • THẺ CÀO MAY MẮN ✦</div>
         
         <header class="scratch-header">
           <h2 class="scratch-title">Thẻ Cào May Mắn ✨</h2>
@@ -294,26 +274,29 @@
           </button>
         </div>
 
-        <!-- Các nút điều hướng tiếp theo -->
+        <!-- Nút tiếp tục sang Bước 4 -->
         <div class="action-buttons scratch-actions">
           <button type="button" class="btn btn-primary btn-garden-entry" id="btn-scratch-to-garden" aria-label="Đến vườn hoa hồng Sophia">
-            <span class="btn-icon">🌹</span>
-            <span class="btn-text">Vườn Hoa Sophia ✨</span>
-          </button>
-          <button type="button" class="btn btn-secondary" id="btn-scratch-back-wishes" aria-label="Quay lại lời chúc">
-            <span class="btn-icon">💌</span>
-            <span class="btn-text">Xem Lời Chúc</span>
+            <span class="btn-icon">🌸</span>
+            <span class="btn-text">Tiếp tục: Bước vào Vườn Hoa Sophia 👇</span>
           </button>
         </div>
       </section>
 
+      <!-- Dải phân cách mạ vàng sang Bước 4 -->
+      <div class="step-divider" aria-hidden="true">
+        <span class="step-divider-line"></span>
+        <span class="step-divider-badge">🌹 BƯỚC 4: VƯỜN HOA DIỆU KỲ</span>
+        <span class="step-divider-line"></span>
+      </div>
+
       <!-- ===================================================================
-           GIAI ĐOẠN 3: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
+           BƯỚC 4: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
            =================================================================== -->
-      <section id="garden-stage" class="stage hidden" aria-label="Vườn hoa hồng Sophia diệu kỳ">
+      <section id="garden-stage" class="stage" aria-label="Vườn hoa hồng Sophia diệu kỳ">
         
         <header class="garden-header">
-          <div class="stage-tag">✦ Sophia Rose Garden ✦</div>
+          <div class="stage-tag">✦ BƯỚC 4 • VƯỜN HOA DIỆU KỲ ✦</div>
           <h2 class="garden-title" id="garden-title">
             <span class="title-text">Vườn Hoa Hồng Sophia Của Em 🌸</span>
           </h2>
@@ -421,9 +404,10 @@
             <span class="btn-text">Xóa hết hoa</span>
           </button>
 
-          <button type="button" class="btn btn-secondary" id="btn-garden-back" aria-label="Quay lại lời chúc">
-            <span class="btn-icon">💌</span>
-            <span class="btn-text">Xem lời chúc</span>
+          <!-- Nút cuộn mượt lên đầu trang -->
+          <button type="button" class="btn btn-secondary" id="btn-scroll-top" aria-label="Lên đầu trang">
+            <span class="btn-icon">↺</span>
+            <span class="btn-text">Lên đầu trang & Xem lại</span>
           </button>
         </div>
 
@@ -435,6 +419,6 @@
   <!-- Canvas vườn hoa chồi lên tiền cảnh (lớp trước viền dưới) -->
   <canvas id="garden-canvas-front" aria-hidden="true"></canvas>
 
-  <script src="script.js?v=3.1"></script>
+  <script src="script.js?v=4.0"></script>
 </body>
 </html>
