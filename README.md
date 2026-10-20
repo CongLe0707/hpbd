@@ -1,6 +1,6 @@
 # Website Chúc Mừng Sinh Nhật Hoàng Gia & Lãng Mạn 🌸
 
-Dự án website chúc mừng sinh nhật được nâng cấp toàn diện, tráng lệ và lãng mạn dành riêng cho **người ấy**, lấy cảm hứng từ hoa hồng Sophia vương giả với tông hồng phấn, trắng kem và mạ vàng ấm áp.
+Dự án website chúc mừng sinh nhật được nâng cấp toàn diện, tráng lệ và lãng mạn dành riêng cho **Bảo Trân**, lấy cảm hứng từ hoa hồng Sophia vương giả với tông hồng phấn, trắng kem và mạ vàng ấm áp.
 
 🔗 **Link xem trực tiếp**: **[https://congle0707.github.io/hpbd/](https://congle0707.github.io/hpbd/)**
 
@@ -62,7 +62,7 @@ hpbd/
 9. **Thẻ Cào Bí Mật Hoàng Gia (Interactive Secret Scratch Card)**:
    - Lớp nhũ kim sa Rose-Gold & Champagne lấp lánh phủ trên canvas, hỗ trợ vuốt chạm bằng ngón tay hoặc chuột cào chân thực.
    - Hiển thị tiến độ cào thời gian thực (`Đã cào: X%`), khi đạt từ 45% trở lên sẽ tự động mở khóa 100%, kích hoạt chuông pentatonic ngân vang và pháo hoa đại tiệc.
-   - Mở ra "Tấm Vé Đặc Quyền" dành riêng cho người ấy (ngày thảnh thơi, trà chiều an nhiên, vạn sự hanh thông & lời chúc an yên).
+   - Mở ra "Tấm Vé Đặc Quyền" dành riêng cho Bảo Trân (ngày thảnh thơi, trà chiều an nhiên, vạn sự hanh thông & lời chúc an yên).
    - Nút "Phủ nhũ cào lại 🔄" cho phép người nhận cào lại thỏa thích.
 
 10. **Hiệu ứng chạm phát nổ hoa & sao lấp lánh (Touch Sparkle Burst)**:
@@ -75,7 +75,7 @@ hpbd/
 ```javascript
 const BIRTHDAY_CONFIG = {
   // 1. Tên người nhận sinh nhật
-  recipientName: "người ấy",
+  recipientName: "Bảo Trân",
 
   // 2. Lời chúc sinh nhật giàu triết lý, niềm tin và hy vọng
   wishes: `Anh không đến đây 1 mình,

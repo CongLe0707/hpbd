@@ -6,7 +6,7 @@
  */
 const BIRTHDAY_CONFIG = {
   // 1. Tên người nhận sinh nhật
-  recipientName: "người ấy",
+  recipientName: "Bảo Trân",
 
   // 2. Lời chúc sinh nhật giàu triết lý, niềm tin và hy vọng (không nhắc đến yêu thương)
   wishes: `Anh không đến đây 1 mình,
@@ -52,7 +52,7 @@ Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều
     moreBatchCount: 28,
     soundEnabled: true,
     title: "Vườn Hoa Hồng Sophia Của Em 🌸",
-    blessingText: "“Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia bừng nở rạng ngời gửi trọn những điều tuyệt vời nhất đến người ấy.”"
+    blessingText: "“Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia bừng nở rạng ngời gửi trọn những điều tuyệt vời nhất đến Bảo Trân.”"
   },
 
   // 9. Cấu hình tốc độ gõ chữ từ từ cho lời chúc (chậm rãi, sâu lắng)
