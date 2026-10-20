@@ -402,11 +402,11 @@ function drawScratchCover() {
   sctx.font = "bold 20px 'Montserrat', sans-serif";
   sctx.textAlign = 'center';
   sctx.textBaseline = 'middle';
-  sctx.fillText("✨ CÀO NHẸ TẠI ĐÂY ✨", w / 2, h / 2 - 14);
+  sctx.fillText("✨ CÀO ĐỂ NHẬN QUÀ ✨", w / 2, h / 2 - 14);
 
   sctx.fillStyle = '#b84a65';
   sctx.font = "italic 13.5px 'Playfair Display', serif";
-  sctx.fillText("Dùng tay hoặc chuột vuốt để mở bí mật 💌", w / 2, h / 2 + 18);
+  sctx.fillText("Vuốt nhẹ để mở tấm vé may mắn 🎟️", w / 2, h / 2 + 18);
 
   scratchCanvas.classList.remove('revealed');
   scratchRevealed = false;
@@ -478,7 +478,7 @@ function revealScratchPrize() {
     scratchCanvas.classList.add('revealed');
   }
   if (scratchProgressText) {
-    scratchProgressText.innerHTML = "🎉 <strong>Đã mở khóa 100%!</strong> ✨";
+    scratchProgressText.innerHTML = "🎉 <strong>Chúc mừng! Đã mở khóa 100%!</strong> 🌟";
   }
 
   // Âm thanh chuông ngân pentatonic chúc mừng

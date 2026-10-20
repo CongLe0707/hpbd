@@ -1924,13 +1924,20 @@ body {
   }
 
   .stage-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto 18px;
+    padding: 4px;
+    background: rgba(254, 241, 244, 0.92);
+    border: 1px solid rgba(226, 115, 141, 0.35);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(184, 74, 101, 0.08), inset 0 1px 3px rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     gap: 4px;
-    padding: 3px 6px;
-    margin-bottom: 16px;
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    box-sizing: border-box;
   }
 
   .stage-nav::-webkit-scrollbar {
@@ -1938,10 +1945,56 @@ body {
   }
 
   .stage-nav-btn {
-    padding: 6px 9px;
-    font-size: 0.76rem;
-    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 2px 6px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 0;
+    width: 100%;
+    box-shadow: none;
+    gap: 2px;
+  }
+
+  .stage-nav-btn .nav-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    margin-bottom: 2px;
+    transition: transform 0.2s ease;
+  }
+
+  .stage-nav-btn .nav-label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.1;
     white-space: nowrap;
+  }
+
+  .stage-nav-btn .nav-badge-dot {
+    display: none;
+  }
+
+  .stage-nav-btn:hover {
+    color: var(--rose-dark);
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .stage-nav-btn.active {
+    background: #ffffff;
+    color: var(--rose-dark);
+    box-shadow: 0 3px 10px rgba(184, 74, 101, 0.18), 0 1px 2px rgba(0, 0, 0, 0.04);
+    font-weight: 700;
+    transform: none;
+  }
+
+  .stage-nav-btn.active .nav-icon {
+    transform: scale(1.12);
   }
 
   .card-corner {
@@ -2313,9 +2366,26 @@ body {
     height: 90px;
   }
 
+  .stage-nav {
+    max-width: 285px;
+    padding: 3px;
+    gap: 2px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+  }
+
   .stage-nav-btn {
-    padding: 5px 8px;
-    font-size: 0.72rem;
+    padding: 5px 1px 4px;
+    border-radius: 10px;
+  }
+
+  .stage-nav-btn .nav-icon {
+    font-size: 1.05rem;
+    margin-bottom: 1px;
+  }
+
+  .stage-nav-btn .nav-label {
+    font-size: 0.62rem;
   }
 }
 
