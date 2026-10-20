@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initConfetti();
   init3DCardTilt();
   initBouquetInteractions();
+  initTouchSparkleBurst();
   initSwayingFlowerGarden();
 });
 
@@ -251,14 +252,283 @@ function resetWishesTypewriter() {
 }
 
 /* ============================================================================
+   HIỆU ỨNG CHẠM PHÁT NỔ HOA & SAO LẤP LÁNH (TOUCH SPARKLE BURST)
+   Lấy cảm hứng từ thiệp vietchuu, mỗi cú chạm đều bung nở cánh hoa và ánh sao
+   ============================================================================ */
+function initTouchSparkleBurst() {
+  const symbols = ['🌸', '✨', '🌹', '🌷', '💫', '🎉', '💖'];
+  document.addEventListener('pointerdown', (e) => {
+    // Không kích hoạt khi đang cào trên canvas thẻ cào để thao tác cào mượt nhất
+    if (e.target && (e.target.id === 'scratch-canvas' || e.target.closest('#scratch-canvas'))) {
+      return;
+    }
+
+    const count = 5;
+    for (let i = 0; i < count; i++) {
+      const sp = document.createElement('span');
+      sp.className = 'touch-sparkle';
+      sp.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      sp.style.left = `${e.clientX}px`;
+      sp.style.top = `${e.clientY}px`;
+
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.45;
+      const dist = 32 + Math.random() * 42;
+      sp.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
+      sp.style.setProperty('--ty', `${Math.sin(angle) * dist - 16}px`);
+      sp.style.setProperty('--rot', `${(Math.random() - 0.5) * 70}deg`);
+
+      document.body.appendChild(sp);
+      setTimeout(() => sp.remove(), 850);
+    }
+  }, { passive: true });
+}
+
+/* ============================================================================
+   THẺ CÀO BÍ MẬT TƯƠNG TÁC (INTERACTIVE SECRET SCRATCH CARD)
+   Lớp nhũ kim sa Rose-Gold sang trọng, cào mở đặc quyền, tự động hoàn tất ở 45%
+   ============================================================================ */
+let isScratchInitialized = false;
+let isScratching = false;
+let scratchRevealed = false;
+let lastScratchPt = null;
+let scratchCanvas = null;
+let scratchCardBox = null;
+let scratchProgressText = null;
+
+function initScratchCard() {
+  scratchCanvas = document.getElementById('scratch-canvas');
+  scratchCardBox = document.getElementById('scratch-card-box');
+  scratchProgressText = document.getElementById('scratch-progress-text');
+  const btnReset = document.getElementById('btn-scratch-reset');
+
+  if (!scratchCanvas || !scratchCardBox) return;
+
+  // Đảm bảo vẽ lớp phủ khi giao diện đã render kích thước thực
+  setTimeout(() => {
+    drawScratchCover();
+  }, 60);
+
+  if (!isScratchInitialized) {
+    isScratchInitialized = true;
+
+    scratchCanvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      isScratching = true;
+      lastScratchPt = null;
+      scratchAt(getScratchCoords(e));
+    });
+
+    let moveCount = 0;
+    scratchCanvas.addEventListener('pointermove', (e) => {
+      if (!isScratching) return;
+      e.preventDefault();
+      scratchAt(getScratchCoords(e));
+      moveCount++;
+      if (moveCount % 7 === 0) {
+        checkScratchPercent();
+      }
+    });
+
+    const endScratch = () => {
+      if (!isScratching) return;
+      isScratching = false;
+      lastScratchPt = null;
+      checkScratchPercent();
+    };
+
+    window.addEventListener('pointerup', endScratch);
+    window.addEventListener('pointercancel', endScratch);
+
+    if (btnReset) {
+      btnReset.addEventListener('click', () => {
+        drawScratchCover();
+      });
+    }
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (!scratchRevealed && currentStageGlobal === 'scratch') {
+          drawScratchCover();
+        }
+      }, 150);
+    });
+  }
+}
+
+function drawScratchCover() {
+  if (!scratchCanvas || !scratchCardBox) return;
+
+  const rect = scratchCardBox.getBoundingClientRect();
+  const w = Math.max(280, Math.floor(rect.width || 380));
+  const h = Math.max(380, Math.floor(rect.height || 440));
+
+  scratchCanvas.width = w;
+  scratchCanvas.height = h;
+
+  const sctx = scratchCanvas.getContext('2d');
+  sctx.globalCompositeOperation = 'source-over';
+
+  // Lớp nền nhũ kim sa Rose-Gold & Champagne sang trọng
+  const grad = sctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, '#f2a8b9');
+  grad.addColorStop(0.25, '#fad4dc');
+  grad.addColorStop(0.5, '#fff0f3');
+  grad.addColorStop(0.75, '#f5bdc8');
+  grad.addColorStop(1, '#e394a5');
+  sctx.fillStyle = grad;
+  sctx.fillRect(0, 0, w, h);
+
+  // Hạt bụi kim tuyến & ánh sao lấp lánh ngẫu nhiên
+  for (let i = 0; i < 80; i++) {
+    sctx.fillStyle = i % 3 === 0 
+      ? 'rgba(255, 255, 255, 0.85)' 
+      : (i % 3 === 1 ? 'rgba(216, 162, 67, 0.4)' : 'rgba(201, 24, 74, 0.22)');
+    sctx.beginPath();
+    sctx.arc(Math.random() * w, Math.random() * h, 1 + Math.random() * 2.5, 0, Math.PI * 2);
+    sctx.fill();
+  }
+
+  // Khung viền chỉ vàng kim đứt đoạn tinh tế
+  sctx.strokeStyle = 'rgba(184, 74, 101, 0.45)';
+  sctx.lineWidth = 2;
+  sctx.setLineDash([8, 6]);
+  sctx.strokeRect(14, 14, w - 28, h - 28);
+  sctx.setLineDash([]);
+
+  // Chữ chỉ dẫn ở giữa lớp nhũ
+  sctx.fillStyle = '#9e2a5b';
+  sctx.font = "bold 20px 'Montserrat', sans-serif";
+  sctx.textAlign = 'center';
+  sctx.textBaseline = 'middle';
+  sctx.fillText("✨ CÀO NHẸ TẠI ĐÂY ✨", w / 2, h / 2 - 14);
+
+  sctx.fillStyle = '#b84a65';
+  sctx.font = "italic 13.5px 'Playfair Display', serif";
+  sctx.fillText("Dùng tay hoặc chuột vuốt để mở bí mật 💌", w / 2, h / 2 + 18);
+
+  scratchCanvas.classList.remove('revealed');
+  scratchRevealed = false;
+  if (scratchProgressText) {
+    scratchProgressText.textContent = "Đã cào: 0%";
+  }
+}
+
+function getScratchCoords(e) {
+  const rect = scratchCanvas.getBoundingClientRect();
+  const scaleX = scratchCanvas.width / rect.width;
+  const scaleY = scratchCanvas.height / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
+}
+
+function scratchAt(pt) {
+  if (!scratchCanvas || scratchRevealed) return;
+  const sctx = scratchCanvas.getContext('2d');
+  sctx.globalCompositeOperation = 'destination-out';
+  sctx.lineWidth = 42;
+  sctx.lineCap = 'round';
+  sctx.lineJoin = 'round';
+
+  sctx.beginPath();
+  if (lastScratchPt) {
+    sctx.moveTo(lastScratchPt.x, lastScratchPt.y);
+    sctx.lineTo(pt.x, pt.y);
+  } else {
+    sctx.arc(pt.x, pt.y, 21, 0, Math.PI * 2);
+  }
+  sctx.stroke();
+  lastScratchPt = pt;
+}
+
+function checkScratchPercent() {
+  if (!scratchCanvas || scratchRevealed) return;
+  const sctx = scratchCanvas.getContext('2d');
+  const { width, height } = scratchCanvas;
+
+  try {
+    const imgData = sctx.getImageData(0, 0, width, height).data;
+    let cleared = 0;
+    const step = 16;
+    const totalSampled = Math.floor(imgData.length / step);
+
+    for (let i = 3; i < imgData.length; i += step) {
+      if (imgData[i] < 128) cleared++;
+    }
+
+    const pct = Math.min(100, Math.round((cleared / totalSampled) * 100));
+    if (scratchProgressText) {
+      scratchProgressText.textContent = `Đã cào: ${pct}%`;
+    }
+
+    if (pct >= 45 && !scratchRevealed) {
+      revealScratchPrize();
+    }
+  } catch (err) {
+    // Dự phòng an toàn
+  }
+}
+
+function revealScratchPrize() {
+  scratchRevealed = true;
+  if (scratchCanvas) {
+    scratchCanvas.classList.add('revealed');
+  }
+  if (scratchProgressText) {
+    scratchProgressText.innerHTML = "🎉 <strong>Đã mở khóa 100%!</strong> ✨";
+  }
+
+  // Âm thanh chuông ngân pentatonic chúc mừng
+  playScratchUnlockChime();
+
+  // Bắn pháo hoa rực rỡ
+  if (typeof triggerGrandFireworks === 'function') {
+    triggerGrandFireworks();
+  }
+}
+
+function playScratchUnlockChime() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const actx = new AudioCtx();
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+    const now = actx.currentTime;
+
+    notes.forEach((freq, idx) => {
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+      gain.gain.setValueAtTime(0, now + idx * 0.08);
+      gain.gain.linearRampToValueAtTime(0.2, now + idx * 0.08 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.7);
+
+      osc.connect(gain);
+      gain.connect(actx.destination);
+      osc.start(now + idx * 0.08);
+      osc.stop(now + idx * 0.08 + 0.75);
+    });
+  } catch (e) {
+    // Audio Context safe
+  }
+}
+
+/* ============================================================================
    LOGIC CHUYỂN ĐỔI GIAI ĐOẠN & TƯƠNG TÁC NGƯỜI DÙNG (STAGE MANAGER)
    ============================================================================ */
 let switchStageGlobal = (stageName) => {};
+let currentStageGlobal = 'gift';
 
 function initStageInteractions() {
   const stages = {
     gift: document.getElementById('gift-stage'),
     wishes: document.getElementById('wishes-stage'),
+    scratch: document.getElementById('scratch-stage'),
     garden: document.getElementById('garden-stage')
   };
 
@@ -266,6 +536,7 @@ function initStageInteractions() {
   const giftBox = document.getElementById('gift-box');
   const btnOpenGift = document.getElementById('btn-open-gift');
   const btnBlowCandle = document.getElementById('btn-blow-candle');
+  const btnGotoScratch = document.getElementById('btn-goto-scratch');
   const btnGotoGarden = document.getElementById('btn-goto-garden');
   const btnReplay = document.getElementById('btn-replay');
   const candle = document.getElementById('candle');
@@ -299,11 +570,14 @@ function initStageInteractions() {
     }
 
     currentStage = targetStage;
+    currentStageGlobal = targetStage;
 
     // Kích hoạt pháo hoa hoặc hiệu ứng đặc thù
     if (targetStage === 'wishes') {
       triggerGrandFireworks();
       startWishesTypewriter(true);
+    } else if (targetStage === 'scratch') {
+      initScratchCard();
     } else if (targetStage === 'garden') {
       if (window.onGardenStageActivated) {
         window.onGardenStageActivated(!hasVisitedGarden);
@@ -362,10 +636,11 @@ function initStageInteractions() {
       triggerGrandFireworks();
       setTimeout(triggerGrandFireworks, 400);
 
-      // Hiện lời chúc tốt đẹp và nút mở vườn hoa
+      // Hiện lời chúc tốt đẹp, nút mở thẻ cào bí mật và nút mở vườn hoa
       setTimeout(() => {
         postBlowMessage.classList.remove('hidden');
         btnBlowCandle.classList.add('hidden');
+        if (btnGotoScratch) btnGotoScratch.classList.remove('hidden');
         if (btnGotoGarden) btnGotoGarden.classList.remove('hidden');
         btnReplay.classList.remove('hidden');
       }, 700);
@@ -375,6 +650,17 @@ function initStageInteractions() {
   btnBlowCandle.addEventListener('click', handleBlowCandle);
   if (cakeWrapper) {
     cakeWrapper.addEventListener('click', handleBlowCandle);
+  }
+
+  // Chuyển sang thẻ cào bí mật từ nút ở Stage 2
+  if (btnGotoScratch) {
+    btnGotoScratch.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchStage('scratch');
+    });
   }
 
   // Chuyển sang vườn hoa từ nút ở Stage 2
@@ -388,7 +674,23 @@ function initStageInteractions() {
     });
   }
 
-  // Nút quay lại lời chúc ở Stage 3
+  // Nút ở Stage Thẻ cào: Đi tới Vườn hoa
+  const btnScratchToGarden = document.getElementById('btn-scratch-to-garden');
+  if (btnScratchToGarden) {
+    btnScratchToGarden.addEventListener('click', () => {
+      switchStage('garden');
+    });
+  }
+
+  // Nút ở Stage Thẻ cào: Quay lại Lời chúc
+  const btnScratchBackWishes = document.getElementById('btn-scratch-back-wishes');
+  if (btnScratchBackWishes) {
+    btnScratchBackWishes.addEventListener('click', () => {
+      switchStage('wishes');
+    });
+  }
+
+  // Nút quay lại lời chúc ở Stage 3 (Vườn hoa)
   const btnGardenBack = document.getElementById('btn-garden-back');
   if (btnGardenBack) {
     btnGardenBack.addEventListener('click', () => {
@@ -403,6 +705,7 @@ function initStageInteractions() {
     postBlowMessage.classList.add('hidden');
     btnBlowCandle.disabled = false;
     btnBlowCandle.classList.remove('hidden');
+    if (btnGotoScratch) btnGotoScratch.classList.add('hidden');
     if (btnGotoGarden) btnGotoGarden.classList.add('hidden');
     btnReplay.classList.add('hidden');
     resetWishesTypewriter();

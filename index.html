@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=2.7">
+  <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body>
   <!-- Ảnh nền hoa hồng Sophia chuyên dụng (tối ưu tuyệt đối cho di động & máy tính) -->
@@ -49,9 +49,14 @@
           <span class="nav-icon">💌</span>
           <span class="nav-label">Lời Chúc</span>
         </button>
+        <button type="button" class="stage-nav-btn" data-stage="scratch" aria-label="Chuyển đến màn hình Thẻ Cào Bí Mật">
+          <span class="nav-icon">🎟️</span>
+          <span class="nav-label">Thẻ Cào</span>
+          <span class="nav-badge-dot" aria-hidden="true"></span>
+        </button>
         <button type="button" class="stage-nav-btn" data-stage="garden" aria-label="Chuyển đến màn hình Vườn Hoa Hồng">
           <span class="nav-icon">🌹</span>
-          <span class="nav-label">Vườn Hoa Hồng</span>
+          <span class="nav-label">Vườn Hoa</span>
           <span class="nav-badge-dot" aria-hidden="true"></span>
         </button>
       </nav>
@@ -200,10 +205,16 @@
               <span class="btn-text">Ước một điều và thổi nến</span>
             </button>
 
+            <!-- Nút mở thẻ cào bí mật -->
+            <button type="button" class="btn btn-scratch hidden" id="btn-goto-scratch" aria-label="Khám phá thẻ cào bí mật">
+              <span class="btn-icon">🎟️</span>
+              <span class="btn-text">Cào Thẻ Bí Mật ✨</span>
+            </button>
+
             <!-- Nút bước sang vườn hoa hồng Sophia kỳ diệu -->
             <button type="button" class="btn btn-primary btn-garden-entry hidden" id="btn-goto-garden" aria-label="Khám phá vườn hoa hồng Sophia">
               <span class="btn-icon">🌹</span>
-              <span class="btn-text">Vườn Hoa Hồng Sophia ✨</span>
+              <span class="btn-text">Vườn Hoa Sophia ✨</span>
             </button>
 
             <button type="button" class="btn btn-secondary hidden" id="btn-replay" aria-label="Xem lại từ đầu">
@@ -213,6 +224,86 @@
           </div>
         </div>
 
+      </section>
+
+      <!-- ===================================================================
+           GIAI ĐOẠN 2.5: Thẻ Cào Bí Mật (Interactive Secret Scratch Card)
+           =================================================================== -->
+      <section id="scratch-stage" class="stage hidden" aria-label="Thẻ cào bí mật">
+        <div class="stage-tag">✦ Secret Lucky Card ✦</div>
+        
+        <header class="scratch-header">
+          <h2 class="scratch-title">Thẻ Cào Bí Mật ✨</h2>
+          <p class="scratch-subtitle">
+            Dùng ngón tay hoặc chuột cào nhẹ lớp nhũ lấp lánh để mở đặc quyền bí mật dành riêng cho bạn!
+          </p>
+        </header>
+
+        <div class="scratch-card-box" id="scratch-card-box">
+          <!-- Lớp phần thưởng / đặc quyền bí mật bên dưới -->
+          <div class="scratch-prize-card" id="scratch-prize-card">
+            <div class="prize-badge">✦ SECRET BIRTHDAY PRIVILEGES ✦</div>
+            <h3 class="prize-title">Tấm Vé Đặc Quyền Của Người Ấy 🎟️</h3>
+            <p class="prize-sub">Hiệu lực vĩnh viễn • Đặc quyền ngày sinh nhật an nhiên</p>
+
+            <div class="privilege-list">
+              <div class="privilege-item">
+                <div class="privilege-icon">🌟</div>
+                <div class="privilege-content">
+                  <div class="privilege-title">Đặc quyền 1: Ngày Thảnh Thơi</div>
+                  <div class="privilege-desc">Tạm gác mọi âu lo và deadline, trọn vẹn dành thời gian cho những điều khiến tâm hồn em mỉm cười.</div>
+                </div>
+              </div>
+
+              <div class="privilege-item">
+                <div class="privilege-icon">☕</div>
+                <div class="privilege-content">
+                  <div class="privilege-title">Đặc quyền 2: Buổi Trà Chiều An Nhiên</div>
+                  <div class="privilege-desc">Một buổi cà phê hoặc trà chiều ngắm cảnh tại bất kỳ nơi nào em thích, thảnh thơi trò chuyện không giới hạn thời gian.</div>
+                </div>
+              </div>
+
+              <div class="privilege-item">
+                <div class="privilege-icon">🌷</div>
+                <div class="privilege-content">
+                  <div class="privilege-title">Đặc quyền 3: Vạn Sự Như Ý & Tự Do</div>
+                  <div class="privilege-desc">Vũ trụ trao tặng em một tuổi mới ngập tràn bình an, vạn sự hanh thông và luôn tự tin tỏa sáng theo cách của riêng mình.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="prize-quote-box">
+              <span class="prize-quote-icon">🌸</span>
+              <p class="prize-quote-text">
+                “Dù thế giới ngoài kia có hối hả đến đâu, mong em luôn an nhiên trước mọi biến chuyển, kiên định với chính mình, và luôn nhớ rằng em xứng đáng với những điều dịu dàng nhất.”
+              </p>
+            </div>
+          </div>
+
+          <!-- Lớp phủ nhũ kim sa cào bằng Canvas -->
+          <canvas id="scratch-canvas" class="scratch-canvas"></canvas>
+        </div>
+
+        <!-- Trạng thái cào & nút phủ nhũ lại -->
+        <div class="scratch-status-bar">
+          <span id="scratch-progress-text" class="scratch-progress-badge">Đã cào: 0%</span>
+          <button type="button" id="btn-scratch-reset" class="btn-scratch-reset" aria-label="Phủ nhũ cào lại">
+            <span class="reset-icon">🔄</span>
+            <span>Phủ nhũ cào lại</span>
+          </button>
+        </div>
+
+        <!-- Các nút điều hướng tiếp theo -->
+        <div class="action-buttons scratch-actions">
+          <button type="button" class="btn btn-primary btn-garden-entry" id="btn-scratch-to-garden" aria-label="Đến vườn hoa hồng Sophia">
+            <span class="btn-icon">🌹</span>
+            <span class="btn-text">Vườn Hoa Sophia ✨</span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-scratch-back-wishes" aria-label="Quay lại lời chúc">
+            <span class="btn-icon">💌</span>
+            <span class="btn-text">Xem Lời Chúc</span>
+          </button>
+        </div>
       </section>
 
       <!-- ===================================================================
@@ -343,6 +434,6 @@
   <!-- Canvas vườn hoa chồi lên tiền cảnh (lớp trước viền dưới) -->
   <canvas id="garden-canvas-front" aria-hidden="true"></canvas>
 
-  <script src="script.js?v=2.7"></script>
+  <script src="script.js?v=3.0"></script>
 </body>
 </html>

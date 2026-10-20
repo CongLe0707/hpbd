@@ -59,6 +59,15 @@ hpbd/
    - Đoạn văn chúc mừng giàu triết lý, hy vọng và niềm tin từ từ xuất hiện từng ký tự với con trỏ lấp lánh như được nắn nót viết tay, tạo cảm xúc sâu lắng, không hiện ồ ạt cả đoạn cùng lúc.
    - Hỗ trợ chạm vào khung lời chúc để hoàn thành ngay lập tức nếu muốn đọc nhanh.
 
+9. **Thẻ Cào Bí Mật Hoàng Gia (Interactive Secret Scratch Card)**:
+   - Lớp nhũ kim sa Rose-Gold & Champagne lấp lánh phủ trên canvas, hỗ trợ vuốt chạm bằng ngón tay hoặc chuột cào chân thực.
+   - Hiển thị tiến độ cào thời gian thực (`Đã cào: X%`), khi đạt từ 45% trở lên sẽ tự động mở khóa 100%, kích hoạt chuông pentatonic ngân vang và pháo hoa đại tiệc.
+   - Mở ra "Tấm Vé Đặc Quyền" dành riêng cho người ấy (ngày thảnh thơi, trà chiều an nhiên, vạn sự hanh thông & lời chúc an yên).
+   - Nút "Phủ nhũ cào lại 🔄" cho phép người nhận cào lại thỏa thích.
+
+10. **Hiệu ứng chạm phát nổ hoa & sao lấp lánh (Touch Sparkle Burst)**:
+    - Lấy cảm hứng từ những trang thiệp kỷ niệm viral, mỗi khi chạm vào màn hình sẽ bung nở chùm cánh hoa và ánh sao lấp lánh bay bổng, sinh động trên mọi thiết bị.
+
 ---
 
 ## ⚙️ Cấu hình tập trung trong [`script.js`](script.js)
