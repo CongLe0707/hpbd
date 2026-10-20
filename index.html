@@ -27,6 +27,10 @@
   <canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
   <!-- Lớp phủ ánh sáng nền tạo sự thoáng và làm nổi bật nội dung -->
+  <!-- Canvas vườn hoa chồi lên từ phía dưới (lớp nền sau thẻ) -->
+  <canvas id="garden-canvas-back" aria-hidden="true"></canvas>
+
+  <!-- Lớp phủ ánh sáng nền tạo sự thoáng và làm nổi bật nội dung -->
   <div class="bg-vignette" aria-hidden="true"></div>
   <div class="ambient-glow" aria-hidden="true"></div>
 
@@ -35,6 +39,23 @@
     <!-- Thẻ chứa nội dung chính với phong cách Glassmorphism hoàng gia tinh tế -->
     <div class="card-container" id="card-container">
       
+      <!-- Thanh điều hướng giai đoạn tinh tế -->
+      <nav class="stage-nav" id="stage-nav" aria-label="Điều hướng các màn hình">
+        <button type="button" class="stage-nav-btn active" data-stage="gift" aria-label="Chuyển đến màn hình Hộp Quà">
+          <span class="nav-icon">🎁</span>
+          <span class="nav-label">Hộp Quà</span>
+        </button>
+        <button type="button" class="stage-nav-btn" data-stage="wishes" aria-label="Chuyển đến màn hình Lời Chúc">
+          <span class="nav-icon">💌</span>
+          <span class="nav-label">Lời Chúc</span>
+        </button>
+        <button type="button" class="stage-nav-btn" data-stage="garden" aria-label="Chuyển đến màn hình Vườn Hoa Hồng">
+          <span class="nav-icon">🌹</span>
+          <span class="nav-label">Vườn Hoa Hồng</span>
+          <span class="nav-badge-dot" aria-hidden="true"></span>
+        </button>
+      </nav>
+
       <!-- Góc hoa văn vàng kim trang trí cổ điển -->
       <div class="card-corner top-left" aria-hidden="true"></div>
       <div class="card-corner top-right" aria-hidden="true"></div>
@@ -129,7 +150,7 @@
           <div class="wishes-text" id="wishes-text">
             Anh không đến đây 1 mình,<br>
             anh đến đây với bó hoa mà em thích,<br>
-            chúc em xin nhật vui vẻ
+            chúc em sinh nhật vui vẻ
           </div>
           <div class="quote-mark close" aria-hidden="true">”</div>
         </article>
@@ -183,17 +204,194 @@
               <span class="btn-text">Ước một điều và thổi nến</span>
             </button>
 
+            <!-- Nút bước sang vườn hoa hồng Sophia kỳ diệu -->
+            <button type="button" class="btn btn-primary btn-garden-entry hidden" id="btn-goto-garden" aria-label="Khám phá vườn hoa hồng Sophia">
+              <span class="btn-icon">🌹</span>
+              <span class="btn-text">Vườn Hoa Hồng Sophia ✨</span>
+            </button>
+
             <button type="button" class="btn btn-secondary hidden" id="btn-replay" aria-label="Xem lại từ đầu">
               <span class="btn-icon">↺</span>
-              <span class="btn-text">Xem lại</span>
+              <span class="btn-text">Xem lại từ đầu</span>
             </button>
           </div>
         </div>
 
       </section>
 
+      <!-- ===================================================================
+           GIAI ĐOẠN 3: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
+           =================================================================== -->
+      <section id="garden-stage" class="stage hidden" aria-label="Vườn hoa hồng Sophia diệu kỳ">
+        
+        <header class="garden-header">
+          <div class="stage-tag">✦ Sophia Rose Garden ✦</div>
+          <h2 class="garden-title" id="garden-title">
+            <span class="title-text">Vườn Hoa Hồng Sophia Của Em 🌸</span>
+          </h2>
+          <p class="garden-subtitle">Chạm vào đóa hoa diệu kỳ để ngàn đóa hoa hồng Sophia cùng chồi lên bừng nở ✨</p>
+        </header>
+
+        <!-- Khu vực bông hoa trung tâm lắc lư qua lại -->
+        <div class="swaying-flower-container" id="swaying-flower-interactive" role="button" tabindex="0" aria-label="Chạm vào hoa hồng Sophia để làm nở cả vườn hoa">
+          <div class="flower-aura" aria-hidden="true"></div>
+          <div class="flower-shockwave" id="flower-shockwave" aria-hidden="true"></div>
+          
+          <!-- Huy hiệu mời chạm vui mắt -->
+          <div class="touch-hint-badge" id="touch-hint-badge">
+            <span class="hint-pulse" aria-hidden="true"></span>
+            <span class="hint-icon">✨</span>
+            <span class="hint-text">Chạm vào đóa hồng Sophia nhé!</span>
+            <span class="hint-icon">🌹</span>
+          </div>
+
+          <!-- Đóa hoa SVG nghệ thuật lắc lư qua lại tự nhiên -->
+          <div class="swaying-flower" id="swaying-flower">
+            <!-- Cành và thân hoa uốn lượn mềm mại -->
+            <div class="stem-wrapper">
+              <svg class="flower-stem-svg" viewBox="0 0 100 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="mainStemGrad" x1="50" y1="240" x2="50" y2="40" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#3d6b45"/>
+                    <stop offset="40%" stop-color="#5a9662"/>
+                    <stop offset="85%" stop-color="#7eb886"/>
+                    <stop offset="100%" stop-color="#a4d8ab"/>
+                  </linearGradient>
+                  <linearGradient id="mainLeafLeft" x1="10" y1="170" x2="50" y2="130" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#4a7c52"/>
+                    <stop offset="100%" stop-color="#8cd497"/>
+                  </linearGradient>
+                  <linearGradient id="mainLeafRight" x1="90" y1="120" x2="50" y2="90" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#4a7c52"/>
+                    <stop offset="100%" stop-color="#8cd497"/>
+                  </linearGradient>
+                </defs>
+                <!-- Thân hoa cong duyên dáng -->
+                <path class="stem-path" d="M50 240 C48 180, 56 120, 50 40" stroke="url(#mainStemGrad)" stroke-width="7" stroke-linecap="round"/>
+                
+                <!-- Lá trái mềm mại -->
+                <g class="swaying-leaf leaf-left">
+                  <path d="M49 155 C30 150, 10 135, 12 115 C28 116, 46 135, 49 155 Z" fill="url(#mainLeafLeft)"/>
+                  <path d="M49 155 C35 140, 20 128, 12 115" stroke="#aef0b8" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+                </g>
+
+                <!-- Lá phải mềm mại -->
+                <g class="swaying-leaf leaf-right">
+                  <path d="M51 115 C70 105, 90 92, 88 72 C72 75, 54 95, 51 115 Z" fill="url(#mainLeafRight)"/>
+                  <path d="M51 115 C65 98, 78 85, 88 72" stroke="#aef0b8" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+                </g>
+                
+                <!-- Đài hoa xanh đỡ cánh hoa -->
+                <path d="M38 46 C45 36, 55 36, 62 46 C56 50, 44 50, 38 46 Z" fill="#4a7c52"/>
+                <path d="M35 44 C38 32, 42 28, 44 38" stroke="#5a9662" stroke-width="3" stroke-linecap="round"/>
+                <path d="M65 44 C62 32, 58 28, 56 38" stroke="#5a9662" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <!-- Đầu hoa bông hồng Sophia đa tầng quý phái -->
+            <div class="flower-head" id="flower-head">
+              <div class="flower-head-glow" aria-hidden="true"></div>
+              
+              <div class="flower-blossom-svg-wrapper">
+                <svg class="flower-blossom-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <defs>
+                    <radialGradient id="centerRoseCore" cx="80" cy="80" r="70" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#fff5f7"/>
+                      <stop offset="25%" stop-color="#ffaec2"/>
+                      <stop offset="55%" stop-color="#e86184"/>
+                      <stop offset="85%" stop-color="#b8385a"/>
+                      <stop offset="100%" stop-color="#801b35"/>
+                    </radialGradient>
+                    <radialGradient id="centerGoldGlow" cx="80" cy="80" r="30" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#fff2ad"/>
+                      <stop offset="50%" stop-color="#f5ba42"/>
+                      <stop offset="100%" stop-color="#d4821a"/>
+                    </radialGradient>
+                    <filter id="roseBloomFilter" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#8c233e" flood-opacity="0.32"/>
+                    </filter>
+                  </defs>
+
+                  <!-- Cánh ngoài tầng 1 -->
+                  <g class="petals-outer" filter="url(#roseBloomFilter)">
+                    <path d="M80 15 C115 15, 145 42, 142 80 C140 115, 110 145, 80 145 C50 145, 20 115, 18 80 C15 42, 45 15, 80 15 Z" fill="url(#centerRoseCore)" opacity="0.95"/>
+                  </g>
+
+                  <!-- Cánh tầng 2 (Tạo dáng uốn lượn cánh hoa hồng) -->
+                  <g class="petals-layer-2">
+                    <path d="M30 75 C30 45, 60 25, 90 28 C120 30, 138 55, 132 88 C126 120, 95 138, 65 132 C38 126, 30 100, 30 75 Z" fill="#eb6b8d" opacity="0.92"/>
+                    <path d="M40 85 C35 55, 65 35, 100 40 C130 45, 135 75, 125 105 C115 130, 75 135, 50 120 C35 110, 42 95, 40 85 Z" fill="#f78ba7" opacity="0.88"/>
+                  </g>
+
+                  <!-- Cánh tầng 3 -->
+                  <g class="petals-layer-3">
+                    <circle cx="80" cy="80" r="42" fill="#ff99b3"/>
+                    <path d="M55 70 C55 52, 75 48, 95 52 C115 56, 118 78, 110 95 C102 112, 78 115, 65 105 C55 95, 55 82, 55 70 Z" fill="#ffb8cc"/>
+                    <path d="M65 80 C65 65, 80 60, 95 65 C108 70, 108 85, 100 95 C92 105, 75 102, 68 95 C64 90, 65 85, 65 80 Z" fill="#ffd1de"/>
+                  </g>
+
+                  <!-- Nhụy hoa lấp lánh ánh vàng kim -->
+                  <g class="flower-core">
+                    <circle cx="80" cy="80" r="18" fill="url(#centerGoldGlow)"/>
+                    <circle cx="80" cy="80" r="10" fill="#fff9d6"/>
+                    <!-- Chấm phấn hoa phát sáng -->
+                    <circle cx="75" cy="76" r="2.5" fill="#ffffff"/>
+                    <circle cx="84" cy="74" r="2" fill="#ffffff"/>
+                    <circle cx="78" cy="85" r="2.2" fill="#ffffff"/>
+                    <circle cx="85" cy="82" r="1.8" fill="#ffffff"/>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Hạt bụi tiên lấp lánh xoay quanh đóa hoa -->
+              <div class="flower-orbit-sparkles" aria-hidden="true">
+                <span class="orbit-sparkle o1">✨</span>
+                <span class="orbit-sparkle o2">🌸</span>
+                <span class="orbit-sparkle o3">💖</span>
+                <span class="orbit-sparkle o4">⭐</span>
+                <span class="orbit-sparkle o5">🌷</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bảng đếm hoa & thông điệp kỳ diệu -->
+        <div class="garden-status-board">
+          <div class="garden-counter-pill" id="garden-counter-pill">
+            <span class="counter-icon">🌹</span>
+            <span class="counter-text" id="garden-counter-text">Chạm vào đóa hoa để ngàn hoa hồng Sophia bừng nở</span>
+            <span class="counter-number" id="garden-counter-number"></span>
+          </div>
+          <p class="garden-blessing" id="garden-blessing">
+            “Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia chồi lên gửi trọn yêu thương đến Bảo Trân.”
+          </p>
+        </div>
+
+        <!-- Nút hành động trong vườn hoa -->
+        <div class="garden-action-buttons">
+          <button type="button" class="btn btn-primary" id="btn-bloom-more" aria-label="Nở thêm hoa hồng Sophia">
+            <span class="btn-icon">🌹</span>
+            <span class="btn-text">Nở thêm hoa hồng Sophia</span>
+          </button>
+
+          <button type="button" class="btn btn-secondary" id="btn-reset-garden" aria-label="Làm mới vườn hoa hồng">
+            <span class="btn-icon">↺</span>
+            <span class="btn-text">Nở lại</span>
+          </button>
+
+          <button type="button" class="btn btn-secondary" id="btn-garden-back" aria-label="Quay lại lời chúc">
+            <span class="btn-icon">💌</span>
+            <span class="btn-text">Xem lời chúc</span>
+          </button>
+        </div>
+
+      </section>
+
     </div>
   </main>
+
+  <!-- Canvas vườn hoa chồi lên tiền cảnh (lớp trước viền dưới) -->
+  <canvas id="garden-canvas-front" aria-hidden="true"></canvas>
 
   <script src="script.js"></script>
 </body>

@@ -35,6 +35,15 @@ const BIRTHDAY_CONFIG = {
   // 7. Cấu hình vệt sao stardust lấp lánh khi di chuột
   stardust: {
     enabled: true
+  },
+
+  // 8. Cấu hình Vườn hoa hồng Sophia diệu kỳ & Đóa hoa lắc lư
+  garden: {
+    initialBatchCount: 45,
+    moreBatchCount: 28,
+    soundEnabled: true,
+    title: "Vườn Hoa Hồng Sophia Của Em 🌸",
+    blessingText: "“Anh đến đây với bó hoa mà em thích – ngàn đóa hoa hồng Sophia chồi lên gửi trọn yêu thương đến Bảo Trân.”"
   }
 };
 
@@ -82,6 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
     bouquetImg.src = BIRTHDAY_CONFIG.bouquetImage;
   }
 
+  // Cập nhật nội dung Giai đoạn 3 (Vườn hoa)
+  const gardenTitleEl = document.querySelector('#garden-title .title-text');
+  const gardenBlessingEl = document.getElementById('garden-blessing');
+  if (gardenTitleEl && BIRTHDAY_CONFIG.garden && BIRTHDAY_CONFIG.garden.title) {
+    gardenTitleEl.textContent = BIRTHDAY_CONFIG.garden.title;
+  }
+  if (gardenBlessingEl && BIRTHDAY_CONFIG.garden && BIRTHDAY_CONFIG.garden.blessingText) {
+    gardenBlessingEl.textContent = BIRTHDAY_CONFIG.garden.blessingText;
+  }
+
   // Khởi động các tương tác và hiệu ứng
   initStageInteractions();
   initPetalAnimation();
@@ -89,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initConfetti();
   init3DCardTilt();
   initBouquetInteractions();
+  initSwayingFlowerGarden();
 });
 
 /**
@@ -104,18 +124,77 @@ function escapeHtml(str) {
 }
 
 /* ============================================================================
-   LOGIC CHUYỂN ĐỔI GIAI ĐOẠN & TƯƠNG TÁC NGƯỜI DÙNG
+   LOGIC CHUYỂN ĐỔI GIAI ĐOẠN & TƯƠNG TÁC NGƯỜI DÙNG (STAGE MANAGER)
    ============================================================================ */
+let switchStageGlobal = (stageName) => {};
+
 function initStageInteractions() {
-  const giftStage = document.getElementById('gift-stage');
-  const wishesStage = document.getElementById('wishes-stage');
+  const stages = {
+    gift: document.getElementById('gift-stage'),
+    wishes: document.getElementById('wishes-stage'),
+    garden: document.getElementById('garden-stage')
+  };
+
+  const navBtns = document.querySelectorAll('.stage-nav-btn');
   const giftBox = document.getElementById('gift-box');
   const btnOpenGift = document.getElementById('btn-open-gift');
   const btnBlowCandle = document.getElementById('btn-blow-candle');
+  const btnGotoGarden = document.getElementById('btn-goto-garden');
   const btnReplay = document.getElementById('btn-replay');
   const candle = document.getElementById('candle');
   const cakeWrapper = document.getElementById('cake-interactive-wrapper');
   const postBlowMessage = document.getElementById('post-blow-message');
+
+  let currentStage = 'gift';
+  let hasVisitedGarden = false;
+
+  // Chuyển giai đoạn mượt mà với hoạt cảnh fade & scale
+  const switchStage = (targetStage) => {
+    if (!stages[targetStage] || currentStage === targetStage) return;
+
+    const prevEl = stages[currentStage];
+    if (prevEl) {
+      prevEl.classList.remove('active');
+      prevEl.classList.add('hidden');
+    }
+
+    navBtns.forEach((btn) => {
+      const stageAttr = btn.getAttribute('data-stage');
+      btn.classList.toggle('active', stageAttr === targetStage);
+    });
+
+    const nextEl = stages[targetStage];
+    if (nextEl) {
+      nextEl.classList.remove('hidden');
+      setTimeout(() => {
+        nextEl.classList.add('active');
+      }, 40);
+    }
+
+    currentStage = targetStage;
+
+    // Kích hoạt pháo hoa hoặc hiệu ứng đặc thù
+    if (targetStage === 'wishes') {
+      triggerGrandFireworks();
+    } else if (targetStage === 'garden') {
+      if (window.onGardenStageActivated) {
+        window.onGardenStageActivated(!hasVisitedGarden);
+      }
+      hasVisitedGarden = true;
+    }
+  };
+
+  switchStageGlobal = switchStage;
+
+  // Bắt sự kiện click trên thanh điều hướng tab
+  navBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const stage = btn.getAttribute('data-stage');
+      if (stage) {
+        switchStage(stage);
+      }
+    });
+  });
 
   // Mở quà hoành tráng
   const handleOpenGift = () => {
@@ -127,15 +206,7 @@ function initStageInteractions() {
 
       setTimeout(() => {
         giftBox.classList.add('opened');
-        giftStage.classList.remove('active');
-        giftStage.classList.add('hidden');
-
-        wishesStage.classList.remove('hidden');
-        setTimeout(() => {
-          wishesStage.classList.add('active');
-          // Pháo hoa chào đón giai đoạn lời chúc & bó hoa
-          triggerGrandFireworks();
-        }, 50);
+        switchStage('wishes');
       }, 700);
     }
   };
@@ -159,10 +230,11 @@ function initStageInteractions() {
       triggerGrandFireworks();
       setTimeout(triggerGrandFireworks, 400);
 
-      // Hiện lời chúc tốt đẹp
+      // Hiện lời chúc tốt đẹp và nút mở vườn hoa
       setTimeout(() => {
         postBlowMessage.classList.remove('hidden');
         btnBlowCandle.classList.add('hidden');
+        if (btnGotoGarden) btnGotoGarden.classList.remove('hidden');
         btnReplay.classList.remove('hidden');
       }, 700);
     }
@@ -173,6 +245,21 @@ function initStageInteractions() {
     cakeWrapper.addEventListener('click', handleBlowCandle);
   }
 
+  // Chuyển sang vườn hoa từ nút ở Stage 2
+  if (btnGotoGarden) {
+    btnGotoGarden.addEventListener('click', () => {
+      switchStage('garden');
+    });
+  }
+
+  // Nút quay lại lời chúc ở Stage 3
+  const btnGardenBack = document.getElementById('btn-garden-back');
+  if (btnGardenBack) {
+    btnGardenBack.addEventListener('click', () => {
+      switchStage('wishes');
+    });
+  }
+
   // Xem lại (Bắt đầu lại từ đầu)
   btnReplay.addEventListener('click', () => {
     // Reset nến và lời chúc
@@ -180,17 +267,12 @@ function initStageInteractions() {
     postBlowMessage.classList.add('hidden');
     btnBlowCandle.disabled = false;
     btnBlowCandle.classList.remove('hidden');
+    if (btnGotoGarden) btnGotoGarden.classList.add('hidden');
     btnReplay.classList.add('hidden');
 
     // Chuyển về giai đoạn hộp quà
-    wishesStage.classList.remove('active');
-    wishesStage.classList.add('hidden');
-
     giftBox.classList.remove('opening', 'opened');
-    giftStage.classList.remove('hidden');
-    setTimeout(() => {
-      giftStage.classList.add('active');
-    }, 50);
+    switchStage('gift');
   });
 }
 
@@ -613,6 +695,739 @@ function initConfetti() {
     if (!isAnimating) {
       isAnimating = true;
       requestAnimationFrame(loop);
+    }
+  };
+}
+
+/* ============================================================================
+   GIAI ĐOẠN 3: VƯỜN HOA DIỆU KỲ & ĐÓA HOA LẮC LƯ TƯƠNG TÁC
+   Procedural Botanical Sprouting Engine & Web Audio Chimes
+   ============================================================================ */
+function initSwayingFlowerGarden() {
+  const container = document.getElementById('swaying-flower-interactive');
+  const shockwave = document.getElementById('flower-shockwave');
+  const touchBadge = document.getElementById('touch-hint-badge');
+  const counterPill = document.getElementById('garden-counter-pill');
+  const counterText = document.getElementById('garden-counter-text');
+  const counterNumber = document.getElementById('garden-counter-number');
+  const btnBloomMore = document.getElementById('btn-bloom-more');
+  const btnResetGarden = document.getElementById('btn-reset-garden');
+  const gardenStage = document.getElementById('garden-stage');
+
+  const canvasBack = document.getElementById('garden-canvas-back');
+  const canvasFront = document.getElementById('garden-canvas-front');
+  if (!canvasBack || !canvasFront) return;
+
+  const ctxBack = canvasBack.getContext('2d');
+  const ctxFront = canvasFront.getContext('2d');
+
+  let width = (canvasBack.width = canvasFront.width = window.innerWidth);
+  let height = (canvasBack.height = canvasFront.height = window.innerHeight);
+
+  const resize = () => {
+    width = canvasBack.width = canvasFront.width = window.innerWidth;
+    height = canvasBack.height = canvasFront.height = window.innerHeight;
+  };
+  window.addEventListener('resize', resize);
+
+  // Âm thanh chuông ngân diệu kỳ (Web Audio API Pentatonic Chime)
+  const playBloomChime = () => {
+    if (!BIRTHDAY_CONFIG.garden || !BIRTHDAY_CONFIG.garden.soundEnabled) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      // Hợp âm ngũ cung lãng mạn: C5, E5, G5, B5, C6, E6
+      const freqs = [523.25, 659.25, 783.99, 987.77, 1046.50, 1318.51];
+      freqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.07);
+
+        gain.gain.setValueAtTime(0, ctx.currentTime + idx * 0.07);
+        gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + idx * 0.07 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.07 + 1.15);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime + idx * 0.07);
+        osc.stop(ctx.currentTime + idx * 0.07 + 1.25);
+      });
+    } catch (e) {
+      // Bỏ qua lỗi context không được phép
+    }
+  };
+
+  // Bảng màu chuẩn hoa hồng Sophia: Hồng phấn hoàng gia, hồng đào, hồng kem và hồng nhung
+  const sophiaRosePalettes = {
+    'sophia-grand': {
+      outer: '#f58aa4',
+      mid: '#e85f83',
+      inner: '#c43b60',
+      core: '#fff2f5',
+      rim: '#ffe6ed',
+      stamen: '#f4c348'
+    },
+    'sophia-classic': {
+      outer: '#f78fa7',
+      mid: '#e55a80',
+      inner: '#bd3356',
+      core: '#ffebf1',
+      rim: '#ffdae4',
+      stamen: '#f7cb52'
+    },
+    'sophia-cup': {
+      outer: '#fa98aa',
+      mid: '#f06e84',
+      inner: '#cb455f',
+      core: '#fff5ed',
+      rim: '#ffe8ee',
+      stamen: '#f5bd3f'
+    },
+    'sophia-rosette': {
+      outer: '#fff2f5',
+      mid: '#fca3b9',
+      inner: '#e86187',
+      core: '#ffffff',
+      rim: '#fde8ee',
+      stamen: '#ffd56b'
+    },
+    'sophia-bud': {
+      outer: '#f47996',
+      mid: '#db4970',
+      inner: '#b83354',
+      core: '#ffeef3',
+      rim: '#ffd4df',
+      stamen: '#f4c348'
+    }
+  };
+
+  // Cánh hoa hồng Sophia rơi và chao liệng trong gió
+  class SophiaRosePetalMote {
+    constructor(x, y) {
+      this.x = x + (Math.random() - 0.5) * 16;
+      this.y = y;
+      this.vx = (Math.random() - 0.5) * 1.5;
+      this.vy = -1.0 - Math.random() * 1.6;
+      this.size = 3.5 + Math.random() * 4.5;
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() - 0.5) * 0.08;
+      this.flip = Math.random() * Math.PI;
+      this.flipSpeed = 0.03 + Math.random() * 0.04;
+      this.alpha = 1;
+      this.decay = 0.009 + Math.random() * 0.014;
+      this.color = Math.random() > 0.4 ? 'rgba(247, 139, 167, ' : 'rgba(255, 204, 218, ';
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.rotation += this.rotSpeed;
+      this.flip += this.flipSpeed;
+      this.alpha -= this.decay;
+    }
+
+    draw(ctx) {
+      if (this.alpha <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, this.alpha);
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.scale(Math.cos(this.flip), 1);
+
+      // Vẽ cánh hoa hồng hình trái tim/bầu dục mềm mại
+      ctx.beginPath();
+      ctx.moveTo(0, -this.size);
+      ctx.bezierCurveTo(this.size * 0.8, -this.size * 0.8, this.size * 0.8, this.size * 0.5, 0, this.size);
+      ctx.bezierCurveTo(-this.size * 0.8, this.size * 0.5, -this.size * 0.8, -this.size * 0.8, 0, -this.size);
+      ctx.fillStyle = this.color + this.alpha + ')';
+      ctx.fill();
+
+      ctx.restore();
+    }
+  }
+
+  // ĐỐI TƯỢNG HOA HỒNG SOPHIA CHỒI TỪ DƯỚI LÊN (SOPHIA ROSE SPROUTING FLOWER)
+  class BotanicalFlower {
+    constructor(x, layer, customOptions = {}) {
+      this.x = x;
+      this.layer = layer; // 'back' hoặc 'front'
+      this.baseY = height + 15;
+
+      const minH = layer === 'back' ? 0.32 : 0.60;
+      const maxH = layer === 'back' ? 0.76 : 0.88;
+      this.targetHeight = customOptions.targetHeight || height * (minH + Math.random() * (maxH - minH));
+
+      this.currentHeight = 0;
+      this.delay = customOptions.delay !== undefined ? customOptions.delay : Math.random() * 1100;
+      this.elapsed = 0;
+
+      this.curvature = (Math.random() - 0.5) * (layer === 'back' ? 55 : 35);
+      this.stemThickness = layer === 'back' ? (2.8 + Math.random() * 1.5) : (3.5 + Math.random() * 2.0);
+
+      // MỖI BÔNG HOA ĐỀU LÀ MỘT DÁNG HOA HỒNG SOPHIA LỘNG LẪY
+      const sophiaTypes = ['sophia-grand', 'sophia-classic', 'sophia-cup', 'sophia-rosette', 'sophia-bud', 'sophia-grand', 'sophia-classic'];
+      this.type = customOptions.type || sophiaTypes[Math.floor(Math.random() * sophiaTypes.length)];
+
+      const baseFlowerSize = layer === 'back' ? (22 + Math.random() * 10) : (28 + Math.random() * 14);
+      this.flowerSize = baseFlowerSize;
+
+      this.colors = sophiaRosePalettes[this.type] || sophiaRosePalettes['sophia-grand'];
+
+      // Lá hoa hồng Sophia răng cưa mọc so le
+      this.leaves = [];
+      const leafCount = 2 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < leafCount; i++) {
+        this.leaves.push({
+          ratio: 0.30 + (i / leafCount) * 0.50,
+          side: i % 2 === 0 ? -1 : 1,
+          length: (layer === 'back' ? 16 : 22) + Math.random() * 6,
+          unfurl: 0
+        });
+      }
+
+      this.bloomProgress = 0;
+      this.hasEmittedPollen = false;
+
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = 0.0016 + Math.random() * 0.0014;
+      this.swayAmplitude = 5 + Math.random() * 7;
+    }
+
+    update(delta, time) {
+      if (this.delay > 0) {
+        this.delay -= delta;
+        return;
+      }
+
+      if (this.currentHeight < this.targetHeight) {
+        const remaining = this.targetHeight - this.currentHeight;
+        const growthStep = Math.max(2.5, remaining * 0.065);
+        this.currentHeight = Math.min(this.targetHeight, this.currentHeight + growthStep);
+      }
+
+      if (this.currentHeight >= this.targetHeight * 0.8) {
+        if (this.bloomProgress < 1) {
+          this.bloomProgress = Math.min(1, this.bloomProgress + 0.045);
+        }
+      }
+    }
+
+    draw(ctx, time) {
+      if (this.currentHeight <= 0) return;
+
+      const sway = Math.sin(time * this.swaySpeed + this.swayPhase) * this.swayAmplitude;
+      const progress = this.currentHeight / this.targetHeight;
+
+      const tipX = this.x + (this.curvature * progress) + sway;
+      const tipY = this.baseY - this.currentHeight;
+
+      const ctrlX = this.x + this.curvature * 0.5 + sway * 0.35;
+      const ctrlY = this.baseY - this.currentHeight * 0.52;
+
+      ctx.save();
+
+      // 1. Thân cành hoa hồng Sophia màu xanh ngọc tươi bóng
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.baseY);
+      ctx.quadraticCurveTo(ctrlX, ctrlY, tipX, tipY);
+      const stemGrad = ctx.createLinearGradient(this.x, this.baseY, tipX, tipY);
+      stemGrad.addColorStop(0, '#2e5636');
+      stemGrad.addColorStop(0.5, '#4f8c57');
+      stemGrad.addColorStop(1, '#81c78b');
+      ctx.strokeStyle = stemGrad;
+      ctx.lineWidth = this.stemThickness;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Gai nhỏ mềm mại đặc trưng của hoa hồng
+      if (this.stemThickness > 3 && this.currentHeight > 80) {
+        const thornY = this.baseY - this.currentHeight * 0.45;
+        const thornX = (this.x + ctrlX) * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(thornX, thornY);
+        ctx.lineTo(thornX - 4, thornY + 3);
+        ctx.strokeStyle = '#3a6640';
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+      }
+
+      // 2. Lá hoa hồng Sophia răng cưa với gân lá xanh ngọc
+      for (let i = 0; i < this.leaves.length; i++) {
+        const leaf = this.leaves[i];
+        const leafThresh = this.targetHeight * leaf.ratio;
+        if (this.currentHeight > leafThresh) {
+          if (leaf.unfurl < 1) {
+            leaf.unfurl = Math.min(1, leaf.unfurl + 0.06);
+          }
+
+          const t = leaf.ratio;
+          const lx = (1 - t) * (1 - t) * this.x + 2 * (1 - t) * t * ctrlX + t * t * tipX;
+          const ly = (1 - t) * (1 - t) * this.baseY + 2 * (1 - t) * t * ctrlY + t * t * tipY;
+
+          const dx = 2 * (1 - t) * (ctrlX - this.x) + 2 * t * (tipX - ctrlX);
+          const dy = 2 * (1 - t) * (ctrlY - this.baseY) + 2 * t * (tipY - ctrlY);
+          const stemAngle = Math.atan2(dy, dx);
+          const leafAngle = stemAngle + (leaf.side * Math.PI / 3.2);
+
+          ctx.save();
+          ctx.translate(lx, ly);
+          ctx.rotate(leafAngle);
+          ctx.scale(leaf.unfurl, leaf.unfurl);
+
+          // Cánh lá bầu dục nhọn đầu đặc trưng của hoa hồng
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(leaf.length * 0.35, -leaf.length * 0.35, leaf.length * 0.75, -leaf.length * 0.25, leaf.length, 0);
+          ctx.bezierCurveTo(leaf.length * 0.75, leaf.length * 0.25, leaf.length * 0.35, leaf.length * 0.35, 0, 0);
+          
+          const leafGrad = ctx.createLinearGradient(0, 0, leaf.length, 0);
+          leafGrad.addColorStop(0, '#3e7d48');
+          leafGrad.addColorStop(0.7, '#5ea869');
+          leafGrad.addColorStop(1, '#a65463'); // Đỉnh lá non ánh đồng đỏ tía của hoa hồng
+          ctx.fillStyle = leafGrad;
+          ctx.fill();
+
+          // Gân lá hoa hồng
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(leaf.length * 0.9, 0);
+          ctx.strokeStyle = '#9be3a5';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+
+      // 3. ĐÓA HOA HỒNG SOPHIA BUNG NỞ TRÁNG LỆ
+      if (this.bloomProgress > 0) {
+        const bloomScale = Math.sin(this.bloomProgress * Math.PI * 0.5) * (1 + 0.16 * Math.sin(this.bloomProgress * Math.PI));
+
+        ctx.save();
+        ctx.translate(tipX, tipY);
+        ctx.rotate(sway * 0.03);
+        ctx.scale(bloomScale, bloomScale);
+
+        const size = this.flowerSize;
+
+        // Các đài hoa xanh vươn ra nâng đỡ đóa hồng Sophia
+        ctx.save();
+        for (let s = 0; s < 5; s++) {
+          const sAngle = (s * Math.PI * 2) / 5 + 0.32;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          const sx = Math.cos(sAngle) * size * 0.55;
+          const sy = Math.sin(sAngle) * size * 0.55;
+          const cpx = Math.cos(sAngle + 0.25) * size * 0.35;
+          const cpy = Math.sin(sAngle + 0.25) * size * 0.35;
+          ctx.quadraticCurveTo(cpx, cpy, sx, sy);
+          ctx.strokeStyle = '#43784c';
+          ctx.lineWidth = 2.2;
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        // VẼ TỪNG DÁNG HOA HỒNG SOPHIA TUYỆT ĐẸP
+        if (this.type === 'sophia-grand') {
+          // 1. Đóa Hồng Sophia Hoàng Gia Nở Rộ Viên Mãn (4 tầng cánh xếp xoắn ốc)
+          // Tầng 1: Cánh ngoài xòe rộng
+          for (let p = 0; p < 7; p++) {
+            const pAngle = (p * Math.PI * 2) / 7;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.48, size * 0.44, size * 0.36, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.outer;
+            ctx.fill();
+            ctx.restore();
+          }
+          // Tầng 2: Cánh giữa cúp tròn mềm mại
+          for (let p = 0; p < 6; p++) {
+            const pAngle = (p * Math.PI * 2) / 6 + 0.28;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.34, size * 0.36, size * 0.28, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.mid;
+            ctx.fill();
+            ctx.restore();
+          }
+          // Tầng 3: Cánh trong xoắn ốc hoa hồng
+          for (let p = 0; p < 5; p++) {
+            const pAngle = (p * Math.PI * 2) / 5 + 0.55;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.22, size * 0.26, size * 0.20, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.inner;
+            ctx.fill();
+            ctx.restore();
+          }
+          // Tầng 4: Lõi nụ hoa hồng & nhụy vàng ấm
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.18, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.core;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.10, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.stamen;
+          ctx.fill();
+
+        } else if (this.type === 'sophia-cup') {
+          // 2. Đóa Hồng Sophia Dáng Chén Sâu (Deep-Cupped English Sophia Rose)
+          // Lớp cánh chén ôm đáy
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.52, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.outer;
+          ctx.fill();
+
+          // Các vạt cánh cúp xếp lượn sóng
+          for (let p = 0; p < 6; p++) {
+            const pAngle = (p * Math.PI * 2) / 6;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.36, size * 0.38, size * 0.28, 0.1, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.mid;
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // Cánh xoáy sâu bên trong chén hoa
+          for (let p = 0; p < 4; p++) {
+            const pAngle = (p * Math.PI * 2) / 4 + 0.4;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.20, size * 0.28, size * 0.18, -0.15, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.inner;
+            ctx.fill();
+            ctx.restore();
+          }
+
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.14, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.core;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.08, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.stamen;
+          ctx.fill();
+
+        } else if (this.type === 'sophia-rosette') {
+          // 3. Đóa Hồng Sophia Dáng Nếp Gấp Lụa Hoàng Gia (Quartered Rosette)
+          // Vòng cánh ngoài xòe rộng màu hồng phấn
+          for (let p = 0; p < 8; p++) {
+            const pAngle = (p * Math.PI * 2) / 8;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.46, size * 0.34, size * 0.32, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.outer;
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // 4 góc xoáy cánh hoa hồng Anh Quốc
+          for (let q = 0; q < 4; q++) {
+            const qAngle = (q * Math.PI) / 2;
+            const qx = Math.cos(qAngle) * size * 0.18;
+            const qy = Math.sin(qAngle) * size * 0.18;
+            ctx.beginPath();
+            ctx.arc(qx, qy, size * 0.16, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.inner;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(qx, qy, size * 0.08, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.core;
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.09, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.stamen;
+          ctx.fill();
+
+        } else if (this.type === 'sophia-bud') {
+          // 4. Nụ Hoa Hồng Sophia Chúm Chím Hé Nở (Tender Sophia Rosebud)
+          // Thân nụ hoa hồng thon dài
+          ctx.beginPath();
+          ctx.ellipse(0, -size * 0.36, size * 0.28, size * 0.44, 0, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.outer;
+          ctx.fill();
+
+          // Cánh xoắn hé nở ở đỉnh nụ
+          ctx.beginPath();
+          ctx.ellipse(-size * 0.08, -size * 0.40, size * 0.18, size * 0.38, -0.22, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.mid;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.ellipse(size * 0.08, -size * 0.40, size * 0.18, size * 0.38, 0.22, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.inner;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.ellipse(0, -size * 0.48, size * 0.12, size * 0.24, 0, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.rim;
+          ctx.fill();
+
+        } else {
+          // 5. Hoa Hồng Sophia Duyên Dáng Truyền Thống (Classic Spiral Sophia Rose)
+          for (let p = 0; p < 6; p++) {
+            const pAngle = (p * Math.PI) / 3;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.44, size * 0.44, size * 0.32, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.outer;
+            ctx.fill();
+            ctx.restore();
+          }
+          for (let p = 0; p < 5; p++) {
+            const pAngle = (p * Math.PI * 2) / 5 + 0.32;
+            ctx.save();
+            ctx.rotate(pAngle);
+            ctx.beginPath();
+            ctx.ellipse(0, -size * 0.30, size * 0.34, size * 0.24, 0, 0, Math.PI * 2);
+            ctx.fillStyle = this.colors.mid;
+            ctx.fill();
+            ctx.restore();
+          }
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.20, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.inner;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.10, 0, Math.PI * 2);
+          ctx.fillStyle = this.colors.stamen;
+          ctx.fill();
+        }
+
+        ctx.restore();
+
+        // Thả những cánh hoa hồng Sophia mềm mại bay bổng vào không gian
+        if (!this.hasEmittedPollen && this.bloomProgress > 0.6) {
+          this.hasEmittedPollen = true;
+          for (let m = 0; m < 3; m++) {
+            pollenMotes.push(new SophiaRosePetalMote(tipX, tipY));
+          }
+        }
+      }
+
+      ctx.restore();
+    }
+  }
+
+  // Quản lý danh sách hoa và hạt phấn
+  let flowersBack = [];
+  let flowersFront = [];
+  let pollenMotes = [];
+  let totalBloomedCount = 0;
+  let isGardenRunning = false;
+  let lastTime = performance.now();
+
+  // Vòng lặp render hiệu ứng vườn hoa 60fps
+  function gardenLoop(now) {
+    const delta = Math.min(50, now - lastTime);
+    lastTime = now;
+
+    // 1. Vẽ lớp hoa nền (phía sau thẻ)
+    ctxBack.clearRect(0, 0, width, height);
+    for (let i = 0; i < flowersBack.length; i++) {
+      flowersBack[i].update(delta, now);
+      flowersBack[i].draw(ctxBack, now);
+    }
+
+    // 2. Vẽ lớp hoa tiền cảnh (phía trước viền dưới)
+    ctxFront.clearRect(0, 0, width, height);
+    for (let i = 0; i < flowersFront.length; i++) {
+      flowersFront[i].update(delta, now);
+      flowersFront[i].draw(ctxFront, now);
+    }
+
+    // 3. Cập nhật và vẽ các cánh hoa hồng Sophia lung linh bay trong gió
+    for (let i = pollenMotes.length - 1; i >= 0; i--) {
+      pollenMotes[i].update();
+      pollenMotes[i].draw(ctxFront);
+      if (pollenMotes[i].alpha <= 0 || pollenMotes[i].y < -20) {
+        pollenMotes.splice(i, 1);
+      }
+    }
+
+    requestAnimationFrame(gardenLoop);
+  }
+
+  // Hàm kích hoạt đợt hoa hồng Sophia chồi lên ngoạn mục từ phía dưới
+  function sproutGardenBatch(count = 42) {
+    resize();
+    if (!isGardenRunning) {
+      isGardenRunning = true;
+      lastTime = performance.now();
+      requestAnimationFrame(gardenLoop);
+    }
+
+    const backCount = Math.floor(count * 0.62);
+    const frontCount = count - backCount;
+
+    // Tạo hoa hồng Sophia lớp nền (trải đều khắp bề ngang màn hình)
+    for (let i = 0; i < backCount; i++) {
+      const x = (i / backCount) * width + (Math.random() - 0.5) * (width / backCount * 0.9);
+      flowersBack.push(new BotanicalFlower(x, 'back', {
+        delay: Math.random() * 1200
+      }));
+    }
+
+    // Tạo hoa hồng Sophia lớp tiền cảnh (tập trung tôn lên phần chân thẻ)
+    for (let i = 0; i < frontCount; i++) {
+      const x = (i / frontCount) * width + (Math.random() - 0.5) * (width / frontCount * 0.9);
+      flowersFront.push(new BotanicalFlower(x, 'front', {
+        delay: 200 + Math.random() * 1100
+      }));
+    }
+
+    totalBloomedCount += count;
+    updateCounterBadge();
+  }
+
+  // Trồng một đóa hoa hồng Sophia đơn lẻ tại vị trí chạm/click
+  function plantSingleFlower(x) {
+    if (!isGardenRunning) {
+      isGardenRunning = true;
+      lastTime = performance.now();
+      requestAnimationFrame(gardenLoop);
+    }
+
+    const isBack = Math.random() > 0.45;
+    const targetArray = isBack ? flowersBack : flowersFront;
+    targetArray.push(new BotanicalFlower(x, isBack ? 'back' : 'front', {
+      delay: 50
+    }));
+
+    totalBloomedCount += 1;
+    updateCounterBadge();
+  }
+
+  // Cập nhật số lượng hoa hồng Sophia và thông điệp động
+  function updateCounterBadge() {
+    if (counterNumber) {
+      counterNumber.textContent = `${totalBloomedCount} đóa hoa hồng Sophia`;
+    }
+    if (counterText) {
+      counterText.textContent = `Vườn hoa hồng Sophia đang bừng nở rực rỡ:`;
+    }
+    if (touchBadge) {
+      const hint = touchBadge.querySelector('.hint-text');
+      if (hint) hint.textContent = 'Chạm tiếp để nở thêm hoa hồng Sophia!';
+    }
+  }
+
+  // Xử lý khi nhấn vào đóa hoa trung tâm lắc lư
+  const handleFlowerClick = (e) => {
+    // Kích hoạt hoạt cảnh nhún nở mạnh mẽ cho đóa hoa lắc lư
+    container.classList.remove('blooming');
+    void container.offsetWidth; // Force reflow
+    container.classList.add('blooming');
+
+    // Bắn sóng xung kích phát quang
+    if (shockwave) {
+      shockwave.classList.remove('burst');
+      void shockwave.offsetWidth;
+      shockwave.classList.add('burst');
+    }
+
+    // Âm thanh chuông ngân diệu kỳ
+    playBloomChime();
+
+    // Tung cánh hoa confetti nhỏ quanh tâm bông hoa
+    const rect = container.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height * 0.35;
+    triggerSoftSparkleConfetti(cx, cy);
+
+    // Kích hoạt toàn bộ vườn hoa chồi lên từ dưới màn hình!
+    sproutGardenBatch(BIRTHDAY_CONFIG.garden ? BIRTHDAY_CONFIG.garden.initialBatchCount : 45);
+
+    // Rung phản hồi cảm ứng trên điện thoại
+    if (navigator.vibrate) {
+      navigator.vibrate([35, 45, 35]);
+    }
+
+    // Tự động gỡ bỏ class blooming sau khi hoàn thành hoạt cảnh để tiếp tục lắc lư
+    setTimeout(() => {
+      container.classList.remove('blooming');
+    }, 800);
+  };
+
+  container.addEventListener('click', handleFlowerClick);
+  container.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleFlowerClick(e);
+    }
+  });
+
+  // Bấm nút "Nở thêm hoa"
+  if (btnBloomMore) {
+    btnBloomMore.addEventListener('click', () => {
+      playBloomChime();
+      sproutGardenBatch(BIRTHDAY_CONFIG.garden ? BIRTHDAY_CONFIG.garden.moreBatchCount : 28);
+    });
+  }
+
+  // Bấm nút "Nở lại" (Làm mới vườn hoa)
+  if (btnResetGarden) {
+    btnResetGarden.addEventListener('click', () => {
+      flowersBack = [];
+      flowersFront = [];
+      pollenMotes = [];
+      totalBloomedCount = 0;
+      ctxBack.clearRect(0, 0, width, height);
+      ctxFront.clearRect(0, 0, width, height);
+      
+      playBloomChime();
+      sproutGardenBatch(BIRTHDAY_CONFIG.garden ? BIRTHDAY_CONFIG.garden.initialBatchCount : 45);
+    });
+  }
+
+  // Chạm/click bất kỳ đâu trên nền màn hình vườn hoa để trồng thêm hoa tại vị trí đó
+  if (gardenStage) {
+    gardenStage.addEventListener('click', (e) => {
+      if (
+        !e.target.closest('#swaying-flower-interactive') &&
+        !e.target.closest('.btn') &&
+        !e.target.closest('.stage-nav')
+      ) {
+        plantSingleFlower(e.clientX || width / 2);
+      }
+    });
+  }
+
+  // Callback khi người dùng chuyển sang giai đoạn Vườn Hoa
+  window.onGardenStageActivated = (isFirstTime) => {
+    resize();
+    if (!isGardenRunning) {
+      isGardenRunning = true;
+      lastTime = performance.now();
+      requestAnimationFrame(gardenLoop);
+    }
+
+    // Nếu lần đầu vào vườn hoa và chưa có hoa nào, tự động kích hoạt đợt hoa đầu tiên
+    if (flowersBack.length === 0 && flowersFront.length === 0) {
+      setTimeout(() => {
+        handleFlowerClick();
+      }, 500);
     }
   };
 }
