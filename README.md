@@ -47,6 +47,12 @@ hpbd/
 6. **Hiệu ứng nghiêng thẻ 3D (Interactive 3D Tilt)**:
    - Trên màn hình máy tính, thẻ nội dung tương tác nhẹ theo vị trí chuột, tạo cảm giác thẻ thiệp chúc mừng cao cấp có chiều sâu thật.
 
+7. **Vườn hoa hồng Sophia diệu kỳ (Enchanted Sophia Rose Meadow)**:
+   - Đóa hoa hồng Sophia trung tâm đung đưa lắc lư tự nhiên theo làn gió với cánh hoa đa tầng, nhụy vàng kim lấp lánh và huy hiệu mời chạm.
+   - Khi bấm vào đóa hoa, hàng chục đóa hoa hồng Sophia thuộc 5 dáng hoa hoàng gia khác nhau (*Grand Rose, Deep Cup, Quartered Rosette, Tender Bud, Classic Spiral*) cùng thi nhau chồi lên từ đáy màn hình vươn cao với các nhánh lá răng cưa và bung cánh rực rỡ.
+   - Hiệu ứng âm thanh chuông ngân diệu kỳ (Web Audio API Pentatonic Chime) cùng mưa cánh hoa hồng Sophia rơi chao liệng trong gió.
+   - Bảng đếm hoa tự động cập nhật số đóa hoa, hỗ trợ bấm nút nở thêm hoa hoặc chạm vào bất kỳ điểm nào trên màn hình để gieo hoa.
+
 ---
 
 ## ⚙️ Cấu hình tập trung trong [`script.js`](script.js)
