@@ -174,12 +174,13 @@ body {
   min-height: 100dvh;
   padding: 36px 18px 80px;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   perspective: 1200px;
 }
 
-.card-container {
+.card-container,
+.step-card-frame {
   width: 100%;
   background: var(--cream-surface);
   backdrop-filter: blur(16px);
@@ -187,15 +188,17 @@ body {
   border: var(--card-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--card-shadow);
-  padding: 42px 36px;
+  padding: 38px 32px 42px;
   text-align: center;
   position: relative;
   overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  scroll-margin-top: 32px;
 }
 
-/* Dải viền mạ vàng trên đỉnh thẻ */
-.card-container::before {
+/* Dải viền mạ vàng trên đỉnh mỗi khung thẻ */
+.card-container::before,
+.step-card-frame::before {
   content: '';
   position: absolute;
   top: 0;
@@ -2137,17 +2140,19 @@ body {
   }
 
   /* Thẻ thiệp chúc mừng thon gọn, để lộ viền hoa hồng 4 góc lãng mạn */
-  .card-container {
+  .card-container,
+  .step-card-frame {
     width: 100%;
     max-width: 440px;
     margin: 0 auto;
-    padding: 24px 18px 20px;
-    border-radius: 22px;
-    background: rgba(255, 253, 249, 0.88);
+    padding: 26px 16px 28px;
+    border-radius: 20px;
+    background: rgba(255, 253, 249, 0.90);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 14px 40px rgba(184, 74, 101, 0.2),
+    box-shadow: 0 14px 40px rgba(184, 74, 101, 0.18),
                 0 4px 12px rgba(0, 0, 0, 0.04);
+    scroll-margin-top: 20px;
   }
 
 

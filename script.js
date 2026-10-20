@@ -525,12 +525,12 @@ function playScratchUnlockChime() {
 let scrollToStepGlobal = (stageName) => { };
 
 function initStageInteractions() {
-  const stages = {
-    gift: document.getElementById('gift-stage'),
-    calendar: document.getElementById('calendar-stage'),
-    wishes: document.getElementById('wishes-stage'),
-    scratch: document.getElementById('scratch-stage'),
-    garden: document.getElementById('garden-stage')
+  const frames = {
+    1: document.getElementById('frame-step-1'),
+    2: document.getElementById('frame-step-2'),
+    3: document.getElementById('frame-step-3'),
+    4: document.getElementById('frame-step-4'),
+    5: document.getElementById('frame-step-5')
   };
 
   const giftBox = document.getElementById('gift-box');
@@ -544,74 +544,60 @@ function initStageInteractions() {
   const cakeWrapper = document.getElementById('cake-interactive-wrapper');
   const postBlowMessage = document.getElementById('post-blow-message');
 
-  // Mở khóa từng bước một cách tuần tự (Progressive Step Unlocking)
+  // Mở khóa từng bước một cách tuần tự (Progressive Step Unlocking sang từng khung riêng biệt)
   const unlockStep = (stepNumber) => {
-    let stageEl = null;
-    let dividerEl = null;
-
-    if (stepNumber === 2) {
-      dividerEl = document.getElementById('divider-step-2');
-      stageEl = stages.calendar;
-    } else if (stepNumber === 3) {
-      dividerEl = document.getElementById('divider-step-3');
-      stageEl = stages.wishes;
-    } else if (stepNumber === 4) {
-      dividerEl = document.getElementById('divider-step-4');
-      stageEl = stages.scratch;
-    } else if (stepNumber === 5) {
-      dividerEl = document.getElementById('divider-step-5');
-      stageEl = stages.garden;
-    }
+    const dividerEl = document.getElementById(`divider-step-${stepNumber}`);
+    const frameEl = frames[stepNumber];
 
     if (dividerEl) {
       dividerEl.classList.remove('step-locked');
       dividerEl.classList.add('step-reveal');
     }
 
-    if (stageEl) {
-      stageEl.classList.remove('step-locked');
-      stageEl.classList.add('step-reveal');
+    if (frameEl) {
+      frameEl.classList.remove('step-locked');
+      frameEl.classList.add('step-reveal');
     }
 
-    // Tác vụ mượt mà và hiệu ứng đặc thù cho từng bước
+    // Tự động nhảy khung mượt mà sang bước tiếp theo
     if (stepNumber === 2) {
       setTimeout(() => {
-        if (stageEl) {
-          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (frameEl) {
+          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         // Kích hoạt nét vẽ khoanh tròn nghệ thuật ngày 23/10
         const day23 = document.getElementById('calendar-day-23');
         if (day23) {
           day23.classList.add('draw-active');
         }
-      }, 150);
+      }, 180);
     } else if (stepNumber === 3) {
       setTimeout(() => {
-        if (stageEl) {
-          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (frameEl) {
+          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         startWishesTypewriter(true);
-      }, 150);
+      }, 180);
     } else if (stepNumber === 4) {
       setTimeout(() => {
-        if (stageEl) {
-          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (frameEl) {
+          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         drawScratchCover();
-      }, 150);
+      }, 180);
     } else if (stepNumber === 5) {
       setTimeout(() => {
-        if (stageEl) {
-          stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (frameEl) {
+          frameEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         if (window.onGardenStageActivated) {
           window.onGardenStageActivated();
         }
-      }, 150);
+      }, 180);
     }
   };
 
-  // Bước 1: Mở hộp quà -> Mở khóa Bước 2 (Lịch Ngày Đặc Biệt 23/10)
+  // Bước 1: Mở hộp quà -> Mở khóa & Nhảy sang Khung 2 (Lịch Ngày Đặc Biệt 23/10)
   const handleOpenGift = () => {
     if (!giftBox.classList.contains('opening') && !giftBox.classList.contains('opened')) {
       giftBox.classList.add('opening');
@@ -624,8 +610,8 @@ function initStageInteractions() {
         unlockStep(2);
       }, 650);
     } else {
-      if (stages.calendar) {
-        stages.calendar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (frames[2]) {
+        frames[2].scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   };
@@ -654,7 +640,7 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 2 -> Bước 3: Nút chuyển từ Lịch sang Lời chúc & Thổi nến
+  // Bước 2 -> Bước 3: Nút chuyển từ Lịch sang Khung Lời chúc & Thổi nến
   if (btnGotoWishes) {
     btnGotoWishes.addEventListener('click', (e) => {
       if (e) {
@@ -665,7 +651,7 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 3: Thổi nến hoành tráng & mở nút dẫn sang Bước 4 (Thẻ cào)
+  // Bước 3: Thổi nến hoành tráng & mở nút dẫn sang Khung 4 (Thẻ cào)
   const handleBlowCandle = () => {
     if (!candle.classList.contains('extinguished')) {
       candle.classList.add('extinguished');
@@ -675,7 +661,7 @@ function initStageInteractions() {
       triggerGrandFireworks();
       setTimeout(triggerGrandFireworks, 400);
 
-      // Hiện lời chúc tốt đẹp và nút dẫn mở khóa Bước 4
+      // Hiện lời chúc tốt đẹp và nút dẫn mở khóa Khung 4
       setTimeout(() => {
         if (postBlowMessage) postBlowMessage.classList.remove('hidden');
         if (btnBlowCandle) btnBlowCandle.classList.add('hidden');
@@ -691,7 +677,7 @@ function initStageInteractions() {
     cakeWrapper.addEventListener('click', handleBlowCandle);
   }
 
-  // Bước 3 -> Bước 4: Nhấn nút xong mới mở khóa & hiện Bước 4 (Thẻ cào)
+  // Bước 3 -> Bước 4: Nhấn nút xong mới mở khóa & nhảy sang Khung 4 (Thẻ cào)
   if (btnGotoScratch) {
     btnGotoScratch.addEventListener('click', (e) => {
       if (e) {
@@ -702,7 +688,7 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 4 -> Bước 5: Nhấn nút xong mới mở khóa & hiện Bước 5 (Vườn hoa)
+  // Bước 4 -> Bước 5: Nhấn nút xong mới mở khóa & nhảy sang Khung 5 (Vườn hoa)
   if (btnScratchToGarden) {
     btnScratchToGarden.addEventListener('click', (e) => {
       if (e) {
@@ -713,15 +699,15 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 5: Nút cuộn mượt lên đầu trang để xem lại
+  // Bước 5: Nút cuộn mượt lên Khung 1 đầu trang để xem lại
   if (btnScrollTop) {
     btnScrollTop.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      if (stages.gift) {
-        stages.gift.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (frames[1]) {
+        frames[1].scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
   }
@@ -752,39 +738,43 @@ function initBouquetInteractions() {
    HIỆU ỨNG NGHIÊNG THẺ 3D (TILT CARD EFFECT)
    ============================================================================ */
 function init3DCardTilt() {
-  const card = document.getElementById('card-container');
-  if (!card || window.innerWidth < 768) return;
+  if (window.innerWidth < 768) return;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) return;
 
-  let bounds;
+  const cards = document.querySelectorAll('.step-card-frame');
+  cards.forEach((card) => {
+    let bounds = null;
 
-  function rotateToMouse(e) {
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-    const leftX = mouseX - bounds.x;
-    const topY = mouseY - bounds.y;
-    const center = {
-      x: leftX - bounds.width / 2,
-      y: topY - bounds.height / 2
-    };
+    function rotateToMouse(e) {
+      if (!bounds) bounds = card.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const leftX = mouseX - bounds.x;
+      const topY = mouseY - bounds.y;
+      const center = {
+        x: leftX - bounds.width / 2,
+        y: topY - bounds.height / 2
+      };
 
-    const maxTilt = 5; // Độ nghiêng vừa phải sang trọng
-    const rotateX = (-center.y / (bounds.height / 2)) * maxTilt;
-    const rotateY = (center.x / (bounds.width / 2)) * maxTilt;
+      const maxTilt = 4; // Độ nghiêng vừa phải sang trọng
+      const rotateX = (-center.y / (bounds.height / 2)) * maxTilt;
+      const rotateY = (center.x / (bounds.width / 2)) * maxTilt;
 
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  }
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    }
 
-  card.addEventListener('mouseenter', () => {
-    bounds = card.getBoundingClientRect();
-    document.addEventListener('mousemove', rotateToMouse);
-  });
+    card.addEventListener('mouseenter', () => {
+      bounds = card.getBoundingClientRect();
+      card.addEventListener('mousemove', rotateToMouse);
+    });
 
-  card.addEventListener('mouseleave', () => {
-    document.removeEventListener('mousemove', rotateToMouse);
-    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+    card.addEventListener('mouseleave', () => {
+      card.removeEventListener('mousemove', rotateToMouse);
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+      bounds = null;
+    });
   });
 }
 
