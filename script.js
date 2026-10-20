@@ -188,7 +188,11 @@ function initStageInteractions() {
 
   // Bắt sự kiện click trên thanh điều hướng tab
   navBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       const stage = btn.getAttribute('data-stage');
       if (stage) {
         switchStage(stage);
@@ -247,7 +251,11 @@ function initStageInteractions() {
 
   // Chuyển sang vườn hoa từ nút ở Stage 2
   if (btnGotoGarden) {
-    btnGotoGarden.addEventListener('click', () => {
+    btnGotoGarden.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
       switchStage('garden');
     });
   }
@@ -1391,8 +1399,17 @@ function initSwayingFlowerGarden() {
     updateClearButtonVisibility();
   }
 
+  // Cờ kiểm soát: Chỉ cho phép click sau khi đã vào hẳn màn hình vườn hoa (chống tap-through từ nút chuyển màn hình)
+  let canInteractWithFlower = false;
+
   // Xử lý khi nhấn vào đóa hoa trung tâm lắc lư
   const handleFlowerClick = (e) => {
+    // Nếu chưa được phép click (vừa mới chuyển màn hình) thì bỏ qua
+    if (!canInteractWithFlower) {
+      if (e && e.preventDefault) e.preventDefault();
+      return;
+    }
+
     if (e && e.stopPropagation) {
       e.stopPropagation();
     }
@@ -1522,11 +1539,35 @@ function initSwayingFlowerGarden() {
   // Callback khi người dùng chuyển sang giai đoạn Vườn Hoa
   window.onGardenStageActivated = (isFirstTime) => {
     resize();
+
+    // 1. Tạm thời khóa tương tác click vào hoa để tránh hiện tượng chạm xuyên màn hình (tap-through/ghost click)
+    canInteractWithFlower = false;
+
+    // 2. Đảm bảo toàn bộ hoa được dọn sạch hoàn toàn khi mới vào màn hình, tuyệt đối không tự mọc hoa
+    flowersBack = [];
+    flowersFront = [];
+    pollenMotes = [];
+    totalBloomedCount = 0;
+    ctxBack.clearRect(0, 0, width, height);
+    ctxFront.clearRect(0, 0, width, height);
+
+    if (counterNumber) counterNumber.textContent = '';
+    if (counterText) counterText.textContent = 'Chạm vào đóa hoa để ngàn hoa hồng Sophia bừng nở';
+    if (touchBadge) {
+      const hint = touchBadge.querySelector('.hint-text');
+      if (hint) hint.textContent = 'Chạm vào đóa hoa để hoa bừng nở!';
+    }
     updateClearButtonVisibility();
+
     if (!isGardenRunning) {
       isGardenRunning = true;
       lastTime = performance.now();
       requestAnimationFrame(gardenLoop);
     }
+
+    // 3. Sau 500ms khi giao diện vườn hoa đã ổn định hoàn toàn, mới cho phép nhận click từ người dùng
+    setTimeout(() => {
+      canInteractWithFlower = true;
+    }, 500);
   };
 }
