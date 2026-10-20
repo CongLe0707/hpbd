@@ -711,7 +711,7 @@ function initSwayingFlowerGarden() {
   const counterText = document.getElementById('garden-counter-text');
   const counterNumber = document.getElementById('garden-counter-number');
   const btnBloomMore = document.getElementById('btn-bloom-more');
-  const btnResetGarden = document.getElementById('btn-reset-garden');
+  const btnClearGarden = document.getElementById('btn-clear-garden') || document.getElementById('btn-reset-garden');
   const gardenStage = document.getElementById('garden-stage');
 
   const canvasBack = document.getElementById('garden-canvas-back');
@@ -924,6 +924,12 @@ function initSwayingFlowerGarden() {
     }
 
     update(delta, time) {
+      if (this.isRetracting) {
+        this.currentHeight = Math.max(0, this.currentHeight - Math.max(7, this.targetHeight * 0.10));
+        this.bloomProgress = Math.max(0, this.bloomProgress - 0.08);
+        return;
+      }
+
       if (this.delay > 0) {
         this.delay -= delta;
         return;
@@ -1356,6 +1362,20 @@ function initSwayingFlowerGarden() {
     updateCounterBadge();
   }
 
+  // Ngưỡng hoa để tự động kích hoạt hiển thị nút Xóa hết hoa (khi nhiều hoa quá)
+  const MANY_FLOWERS_THRESHOLD = 20;
+
+  function updateClearButtonVisibility() {
+    const currentCount = flowersBack.length + flowersFront.length;
+    if (btnClearGarden) {
+      if (currentCount >= MANY_FLOWERS_THRESHOLD) {
+        btnClearGarden.classList.remove('is-hidden');
+      } else {
+        btnClearGarden.classList.add('is-hidden');
+      }
+    }
+  }
+
   // Cập nhật số lượng hoa hồng Sophia và thông điệp động
   function updateCounterBadge() {
     if (counterNumber) {
@@ -1368,6 +1388,7 @@ function initSwayingFlowerGarden() {
       const hint = touchBadge.querySelector('.hint-text');
       if (hint) hint.textContent = 'Chạm tiếp để nở thêm hoa hồng Sophia!';
     }
+    updateClearButtonVisibility();
   }
 
   // Xử lý khi nhấn vào đóa hoa trung tâm lắc lư
@@ -1423,19 +1444,76 @@ function initSwayingFlowerGarden() {
     });
   }
 
-  // Bấm nút "Nở lại" (Làm mới vườn hoa)
-  if (btnResetGarden) {
-    btnResetGarden.addEventListener('click', () => {
+  // Hàm dọn/xóa sạch toàn bộ hoa với hiệu ứng hoa hạ dần xuống đất diệu kỳ
+  function clearAllGardenFlowers() {
+    const totalCurrent = flowersBack.length + flowersFront.length;
+    if (totalCurrent === 0) return;
+
+    // Âm thanh chuông ngân dịu nhẹ khi thu gọn vườn hoa
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        const actx = new AudioCtx();
+        const now = actx.currentTime;
+        const notes = [659.25, 523.25, 392.00, 261.63]; // Mi - Đô - Sol - Đô
+        notes.forEach((freq, idx) => {
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+          gain.gain.setValueAtTime(0.08, now + idx * 0.06);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.30);
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          osc.start(now + idx * 0.06);
+          osc.stop(now + idx * 0.06 + 0.32);
+        });
+      }
+    } catch (e) {}
+
+    // Bắn một đợt hạt bụi tiên/cánh hoa nhỏ
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height * 0.4;
+      triggerSoftSparkleConfetti(cx, cy);
+    }
+
+    // Đánh dấu tất cả hoa đang lùi dần xuống đất
+    for (let i = 0; i < flowersBack.length; i++) {
+      flowersBack[i].isRetracting = true;
+    }
+    for (let i = 0; i < flowersFront.length; i++) {
+      flowersFront[i].isRetracting = true;
+    }
+
+    // Sau khi hoa hạ xuống hoàn tất (khoảng 350ms), dọn sạch mảng
+    setTimeout(() => {
       flowersBack = [];
       flowersFront = [];
       pollenMotes = [];
       totalBloomedCount = 0;
       ctxBack.clearRect(0, 0, width, height);
       ctxFront.clearRect(0, 0, width, height);
-      
-      playBloomChime();
-      sproutGardenBatch(BIRTHDAY_CONFIG.garden ? BIRTHDAY_CONFIG.garden.initialBatchCount : 45);
-    });
+
+      // Đặt lại các thông số và trạng thái bảng đếm
+      if (counterNumber) {
+        counterNumber.textContent = '';
+      }
+      if (counterText) {
+        counterText.textContent = 'Chạm vào đóa hoa để ngàn hoa hồng Sophia bừng nở';
+      }
+      if (touchBadge) {
+        const hint = touchBadge.querySelector('.hint-text');
+        if (hint) hint.textContent = 'Chạm vào đóa hoa để hoa bừng nở!';
+      }
+      updateClearButtonVisibility();
+    }, 360);
+  }
+
+  // Bấm nút "Xóa hết hoa" (chỉ hiện khi có nhiều hoa)
+  if (btnClearGarden) {
+    btnClearGarden.addEventListener('click', clearAllGardenFlowers);
   }
 
   // Chạm/click bất kỳ đâu trên nền màn hình vườn hoa để trồng thêm hoa tại vị trí đó
@@ -1454,6 +1532,7 @@ function initSwayingFlowerGarden() {
   // Callback khi người dùng chuyển sang giai đoạn Vườn Hoa
   window.onGardenStageActivated = (isFirstTime) => {
     resize();
+    updateClearButtonVisibility();
     if (!isGardenRunning) {
       isGardenRunning = true;
       lastTime = performance.now();
