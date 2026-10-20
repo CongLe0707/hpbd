@@ -1393,6 +1393,9 @@ function initSwayingFlowerGarden() {
 
   // Xử lý khi nhấn vào đóa hoa trung tâm lắc lư
   const handleFlowerClick = (e) => {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    }
     // Kích hoạt hoạt cảnh nhún nở mạnh mẽ cho đóa hoa lắc lư
     container.classList.remove('blooming');
     void container.offsetWidth; // Force reflow
@@ -1514,19 +1517,6 @@ function initSwayingFlowerGarden() {
   // Bấm nút "Xóa hết hoa" (chỉ hiện khi có nhiều hoa)
   if (btnClearGarden) {
     btnClearGarden.addEventListener('click', clearAllGardenFlowers);
-  }
-
-  // Chạm/click bất kỳ đâu trên nền màn hình vườn hoa để trồng thêm hoa tại vị trí đó
-  if (gardenStage) {
-    gardenStage.addEventListener('click', (e) => {
-      if (
-        !e.target.closest('#swaying-flower-interactive') &&
-        !e.target.closest('.btn') &&
-        !e.target.closest('.stage-nav')
-      ) {
-        plantSingleFlower(e.clientX || width / 2);
-      }
-    });
   }
 
   // Callback khi người dùng chuyển sang giai đoạn Vườn Hoa
