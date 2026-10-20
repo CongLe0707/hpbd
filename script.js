@@ -1538,12 +1538,5 @@ function initSwayingFlowerGarden() {
       lastTime = performance.now();
       requestAnimationFrame(gardenLoop);
     }
-
-    // Nếu lần đầu vào vườn hoa và chưa có hoa nào, tự động kích hoạt đợt hoa đầu tiên
-    if (flowersBack.length === 0 && flowersFront.length === 0) {
-      setTimeout(() => {
-        handleFlowerClick();
-      }, 500);
-    }
   };
 }
