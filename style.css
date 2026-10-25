@@ -1766,7 +1766,10 @@ body {
 .oracle-card {
   height: 380px;
   cursor: pointer;
-  perspective: 1000px;
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.35s ease, filter 0.35s ease;
@@ -1781,7 +1784,8 @@ body {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border-radius: 20px;
   box-shadow: 0 12px 30px rgba(184, 74, 101, 0.18),
               0 4px 10px rgba(0, 0, 0, 0.05);
@@ -1789,6 +1793,7 @@ body {
 
 .oracle-card.is-flipped .oracle-card-inner {
   transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
 }
 
 .card-face {
@@ -1799,8 +1804,9 @@ body {
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   border-radius: 20px;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1811,8 +1817,58 @@ body {
 
 /* Mặt úp (Card Back) */
 .card-face.card-back {
+  background: #fad5df;
   background: linear-gradient(145deg, #fcecee 0%, #fad5df 45%, #f4bdcb 100%);
   border: 2px solid rgba(216, 162, 67, 0.55);
+  transform: rotateY(0deg) translateZ(1px);
+  -webkit-transform: rotateY(0deg) translateZ(1px);
+  z-index: 2;
+  transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+/* Mặt mở (Card Front) */
+.card-face.card-front {
+  transform: rotateY(180deg) translateZ(1px);
+  -webkit-transform: rotateY(180deg) translateZ(1px);
+  background: #ffffff;
+  background: linear-gradient(160deg, #ffffff 0%, #fff6f8 60%, #fae6ec 100%);
+  border: 2px solid rgba(226, 115, 141, 0.5);
+  box-shadow: inset 0 0 20px rgba(255, 225, 235, 0.6);
+  text-align: center;
+  justify-content: space-between;
+  z-index: 1;
+  transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+/* Safari / WebKit bulletproof fix:
+   Khắc phục triệt để lỗi Safari iOS không ẩn mặt sau khi lật 3D (bị đè chữ) */
+.oracle-card:not(.is-flipped) .card-face.card-front {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.oracle-card:not(.is-flipped) .card-face.card-back {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.oracle-card.is-flipped .card-face.card-back {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.18s ease 0.15s, visibility 0.18s 0.15s;
+}
+
+.oracle-card.is-flipped .card-face.card-front {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 3;
+  transition: opacity 0.25s ease 0.2s, visibility 0.25s 0.2s;
 }
 
 .card-frame-gold {
@@ -1890,16 +1946,6 @@ body {
 @keyframes pulseCardPrompt {
   0%, 100% { opacity: 0.85; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.04); }
-}
-
-/* Mặt mở (Card Front) */
-.card-face.card-front {
-  transform: rotateY(180deg);
-  background: linear-gradient(160deg, #fffdfb 0%, #fff6f8 60%, #fae6ec 100%);
-  border: 2px solid rgba(226, 115, 141, 0.5);
-  box-shadow: inset 0 0 20px rgba(255, 225, 235, 0.6);
-  text-align: center;
-  justify-content: space-between;
 }
 
 .card-front-glow {
@@ -3090,20 +3136,20 @@ body {
   .oracle-cards-grid {
     grid-template-columns: 1fr;
     max-width: 310px;
-    gap: 14px;
+    gap: 16px;
   }
 
   .oracle-card {
-    height: 340px;
+    height: 380px;
   }
 
   .card-face {
-    padding: 18px 14px;
+    padding: 20px 16px;
   }
 
   .card-front-msg {
-    font-size: 0.8rem;
-    line-height: 1.5;
+    font-size: 0.82rem;
+    line-height: 1.55;
   }
 
   .firefly-jar-section {
