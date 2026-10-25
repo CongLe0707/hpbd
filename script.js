@@ -60,6 +60,15 @@ Mong em mỗi ngày trôi qua đều tìm thấy những niềm hạnh phúc l�
     sentencePause: 540,   // Khoảng dừng lắng đọng sau dấu chấm, chấm than, hỏi (ms)
     commaPause: 220,      // Khoảng dừng nhịp sau dấu phẩy, chấm phẩy (ms)
     newlinePause: 460     // Khoảng dừng khi chuyển dòng/đoạn mới (ms)
+  },
+
+  // 10. Cấu hình Lọ Đom Đóm Điều Ước & Gửi Gmail qua Formspree
+  wishingJar: {
+    // Đăng ký miễn phí tại https://formspree.io/ và dán Form ID vào đây (ví dụ: "mldrqwxy")
+    // Khi cô ấy nhập điều ước và bấm gửi, bạn sẽ nhận được email thông báo ngay lập tức!
+    // Nếu chưa có, hệ thống vẫn lưu an toàn trên máy (localStorage) và tự động tải file .txt kỷ niệm.
+    formspreeId: "",
+    recipientEmail: "congle0707@gmail.com"
   }
 };
 
@@ -126,6 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initBouquetInteractions();
   initTouchSparkleBurst();
   initScratchCard();
+  initOracleCards();
+  initFireflyWishingJar();
   initSwayingFlowerGarden();
 });
 
@@ -519,6 +530,281 @@ function playScratchUnlockChime() {
 }
 
 /* ============================================================================
+   3 LÁ BÀI TAROT / THÔNG ĐIỆP VŨ TRỤ (BIRTHDAY ORACLE CARDS)
+   Lật mở 3D chân thực, phát chuông ngân diệu kỳ và bừng sáng pháo hoa
+   ============================================================================ */
+function initOracleCards() {
+  const cards = document.querySelectorAll('.oracle-card');
+  let firstFlip = true;
+
+  cards.forEach((card) => {
+    const handleFlip = () => {
+      card.classList.toggle('is-flipped');
+      playOracleCardChime();
+
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      triggerSoftSparkleConfetti(cx, cy);
+
+      if (firstFlip && card.classList.contains('is-flipped')) {
+        firstFlip = false;
+        if (typeof triggerGrandFireworks === 'function') {
+          triggerGrandFireworks();
+        }
+      }
+    };
+
+    card.addEventListener('click', handleFlip);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleFlip();
+      }
+    });
+  });
+}
+
+function playOracleCardChime() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const actx = new AudioCtx();
+    const chord = [587.33, 739.99, 880.00, 1174.66]; // D5, F#5, A5, D6
+    const now = actx.currentTime;
+
+    chord.forEach((freq, idx) => {
+      const osc = actx.createOscillator();
+      const gain = actx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+
+      gain.gain.setValueAtTime(0, now + idx * 0.06);
+      gain.gain.linearRampToValueAtTime(0.18, now + idx * 0.06 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.85);
+
+      osc.connect(gain);
+      gain.connect(actx.destination);
+      osc.start(now + idx * 0.06);
+      osc.stop(now + idx * 0.06 + 0.9);
+    });
+  } catch (e) {
+    // Audio Context safe
+  }
+}
+
+/* ============================================================================
+   CHIẾC LỌ ĐOM ĐÓM ĐIỀU ƯỚC (ENCHANTED FIREFLY WISHING JAR)
+   Lưu vào localStorage, tự động tải file .txt kỷ niệm và gửi âm thầm qua Formspree về Gmail
+   ============================================================================ */
+let currentSavedWishText = "";
+let currentSavedWishTime = "";
+
+function initFireflyWishingJar() {
+  const wishingInput = document.getElementById('wishing-input');
+  const charCount = document.getElementById('wishing-char-num');
+  const btnSendWish = document.getElementById('btn-send-wish');
+  const wishingForm = document.getElementById('wishing-form');
+  const wishingResult = document.getElementById('wishing-result');
+  const sentWishTextEl = document.getElementById('sent-wish-text');
+  const sentWishTimeEl = document.getElementById('sent-wish-time');
+  const btnDownloadWish = document.getElementById('btn-download-wish');
+  const btnRewriteWish = document.getElementById('btn-rewrite-wish');
+  const magicJar = document.getElementById('magic-jar');
+
+  // Đếm ký tự realtime
+  if (wishingInput && charCount) {
+    wishingInput.addEventListener('input', () => {
+      charCount.textContent = wishingInput.value.length;
+    });
+  }
+
+  // Tương tác chạm vào lọ thủy tinh để đom đóm phát nổ nhẹ
+  if (magicJar) {
+    magicJar.addEventListener('click', (e) => {
+      const rect = magicJar.getBoundingClientRect();
+      triggerSoftSparkleConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+  }
+
+  // Xử lý gửi điều ước
+  if (btnSendWish) {
+    btnSendWish.addEventListener('click', () => {
+      const wishText = wishingInput ? wishingInput.value.trim() : '';
+
+      if (!wishText) {
+        if (wishingInput) {
+          wishingInput.focus();
+          wishingInput.style.borderColor = '#c9184a';
+          wishingInput.placeholder = "Đừng quên viết một điều ước trước khi thả đom đóm nhé! 🌸";
+          setTimeout(() => {
+            wishingInput.style.borderColor = '';
+          }, 2000);
+        }
+        return;
+      }
+
+      // Tạo thời gian gửi
+      const now = new Date();
+      const timeStr = `${now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })} • Ngày ${now.toLocaleDateString('vi-VN')}`;
+      currentSavedWishText = wishText;
+      currentSavedWishTime = timeStr;
+
+      // 1. Kích hoạt bầy đom đóm bay vút lên bầu trời sao
+      launchFlyingWishFireflies();
+
+      // 2. Phát âm thanh chuông ngân diệu kỳ & pháo hoa
+      playOracleCardChime();
+      if (typeof triggerGrandFireworks === 'function') {
+        triggerGrandFireworks();
+      }
+
+      // 3. Lưu vào localStorage an toàn
+      try {
+        localStorage.setItem('hpbd_wish_bao_tran', JSON.stringify({
+          wish: wishText,
+          time: timeStr
+        }));
+      } catch (e) {}
+
+      // 4. Gửi âm thầm về Gmail qua Formspree (nếu có cấu hình formspreeId)
+      sendWishToFormspree(wishText, timeStr);
+
+      // 5. Tự động tải file kỷ niệm (.txt) về máy
+      downloadWishAsTxt(wishText, timeStr);
+
+      // 6. Hiển thị kết quả thành công
+      if (sentWishTextEl) sentWishTextEl.textContent = wishText;
+      if (sentWishTimeEl) sentWishTimeEl.textContent = `Thắp sáng lúc: ${timeStr}`;
+      if (wishingForm) wishingForm.classList.add('hidden');
+      if (wishingResult) wishingResult.classList.remove('hidden');
+    });
+  }
+
+  // Nút tải lại file txt
+  if (btnDownloadWish) {
+    btnDownloadWish.addEventListener('click', () => {
+      if (currentSavedWishText) {
+        downloadWishAsTxt(currentSavedWishText, currentSavedWishTime);
+      }
+    });
+  }
+
+  // Nút viết thêm điều ước khác
+  if (btnRewriteWish) {
+    btnRewriteWish.addEventListener('click', () => {
+      if (wishingForm) wishingForm.classList.remove('hidden');
+      if (wishingResult) wishingResult.classList.add('hidden');
+      if (wishingInput) {
+        wishingInput.value = '';
+        if (charCount) charCount.textContent = '0';
+        wishingInput.focus();
+      }
+    });
+  }
+
+  // Kiểm tra nếu trước đó đã lưu điều ước
+  checkSavedWish();
+}
+
+function checkSavedWish() {
+  try {
+    const raw = localStorage.getItem('hpbd_wish_bao_tran');
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data && data.wish) {
+        currentSavedWishText = data.wish;
+        currentSavedWishTime = data.time || 'Đã lưu';
+        const wishingForm = document.getElementById('wishing-form');
+        const wishingResult = document.getElementById('wishing-result');
+        const sentWishTextEl = document.getElementById('sent-wish-text');
+        const sentWishTimeEl = document.getElementById('sent-wish-time');
+
+        if (sentWishTextEl) sentWishTextEl.textContent = data.wish;
+        if (sentWishTimeEl) sentWishTimeEl.textContent = `Thắp sáng lúc: ${currentSavedWishTime}`;
+        if (wishingForm) wishingForm.classList.add('hidden');
+        if (wishingResult) wishingResult.classList.remove('hidden');
+      }
+    }
+  } catch (e) {}
+}
+
+function launchFlyingWishFireflies() {
+  const magicJar = document.getElementById('magic-jar');
+  const count = 12;
+  const rect = magicJar ? magicJar.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+  const originX = rect.left + rect.width / 2;
+  const originY = rect.top + rect.height / 2;
+
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const ff = document.createElement('span');
+      ff.className = 'flying-wish-firefly';
+      ff.style.left = `${originX}px`;
+      ff.style.top = `${originY}px`;
+
+      const dx = (Math.random() - 0.5) * 160;
+      ff.style.setProperty('--dx', `${dx}px`);
+
+      document.body.appendChild(ff);
+      setTimeout(() => ff.remove(), 1650);
+    }, i * 90);
+  }
+}
+
+function downloadWishAsTxt(wishText, timeStr) {
+  try {
+    const recipient = BIRTHDAY_CONFIG.recipientName || "Bảo Trân";
+    const content =
+`=============================================================
+✨ ĐIỀU ƯỚC TUỔI MỚI CỦA ${recipient.toUpperCase()} ✨
+Mốc thời gian: ${timeStr}
+=============================================================
+
+"${wishText}"
+
+✦ Lời nhắn từ các vì sao:
+Vũ trụ đã lắng nghe trọn vẹn điều ước của em. Mong rằng mọi dự định,
+khát khao và hy vọng trong tuổi mới sẽ đơm hoa kết trái rực rỡ nhất!
+
+Chúc mừng sinh nhật ${recipient} 🌸
+=============================================================`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dieu-uoc-tuoi-moi-${recipient.toLowerCase().replace(/\s+/g, '-')}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (e) {}
+}
+
+function sendWishToFormspree(wishText, timeStr) {
+  const conf = BIRTHDAY_CONFIG.wishingJar || {};
+  const formspreeId = conf.formspreeId;
+  if (!formspreeId) return;
+
+  try {
+    fetch(`https://formspree.io/f/${formspreeId}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        subject: `[HPBD] Điều ước tuổi mới của ${BIRTHDAY_CONFIG.recipientName}`,
+        nguoi_nhan: BIRTHDAY_CONFIG.recipientName,
+        dieu_uoc: wishText,
+        thoi_gian: timeStr
+      })
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+/* ============================================================================
    LOGIC CHUYỂN ĐỔI GIAI ĐOẠN & TƯƠNG TÁC NGƯỜI DÙNG (STAGE MANAGER)
    ============================================================================ */
 let scrollToStepGlobal = (stageName) => { };
@@ -529,7 +815,8 @@ function initStageInteractions() {
     2: document.getElementById('frame-step-2'),
     3: document.getElementById('frame-step-3'),
     4: document.getElementById('frame-step-4'),
-    5: document.getElementById('frame-step-5')
+    5: document.getElementById('frame-step-5'),
+    6: document.getElementById('frame-step-6')
   };
 
   const giftBox = document.getElementById('gift-box');
@@ -537,7 +824,8 @@ function initStageInteractions() {
   const btnGotoWishes = document.getElementById('btn-goto-wishes');
   const btnBlowCandle = document.getElementById('btn-blow-candle');
   const btnGotoScratch = document.getElementById('btn-goto-scratch');
-  const btnScratchToGarden = document.getElementById('btn-scratch-to-garden');
+  const btnScratchToOracle = document.getElementById('btn-scratch-to-oracle') || document.getElementById('btn-scratch-to-garden');
+  const btnOracleToGarden = document.getElementById('btn-oracle-to-garden');
   const btnScrollTop = document.getElementById('btn-scroll-top');
   const candle = document.getElementById('candle');
   const cakeWrapper = document.getElementById('cake-interactive-wrapper');
@@ -548,10 +836,11 @@ function initStageInteractions() {
   const btnBackStep2 = document.getElementById('btn-back-to-step-2');
   const btnBackStep3 = document.getElementById('btn-back-to-step-3');
   const btnBackStep4 = document.getElementById('btn-back-to-step-4');
+  const btnBackStep5 = document.getElementById('btn-back-to-step-5');
 
   // Chuyển sang bước mới: ẨN HOÀN TOÀN TẤT CẢ các bước khác, CHỈ HIỂN THỊ DUY NHẤT bước hiện tại
   const switchToStep = (targetStep) => {
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 6; i++) {
       const frameEl = frames[i];
       if (frameEl) {
         if (i === targetStep) {
@@ -596,6 +885,12 @@ function initStageInteractions() {
         drawScratchCover();
       }, 180);
     } else if (targetStep === 5) {
+      setTimeout(() => {
+        if (typeof checkSavedWish === 'function') {
+          checkSavedWish();
+        }
+      }, 180);
+    } else if (targetStep === 6) {
       setTimeout(() => {
         if (window.onGardenStageActivated) {
           window.onGardenStageActivated();
@@ -715,9 +1010,9 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 4 -> Bước 5: Nhấn nút xong ẩn Bước 4 & nhảy sang duy nhất Bước 5 (Vườn hoa)
-  if (btnScratchToGarden) {
-    btnScratchToGarden.addEventListener('click', (e) => {
+  // Bước 4 -> Bước 5: Sang Oracle & Lọ Điều Ước
+  if (btnScratchToOracle) {
+    btnScratchToOracle.addEventListener('click', (e) => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -737,6 +1032,17 @@ function initStageInteractions() {
     });
   }
 
+  // Bước 5 -> Bước 6: Sang Vườn hoa Sophia
+  if (btnOracleToGarden) {
+    btnOracleToGarden.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchToStep(6);
+    });
+  }
+
   // Bước 5 -> Quay lại Bước 4 (Thẻ cào)
   if (btnBackStep4) {
     btnBackStep4.addEventListener('click', (e) => {
@@ -748,7 +1054,18 @@ function initStageInteractions() {
     });
   }
 
-  // Bước 5: Nút xem lại từ đầu -> Ẩn Bước 5 & quay lại duy nhất Bước 1
+  // Bước 6 -> Quay lại Bước 5 (Oracle & Lọ Điều Ước)
+  if (btnBackStep5) {
+    btnBackStep5.addEventListener('click', (e) => {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      switchToStep(5);
+    });
+  }
+
+  // Bước 6: Nút xem lại từ đầu -> Ẩn Bước 6 & quay lại duy nhất Bước 1
   if (btnScrollTop) {
     btnScrollTop.addEventListener('click', (e) => {
       if (e) {

@@ -14,7 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=7.0">
+  <link rel="stylesheet" href="style.css?v=8.0">
 </head>
 
 <body>
@@ -426,12 +426,12 @@
           </button>
         </div>
 
-        <!-- Nút tiếp tục sang Bước 5 & Nút quay lại -->
+        <!-- Nút tiếp tục sang Bước 5 (Oracle & Lọ Điều Ước) & Nút quay lại -->
         <div class="action-buttons scratch-actions">
-          <button type="button" class="btn btn-primary btn-garden-entry" id="btn-scratch-to-garden"
-            aria-label="Đến vườn hoa hồng Sophia">
-            <span class="btn-icon">🌸</span>
-            <span class="btn-text">Tiếp tục: Bước vào Vườn Hoa Sophia 👇</span>
+          <button type="button" class="btn btn-primary btn-oracle-entry" id="btn-scratch-to-oracle"
+            aria-label="Đến thông điệp vũ trụ và lọ điều ước">
+            <span class="btn-icon">🔮</span>
+            <span class="btn-text">Tiếp tục: Rút Bài Tarot & Gửi Điều Ước 👇</span>
           </button>
           <button type="button" class="btn btn-back-step" id="btn-back-to-step-3" aria-label="Quay lại lời chúc">
             <span class="btn-icon">←</span>
@@ -441,17 +441,224 @@
       </section>
     </div>
 
-    <!-- Dải phân cách mạ vàng sang Khung 5 -->
+    <!-- Dải phân cách mạ vàng sang Khung 5: Thông Điệp Vũ Trụ & Lọ Điều Ước -->
     <div class="step-divider step-locked" id="divider-step-5" aria-hidden="true">
       <span class="step-divider-line"></span>
-      <span class="step-divider-badge">🌹 BƯỚC 5: VƯỜN HOA DIỆU KỲ</span>
+      <span class="step-divider-badge">🔮 BƯỚC 5: THÔNG ĐIỆP VŨ TRỤ & LỌ ĐIỀU ƯỚC</span>
       <span class="step-divider-line"></span>
     </div>
 
     <!-- ===================================================================
-         KHUNG 5: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
+         KHUNG 5: 3 Lá Bài Tarot & Lọ Đom Đóm Điều Ước
          =================================================================== -->
     <div class="step-card-frame step-locked" id="frame-step-5">
+      <div class="card-corner top-left" aria-hidden="true"></div>
+      <div class="card-corner top-right" aria-hidden="true"></div>
+      <div class="card-corner bottom-left" aria-hidden="true"></div>
+      <div class="card-corner bottom-right" aria-hidden="true"></div>
+
+      <section id="oracle-stage" class="stage" aria-label="Thông điệp vũ trụ và lọ điều ước">
+        <div class="stage-tag">✦ BƯỚC 5 • VẬN MAY & ĐIỀU ƯỚC ✦</div>
+
+        <header class="oracle-header">
+          <h2 class="oracle-title">Thông Điệp Vũ Trụ & Lọ Điều Ước ✨</h2>
+          <p class="oracle-subtitle">
+            Chạm mở từng lá bài nhận năng lượng tích cực cho tuổi mới và thắp sáng điều ước chân thành của em vào chiếc lọ đom đóm cổ tích!
+          </p>
+        </header>
+
+        <!-- PHẦN 1: 3 LÁ BÀI TAROT / THÔNG ĐIỆP VŨ TRỤ -->
+        <div class="oracle-cards-container">
+          <div class="oracle-instruction">
+            <span class="sparkle-icon">✨</span>
+            <span>Chạm vào từng lá bài để lật mở lời nhắn gửi dành riêng cho Bảo Trân</span>
+            <span class="sparkle-icon">✨</span>
+          </div>
+
+          <div class="oracle-cards-grid" id="oracle-cards-grid">
+            <!-- Lá bài 1: Bình Yên Tâm Hồn -->
+            <div class="oracle-card" data-card="peace" role="button" tabindex="0" aria-label="Lá bài Bình Yên Tâm Hồn">
+              <div class="oracle-card-inner">
+                <div class="card-face card-back">
+                  <div class="card-frame-gold"></div>
+                  <div class="card-back-ornament">
+                    <span class="mystic-icon">🕊️</span>
+                    <div class="card-back-title">Bình Yên Tâm Hồn</div>
+                    <div class="card-back-latin">The Serenity</div>
+                  </div>
+                  <div class="card-flip-prompt">Chạm để mở ✦</div>
+                </div>
+                <div class="card-face card-front">
+                  <div class="card-front-glow" aria-hidden="true"></div>
+                  <div class="card-front-badge">✦ THÔNG ĐIỆP I ✦</div>
+                  <div class="card-front-symbol">🕊️</div>
+                  <h3 class="card-front-title">The Serenity</h3>
+                  <div class="card-front-theme">Bình Yên & Tĩnh Tại</div>
+                  <p class="card-front-msg">
+                    “Giữa thế giới vội vã, chúc em luôn giữ được một khoảng trời tĩnh lặng và thanh thản trong tâm hồn. Hãy tin vào nhịp điệu của cuộc đời và nhớ rằng: Bình yên lớn nhất bắt đầu từ khi em dịu dàng với chính mình.”
+                  </p>
+                  <div class="card-front-sparkle">🌸 ✨ 🌸</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lá bài 2: Bản Lĩnh Tỏa Sáng -->
+            <div class="oracle-card" data-card="courage" role="button" tabindex="0" aria-label="Lá bài Bản Lĩnh Tỏa Sáng">
+              <div class="oracle-card-inner">
+                <div class="card-face card-back">
+                  <div class="card-frame-gold"></div>
+                  <div class="card-back-ornament">
+                    <span class="mystic-icon">👑</span>
+                    <div class="card-back-title">Bản Lĩnh Tỏa Sáng</div>
+                    <div class="card-back-latin">The Luminary</div>
+                  </div>
+                  <div class="card-flip-prompt">Chạm để mở ✦</div>
+                </div>
+                <div class="card-face card-front">
+                  <div class="card-front-glow" aria-hidden="true"></div>
+                  <div class="card-front-badge">✦ THÔNG ĐIỆP II ✦</div>
+                  <div class="card-front-symbol">👑</div>
+                  <h3 class="card-front-title">The Luminary</h3>
+                  <div class="card-front-theme">Bản Lĩnh & Kiên Định</div>
+                  <p class="card-front-msg">
+                    “Em sở hữu sức mạnh nội tại và sự kiên cường hơn bất cứ điều gì em từng nghĩ. Tuổi mới này, hãy vững vàng bước về phía trước, tự tin làm chủ con đường riêng và tỏa sáng rực rỡ như một vì sao kiêu hãnh!”
+                  </p>
+                  <div class="card-front-sparkle">⭐ 💫 ⭐</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lá bài 3: May Mắn Bất Ngờ -->
+            <div class="oracle-card" data-card="fortune" role="button" tabindex="0" aria-label="Lá bài May Mắn Bất Ngờ">
+              <div class="oracle-card-inner">
+                <div class="card-face card-back">
+                  <div class="card-frame-gold"></div>
+                  <div class="card-back-ornament">
+                    <span class="mystic-icon">🍀</span>
+                    <div class="card-back-title">May Mắn Bất Ngờ</div>
+                    <div class="card-back-latin">The Fortune</div>
+                  </div>
+                  <div class="card-flip-prompt">Chạm để mở ✦</div>
+                </div>
+                <div class="card-face card-front">
+                  <div class="card-front-glow" aria-hidden="true"></div>
+                  <div class="card-front-badge">✦ THÔNG ĐIỆP III ✦</div>
+                  <div class="card-front-symbol">🍀</div>
+                  <h3 class="card-front-title">The Fortune</h3>
+                  <div class="card-front-theme">May Mắn & Phước Lành</div>
+                  <p class="card-front-msg">
+                    “Vũ trụ đang chuẩn bị những món quà ngọt ngào và những cơ duyên tốt lành nhất dành riêng cho em. Mọi nỗ lực của em sẽ đơm hoa kết trái, và những niềm vui kỳ diệu sẽ gõ cửa cuộc đời em thật bất ngờ!”
+                  </p>
+                  <div class="card-front-sparkle">🌹 💖 🌹</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DẢI PHÂN CÁCH NHẸ GIỮA 2 PHẦN -->
+        <div class="oracle-section-divider" aria-hidden="true">
+          <span class="divider-line"></span>
+          <span class="divider-badge">🏮 CHIẾC LỌ ĐOM ĐÓM ĐIỀU ƯỚC 🏮</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- PHẦN 2: LỌ ĐOM ĐÓM ĐIỀU ƯỚC CỔ TÍCH -->
+        <div class="firefly-jar-section">
+          <div class="jar-visual-container">
+            <!-- Chiếc lọ thủy tinh cổ tích phát sáng lân tinh -->
+            <div class="magic-jar" id="magic-jar" title="Chiếc lọ đom đóm thắp sáng điều ước">
+              <div class="jar-cork"></div>
+              <div class="jar-neck-ribbon"></div>
+              <div class="jar-glass">
+                <div class="jar-glow"></div>
+                <!-- Các hạt đom đóm lơ lửng trong lọ -->
+                <span class="firefly ff-1"></span>
+                <span class="firefly ff-2"></span>
+                <span class="firefly ff-3"></span>
+                <span class="firefly ff-4"></span>
+                <span class="firefly ff-5"></span>
+                <span class="firefly ff-6"></span>
+                <div class="jar-shine"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wishing-box">
+            <h3 class="wishing-title">Gửi Điều Ước Vào Chiếc Lọ Thần Kỳ 🌟</h3>
+            <p class="wishing-desc">
+              Nhắm mắt lại, nghĩ về điều ước sâu kín và chân thành nhất của em cho tuổi mới. Đom đóm sẽ mang điều ước thắp sáng giữa trời đêm.
+            </p>
+
+            <!-- Form nhập điều ước -->
+            <div class="wishing-form" id="wishing-form">
+              <div class="wishing-input-wrapper">
+                <textarea id="wishing-input" class="wishing-textarea" rows="3" maxlength="500"
+                  placeholder="Nhập điều ước tuổi mới của Bảo Trân vào đây nhé... (VD: Mong một tuổi mới luôn an yên, nhiều sức khỏe và mọi dự định đều thuận lợi ✨)"></textarea>
+                <div class="wishing-char-count"><span id="wishing-char-num">0</span>/500</div>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-send-wish" id="btn-send-wish" aria-label="Gửi điều ước">
+                <span class="btn-icon">✨</span>
+                <span class="btn-text">Thả Đom Đóm Gửi Điều Ước</span>
+              </button>
+            </div>
+
+            <!-- Thông báo sau khi đã gửi điều ước -->
+            <div class="wishing-result hidden" id="wishing-result" role="status" aria-live="polite">
+              <div class="wishing-success-badge">✨ ĐIỀU ƯỚC ĐÃ ĐƯỢC THẮP SÁNG ✨</div>
+              <div class="sent-wish-quote">
+                <span class="quote-symbol">“</span>
+                <p class="sent-wish-text" id="sent-wish-text"></p>
+                <span class="quote-symbol">”</span>
+              </div>
+              <p class="sent-wish-time" id="sent-wish-time"></p>
+              <p class="wishing-blessing-note">
+                Những chú đom đóm đã mang điều ước của Bảo Trân bay vút lên bầu trời sao. Mong rằng mọi ước nguyện tốt đẹp nhất sẽ sớm thành hiện thực! 🌸
+              </p>
+
+              <div class="wishing-actions">
+                <button type="button" class="btn btn-download-wish" id="btn-download-wish"
+                  aria-label="Tải file điều ước kỷ niệm">
+                  <span class="btn-icon">📜</span>
+                  <span class="btn-text">Tải file kỷ niệm (.txt)</span>
+                </button>
+                <button type="button" class="btn btn-rewrite-wish" id="btn-rewrite-wish"
+                  aria-label="Viết thêm điều ước khác">
+                  <span class="btn-icon">✍️</span>
+                  <span class="btn-text">Viết thêm điều ước khác</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nút điều hướng sang Bước 6 & Quay lại Bước 4 -->
+        <div class="action-buttons oracle-actions">
+          <button type="button" class="btn btn-primary" id="btn-oracle-to-garden"
+            aria-label="Bước vào vườn hoa Sophia">
+            <span class="btn-icon">🌸</span>
+            <span class="btn-text">Tiếp tục: Bước vào Vườn Hoa Sophia 👇</span>
+          </button>
+          <button type="button" class="btn btn-back-step" id="btn-back-to-step-4" aria-label="Quay lại thẻ cào">
+            <span class="btn-icon">←</span>
+            <span class="btn-text">Quay lại Thẻ Cào May Mắn</span>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Dải phân cách mạ vàng sang Khung 6 -->
+    <div class="step-divider step-locked" id="divider-step-6" aria-hidden="true">
+      <span class="step-divider-line"></span>
+      <span class="step-divider-badge">🌹 BƯỚC 6: VƯỜN HOA DIỆU KỲ</span>
+      <span class="step-divider-line"></span>
+    </div>
+
+    <!-- ===================================================================
+         KHUNG 6: Vườn Hoa Hồng Sophia Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
+         =================================================================== -->
+    <div class="step-card-frame step-locked" id="frame-step-6">
       <div class="card-corner top-left" aria-hidden="true"></div>
       <div class="card-corner top-right" aria-hidden="true"></div>
       <div class="card-corner bottom-left" aria-hidden="true"></div>
@@ -460,7 +667,7 @@
       <section id="garden-stage" class="stage" aria-label="Vườn hoa hồng Sophia diệu kỳ">
 
         <header class="garden-header">
-          <div class="stage-tag">✦ BƯỚC 5 • VƯỜN HOA DIỆU KỲ ✦</div>
+          <div class="stage-tag">✦ BƯỚC 6 • VƯỜN HOA DIỆU KỲ ✦</div>
           <h2 class="garden-title" id="garden-title">
             <span class="title-text">Vườn Hoa Hồng Sophia Của Em 🌸</span>
           </h2>
@@ -577,10 +784,10 @@
             <span class="btn-text">Xóa hết hoa</span>
           </button>
 
-          <!-- Nút quay lại bước 4 -->
-          <button type="button" class="btn btn-back-step" id="btn-back-to-step-4" aria-label="Quay lại thẻ cào">
+          <!-- Nút quay lại bước 5 (Vận May & Điều Ước) -->
+          <button type="button" class="btn btn-back-step" id="btn-back-to-step-5" aria-label="Quay lại vận may và điều ước">
             <span class="btn-icon">←</span>
-            <span class="btn-text">Quay lại Thẻ Cào May Mắn</span>
+            <span class="btn-text">Quay lại Vận May & Điều Ước</span>
           </button>
 
           <!-- Nút xem lại từ đầu (quay về bước 1) -->
@@ -598,7 +805,7 @@
   <!-- Canvas vườn hoa chồi lên tiền cảnh (lớp trước viền dưới) -->
   <canvas id="garden-canvas-front" aria-hidden="true"></canvas>
 
-  <script src="script.js?v=8.0"></script>
+  <script src="script.js?v=9.0"></script>
 </body>
 
 </html>

@@ -1707,6 +1707,628 @@ body {
 }
 
 /* ==========================================================================
+   KHUNG 5: 3 Lá Bài Tarot & Lọ Đom Đóm Điều Ước (Oracle & Wishing Jar)
+   ========================================================================== */
+.oracle-header {
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+.oracle-title {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--rose-deep) 0%, var(--rose-dark) 60%, var(--gold-warm) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.oracle-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Phần 1: Grid 3 Lá Bài Tarot */
+.oracle-cards-container {
+  margin-bottom: 28px;
+}
+
+.oracle-instruction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--rose-dark);
+  background: rgba(251, 235, 238, 0.85);
+  border: 1px dashed rgba(226, 115, 141, 0.45);
+  border-radius: 20px;
+  padding: 6px 16px;
+  margin-bottom: 20px;
+}
+
+.oracle-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  max-width: 780px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+.oracle-card {
+  height: 380px;
+  cursor: pointer;
+  perspective: 1000px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.oracle-card:hover {
+  transform: translateY(-6px);
+}
+
+.oracle-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(184, 74, 101, 0.18),
+              0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.oracle-card.is-flipped .oracle-card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 18px;
+  box-sizing: border-box;
+}
+
+/* Mặt úp (Card Back) */
+.card-face.card-back {
+  background: linear-gradient(145deg, #fcecee 0%, #fad5df 45%, #f4bdcb 100%);
+  border: 2px solid rgba(216, 162, 67, 0.55);
+}
+
+.card-frame-gold {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1.5px dashed rgba(184, 74, 101, 0.45);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.card-frame-gold::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(216, 162, 67, 0.35);
+  border-radius: 10px;
+}
+
+.card-back-ornament {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+}
+
+.card-back-ornament .mystic-icon {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 10px rgba(184, 74, 101, 0.25));
+  animation: floatMystic 3.2s ease-in-out infinite;
+}
+
+@keyframes floatMystic {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.card-back-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--rose-deep);
+  text-align: center;
+  margin-top: 4px;
+}
+
+.card-back-latin {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--rose-dark);
+  letter-spacing: 0.5px;
+}
+
+.card-flip-prompt {
+  margin-top: 24px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--rose-dark);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 115, 141, 0.35);
+  letter-spacing: 0.5px;
+  animation: pulseCardPrompt 2s infinite;
+}
+
+@keyframes pulseCardPrompt {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+/* Mặt mở (Card Front) */
+.card-face.card-front {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #fffdfb 0%, #fff6f8 60%, #fae6ec 100%);
+  border: 2px solid rgba(226, 115, 141, 0.5);
+  box-shadow: inset 0 0 20px rgba(255, 225, 235, 0.6);
+  text-align: center;
+  justify-content: space-between;
+}
+
+.card-front-glow {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255, 215, 100, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.card-front-badge {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--gold-warm);
+  background: rgba(254, 243, 226, 0.9);
+  border: 1px solid rgba(216, 162, 67, 0.4);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.card-front-symbol {
+  font-size: 2.8rem;
+  margin: 6px 0 2px;
+  filter: drop-shadow(0 2px 8px rgba(184, 74, 101, 0.2));
+}
+
+.card-front-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--rose-deep);
+  margin-bottom: 2px;
+}
+
+.card-front-theme {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--rose-dark);
+  margin-bottom: 8px;
+}
+
+.card-front-msg {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  padding: 0 4px;
+  margin: 0;
+}
+
+.card-front-sparkle {
+  font-size: 0.9rem;
+  color: var(--rose-primary);
+  letter-spacing: 4px;
+}
+
+/* Dải phân cách giữa 2 phần */
+.oracle-section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 28px 0 24px;
+}
+
+.oracle-section-divider .divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216, 162, 67, 0.4), transparent);
+}
+
+.oracle-section-divider .divider-badge {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--rose-dark);
+  background: rgba(254, 243, 226, 0.85);
+  border: 1px solid rgba(216, 162, 67, 0.4);
+  padding: 5px 14px;
+  border-radius: 16px;
+}
+
+/* Phần 2: Lọ Đom Đóm Điều Ước (Firefly Wishing Jar) */
+.firefly-jar-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: linear-gradient(135deg, rgba(255, 253, 249, 0.92), rgba(254, 243, 246, 0.92));
+  border: 1.5px solid rgba(226, 115, 141, 0.35);
+  border-radius: 24px;
+  padding: 24px 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 25px rgba(184, 74, 101, 0.08);
+}
+
+.jar-visual-container {
+  flex-shrink: 0;
+}
+
+/* Chiếc lọ thủy tinh thần kỳ */
+.magic-jar {
+  position: relative;
+  width: 120px;
+  height: 175px;
+  margin: 0 auto;
+}
+
+.jar-cork {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 14px;
+  background: linear-gradient(180deg, #c49a6c 0%, #a47547 100%);
+  border-radius: 4px 4px 1px 1px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  z-index: 4;
+}
+
+.jar-neck-ribbon {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52px;
+  height: 8px;
+  background: linear-gradient(90deg, #d8a243, #fbe5a2, #d8a243);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(184, 74, 101, 0.25);
+  z-index: 5;
+}
+
+.jar-neck-ribbon::after {
+  content: '🎀';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+}
+
+.jar-glass {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 104px;
+  height: 152px;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.55), rgba(255, 245, 250, 0.2) 65%, rgba(226, 115, 141, 0.25) 100%);
+  border: 2.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 20px 20px 32px 32px;
+  box-shadow: inset 0 0 20px rgba(255, 220, 130, 0.35),
+              0 12px 28px rgba(184, 74, 101, 0.2);
+  backdrop-filter: blur(3px);
+  overflow: hidden;
+  z-index: 2;
+}
+
+.jar-glow {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(circle, rgba(255, 215, 100, 0.55) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: jarGlowPulse 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes jarGlowPulse {
+  0% { transform: translateX(-50%) scale(0.85); opacity: 0.6; }
+  100% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+}
+
+.jar-shine {
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  width: 12px;
+  height: 110px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), transparent);
+  border-radius: 8px;
+  transform: rotate(-10deg);
+  pointer-events: none;
+}
+
+/* Các hạt đom đóm trong lọ */
+.firefly {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #ffe270;
+  border-radius: 50%;
+  box-shadow: 0 0 8px 2px #ffc83b, 0 0 16px 4px rgba(255, 200, 60, 0.65);
+}
+
+.ff-1 { top: 35%; left: 30%; animation: ffFly1 3.4s ease-in-out infinite; }
+.ff-2 { top: 60%; left: 65%; animation: ffFly2 4.1s ease-in-out infinite; }
+.ff-3 { top: 75%; left: 35%; animation: ffFly3 3.8s ease-in-out infinite; }
+.ff-4 { top: 45%; left: 70%; animation: ffFly1 4.5s ease-in-out infinite reverse; }
+.ff-5 { top: 25%; left: 55%; animation: ffFly2 3.2s ease-in-out infinite reverse; }
+.ff-6 { top: 82%; left: 50%; animation: ffFly3 4.8s ease-in-out infinite; }
+
+@keyframes ffFly1 {
+  0%, 100% { transform: translate(0, 0) scale(0.9); opacity: 0.7; }
+  50% { transform: translate(12px, -15px) scale(1.2); opacity: 1; }
+}
+@keyframes ffFly2 {
+  0%, 100% { transform: translate(0, 0) scale(1.1); opacity: 0.9; }
+  50% { transform: translate(-14px, 12px) scale(0.8); opacity: 0.5; }
+}
+@keyframes ffFly3 {
+  0%, 100% { transform: translate(0, 0) scale(0.8); opacity: 0.6; }
+  50% { transform: translate(10px, -18px) scale(1.25); opacity: 1; }
+}
+
+/* Box nhập điều ước */
+.wishing-box {
+  flex: 1;
+  text-align: left;
+}
+
+.wishing-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.wishing-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.wishing-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wishing-input-wrapper {
+  position: relative;
+}
+
+.wishing-textarea {
+  width: 100%;
+  padding: 12px 14px 24px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(226, 115, 141, 0.4);
+  border-radius: 14px;
+  resize: vertical;
+  min-height: 80px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.wishing-textarea:focus {
+  border-color: var(--rose-primary);
+  box-shadow: 0 0 0 3px rgba(226, 115, 141, 0.25);
+}
+
+.wishing-char-count {
+  position: absolute;
+  bottom: 6px;
+  right: 12px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.btn-send-wish {
+  align-self: flex-start;
+  padding: 10px 22px;
+  font-size: 0.9rem;
+}
+
+/* Kết quả sau khi gửi điều ước */
+.wishing-result {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(216, 162, 67, 0.45);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(184, 74, 101, 0.08);
+}
+
+.wishing-success-badge {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold-warm);
+  background: rgba(254, 243, 226, 0.95);
+  border: 1px solid rgba(216, 162, 67, 0.4);
+  padding: 4px 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.sent-wish-quote {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 4px 0 8px;
+}
+
+.sent-wish-quote .quote-symbol {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--rose-primary);
+  line-height: 1;
+}
+
+.sent-wish-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--rose-deep);
+  margin: 0;
+  max-width: 460px;
+}
+
+.sent-wish-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.wishing-blessing-note {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+.wishing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-download-wish {
+  background: linear-gradient(135deg, #f7d2dc 0%, #fad5df 100%);
+  color: var(--rose-deep);
+  border: 1px solid rgba(184, 74, 101, 0.35);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-download-wish:hover {
+  background: linear-gradient(135deg, #f2bdcc 0%, #f7cad6 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(184, 74, 101, 0.15);
+}
+
+.btn-rewrite-wish {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--text-secondary);
+  border: 1px solid rgba(184, 74, 101, 0.25);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-rewrite-wish:hover {
+  background: rgba(251, 235, 238, 0.95);
+  color: var(--rose-dark);
+}
+
+.oracle-actions {
+  margin-top: 14px;
+}
+
+/* Hiệu ứng đom đóm bay vút lên trời khi gửi điều ước */
+.flying-wish-firefly {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  width: 10px;
+  height: 10px;
+  background: #ffe270;
+  border-radius: 50%;
+  box-shadow: 0 0 14px 4px #ffc83b, 0 0 24px 8px rgba(255, 200, 60, 0.8);
+  animation: flyingWishFly 1.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes flyingWishFly {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translate(calc(-50% + var(--dx, 20px)), calc(-50% - 140px)) scale(1.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx, 40px) * 1.5), calc(-50% - 380px)) scale(0.4);
+  }
+}
+
+/* ==========================================================================
    GIAI ĐOẠN 3: Vườn Hoa Diệu Kỳ & Đóa Hoa Lắc Lư Tương Tác
    ========================================================================== */
 .garden-header {
@@ -2531,6 +3153,61 @@ body {
   .btn-scratch-reset {
     padding: 5px 10px;
     font-size: 0.78rem;
+  }
+
+  /* Tối ưu Khung 5: 3 Lá bài Tarot & Lọ Đom Đóm Điều Ước trên di động */
+  .oracle-title {
+    font-size: 1.45rem;
+  }
+
+  .oracle-subtitle {
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+  .oracle-cards-grid {
+    grid-template-columns: 1fr;
+    max-width: 310px;
+    gap: 14px;
+  }
+
+  .oracle-card {
+    height: 340px;
+  }
+
+  .card-face {
+    padding: 18px 14px;
+  }
+
+  .card-front-msg {
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .firefly-jar-section {
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px 14px;
+  }
+
+  .magic-jar {
+    width: 100px;
+    height: 150px;
+  }
+
+  .jar-glass {
+    width: 90px;
+    height: 130px;
+  }
+
+  .wishing-box {
+    text-align: center;
+  }
+
+  .btn-send-wish {
+    align-self: center;
+    width: 100%;
+    justify-content: center;
   }
 }
 

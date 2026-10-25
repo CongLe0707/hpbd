@@ -68,6 +68,20 @@ hpbd/
 10. **Hiệu ứng chạm phát nổ hoa & sao lấp lánh (Touch Sparkle Burst)**:
     - Lấy cảm hứng từ những trang thiệp kỷ niệm viral, mỗi khi chạm vào màn hình sẽ bung nở chùm cánh hoa và ánh sao lấp lánh bay bổng, sinh động trên mọi thiết bị.
 
+11. **3 Lá Bài Tarot / Thông Điệp Vũ Trụ (Birthday Oracle Cards - Bước 5)**:
+    - 3 lá bài dát vàng hoàng gia úp xuống (*The Serenity - Bình Yên*, *The Luminary - Bản Lĩnh*, *The Fortune - May Mắn*).
+    - Hiệu ứng lật 3D chân thực, kích hoạt chuông ngân Web Audio API và pháo hoa đại tiệc khi mở lá bài.
+    - Mang những thông điệp vũ trụ giàu năng lượng tích cực gửi riêng đến Bảo Trân.
+
+12. **Chiếc Lọ Đom Đóm Điều Ước Cổ Tích (Enchanted Firefly Wishing Jar - Bước 5)**:
+    - Chiếc lọ thủy tinh glassmorphism phát sáng lân tinh với các chú đom đóm dập dờn bay lượn bên trong.
+    - Người nhận viết điều ước tuổi mới và bấm *"Thả Đom Đóm Gửi Điều Ước"*.
+    - Đom đóm mang điều ước bay vút lên bầu trời đêm lung linh sao.
+    - **Tự động lưu trữ 3 tầng**:
+      1. Lưu an toàn trên trình duyệt người nhận (`localStorage`).
+      2. Tự động xuất và tải file kỷ niệm `.txt` (`dieu-uoc-tuoi-moi-bao-tran.txt`).
+      3. Gửi âm thầm về Gmail của bạn qua dịch vụ Formspree miễn phí (chỉ cần điền `formspreeId`).
+
 ---
 
 ## ⚙️ Cấu hình tập trung trong [`script.js`](script.js)
@@ -113,10 +127,18 @@ Mong em mỗi ngày trôi qua đều tìm thấy những niềm hạnh phúc l�
 
   // 8. Cấu hình tốc độ gõ chữ từ từ cho lời chúc (chậm rãi, sâu lắng)
   typewriter: {
-    charDelay: 48,        // Tốc độ gõ từng chữ (ms) - số càng lớn càng chậm rãi
-    sentencePause: 540,   // Khoảng dừng lắng đọng sau dấu chấm, chấm than, hỏi (ms)
-    commaPause: 220,      // Khoảng dừng nhịp sau dấu phẩy (ms)
-    newlinePause: 460     // Khoảng dừng khi ngắt dòng (ms)
+    charDelay: 48,
+    sentencePause: 540,
+    commaPause: 220,
+    newlinePause: 460
+  },
+
+  // 9. Cấu hình Lọ Đom Đóm Điều Ước & Gửi Gmail qua Formspree
+  wishingJar: {
+    // Đăng ký Formspree miễn phí tại https://formspree.io/ và dán Form ID vào đây (ví dụ: "mldrqwxy")
+    // Khi cô ấy nhập điều ước và bấm gửi, bạn sẽ nhận được email thông báo ngay lập tức!
+    formspreeId: "",
+    recipientEmail: "congle0707@gmail.com"
   }
 };
 ```
