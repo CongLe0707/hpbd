@@ -62,13 +62,11 @@ Mong em mỗi ngày trôi qua đều tìm thấy những niềm hạnh phúc l�
     newlinePause: 460     // Khoảng dừng khi chuyển dòng/đoạn mới (ms)
   },
 
-  // 10. Cấu hình Lọ Đom Đóm Điều Ước & Gửi Gmail qua Formspree
+  // 10. Cấu hình Lọ Đom Đóm Điều Ước & Gửi Gmail thông báo
   wishingJar: {
-    // Đăng ký miễn phí tại https://formspree.io/ và dán Form ID vào đây (ví dụ: "mldrqwxy")
-    // Khi cô ấy nhập điều ước và bấm gửi, bạn sẽ nhận được email thông báo ngay lập tức!
-    // Nếu chưa có, hệ thống vẫn lưu an toàn trên máy (localStorage) và tự động tải file .txt kỷ niệm.
-    formspreeId: "",
-    recipientEmail: "congle0707@gmail.com"
+    // Địa chỉ email nhận thông báo khi Bảo Trân gửi điều ước
+    recipientEmail: "thanhcong772003@gmail.com",
+    formspreeId: ""
   }
 };
 
@@ -608,7 +606,6 @@ function initFireflyWishingJar() {
   const wishingResult = document.getElementById('wishing-result');
   const sentWishTextEl = document.getElementById('sent-wish-text');
   const sentWishTimeEl = document.getElementById('sent-wish-time');
-  const btnDownloadWish = document.getElementById('btn-download-wish');
   const btnRewriteWish = document.getElementById('btn-rewrite-wish');
   const magicJar = document.getElementById('magic-jar');
 
@@ -659,7 +656,7 @@ function initFireflyWishingJar() {
         triggerGrandFireworks();
       }
 
-      // 3. Lưu vào localStorage an toàn
+      // 3. Lưu vào localStorage an toàn trên máy
       try {
         localStorage.setItem('hpbd_wish_bao_tran', JSON.stringify({
           wish: wishText,
@@ -667,26 +664,14 @@ function initFireflyWishingJar() {
         }));
       } catch (e) {}
 
-      // 4. Gửi âm thầm về Gmail qua Formspree (nếu có cấu hình formspreeId)
-      sendWishToFormspree(wishText, timeStr);
+      // 4. Gửi email tự động về thanhcong772003@gmail.com
+      sendWishEmail(wishText, timeStr);
 
-      // 5. Tự động tải file kỷ niệm (.txt) về máy
-      downloadWishAsTxt(wishText, timeStr);
-
-      // 6. Hiển thị kết quả thành công
+      // 5. Hiển thị kết quả thành công
       if (sentWishTextEl) sentWishTextEl.textContent = wishText;
       if (sentWishTimeEl) sentWishTimeEl.textContent = `Thắp sáng lúc: ${timeStr}`;
       if (wishingForm) wishingForm.classList.add('hidden');
       if (wishingResult) wishingResult.classList.remove('hidden');
-    });
-  }
-
-  // Nút tải lại file txt
-  if (btnDownloadWish) {
-    btnDownloadWish.addEventListener('click', () => {
-      if (currentSavedWishText) {
-        downloadWishAsTxt(currentSavedWishText, currentSavedWishTime);
-      }
     });
   }
 
@@ -752,56 +737,46 @@ function launchFlyingWishFireflies() {
   }
 }
 
-function downloadWishAsTxt(wishText, timeStr) {
+function sendWishEmail(wishText, timeStr) {
+  const recipient = BIRTHDAY_CONFIG.recipientName || "Bảo Trân";
+  const targetEmail = (BIRTHDAY_CONFIG.wishingJar && BIRTHDAY_CONFIG.wishingJar.recipientEmail) || "thanhcong772003@gmail.com";
+  const formspreeId = BIRTHDAY_CONFIG.wishingJar && BIRTHDAY_CONFIG.wishingJar.formspreeId;
+
+  // 1. Gửi email trực tiếp đến thanhcong772003@gmail.com qua FormSubmit API
   try {
-    const recipient = BIRTHDAY_CONFIG.recipientName || "Bảo Trân";
-    const content =
-`=============================================================
-✨ ĐIỀU ƯỚC TUỔI MỚI CỦA ${recipient.toUpperCase()} ✨
-Mốc thời gian: ${timeStr}
-=============================================================
-
-"${wishText}"
-
-✦ Lời nhắn từ các vì sao:
-Vũ trụ đã lắng nghe trọn vẹn điều ước của em. Mong rằng mọi dự định,
-khát khao và hy vọng trong tuổi mới sẽ đơm hoa kết trái rực rỡ nhất!
-
-Chúc mừng sinh nhật ${recipient} 🌸
-=============================================================`;
-
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `dieu-uoc-tuoi-moi-${recipient.toLowerCase().replace(/\s+/g, '-')}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  } catch (e) {}
-}
-
-function sendWishToFormspree(wishText, timeStr) {
-  const conf = BIRTHDAY_CONFIG.wishingJar || {};
-  const formspreeId = conf.formspreeId;
-  if (!formspreeId) return;
-
-  try {
-    fetch(`https://formspree.io/f/${formspreeId}`, {
+    fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
-        subject: `[HPBD] Điều ước tuổi mới của ${BIRTHDAY_CONFIG.recipientName}`,
-        nguoi_nhan: BIRTHDAY_CONFIG.recipientName,
-        dieu_uoc: wishText,
-        thoi_gian: timeStr
+        _subject: `✨ [HPBD] Điều ước sinh nhật từ ${recipient}! ✨`,
+        "Người gửi": recipient,
+        "Điều ước tuổi mới": wishText,
+        "Thời gian gửi": timeStr
       })
     }).catch(() => {});
   } catch (e) {}
+
+  // 2. Gửi thêm qua Formspree (nếu có cấu hình Formspree ID)
+  if (formspreeId) {
+    try {
+      fetch(`https://formspree.io/f/${formspreeId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `✨ [HPBD] Điều ước tuổi mới của ${recipient} ✨`,
+          nguoi_gui: recipient,
+          dieu_uoc: wishText,
+          thoi_gian: timeStr
+        })
+      }).catch(() => {});
+    } catch (e) {}
+  }
 }
 
 /* ============================================================================

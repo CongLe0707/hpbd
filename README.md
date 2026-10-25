@@ -77,10 +77,9 @@ hpbd/
     - Chiếc lọ thủy tinh glassmorphism phát sáng lân tinh với các chú đom đóm dập dờn bay lượn bên trong.
     - Người nhận viết điều ước tuổi mới và bấm *"Thả Đom Đóm Gửi Điều Ước"*.
     - Đom đóm mang điều ước bay vút lên bầu trời đêm lung linh sao.
-    - **Tự động lưu trữ 3 tầng**:
-      1. Lưu an toàn trên trình duyệt người nhận (`localStorage`).
-      2. Tự động xuất và tải file kỷ niệm `.txt` (`dieu-uoc-tuoi-moi-bao-tran.txt`).
-      3. Gửi âm thầm về Gmail của bạn qua dịch vụ Formspree miễn phí (chỉ cần điền `formspreeId`).
+    - **Lưu trữ & gửi thông báo tự động**:
+      1. Lưu an toàn trên trình duyệt người nhận (`localStorage`) để khi mở lại vẫn thấy điều ước tỏa sáng.
+      2. Tự động gửi email nội dung điều ước của Bảo Trân về thẳng Gmail: `thanhcong772003@gmail.com`.
 
 ---
 
@@ -133,12 +132,11 @@ Mong em mỗi ngày trôi qua đều tìm thấy những niềm hạnh phúc l�
     newlinePause: 460
   },
 
-  // 9. Cấu hình Lọ Đom Đóm Điều Ước & Gửi Gmail qua Formspree
+  // 9. Cấu hình Lọ Đom Đóm Điều Ước & Gửi Gmail
   wishingJar: {
-    // Đăng ký Formspree miễn phí tại https://formspree.io/ và dán Form ID vào đây (ví dụ: "mldrqwxy")
-    // Khi cô ấy nhập điều ước và bấm gửi, bạn sẽ nhận được email thông báo ngay lập tức!
-    formspreeId: "",
-    recipientEmail: "congle0707@gmail.com"
+    // Địa chỉ email nhận thông báo khi Bảo Trân gửi điều ước
+    recipientEmail: "thanhcong772003@gmail.com",
+    formspreeId: ""
   }
 };
 ```
