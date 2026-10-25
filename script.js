@@ -9,16 +9,15 @@ const BIRTHDAY_CONFIG = {
   recipientName: "Bảo Trân",
 
   // 2. Lời chúc sinh nhật giàu triết lý, niềm tin và hy vọng (không nhắc đến yêu thương)
-  wishes: `Anh không đến đây 1 mình,
-anh đến đây với bó hoa mà em thích,
-chúc em sinh nhật thật nhiều niềm vui và bình yên!
+  wishes: `Chúc mừng sinh nhật Bảo Trân – ngày đặc biệt đánh dấu sự hiện diện của một cô gái kiên định, chân thành và luôn ngập tràn nguồn năng lượng tích cực!
+Gửi đến em những lời chúc tốt đẹp và ấm áp nhất, chúc em đón tuổi mới đong đầy niềm vui thuần khiết, tâm hồn luôn an nhiên nhẹ nhõm và trọn vẹn sự bình yên trong từng khoảnh khắc.
 
-Bước sang một tuổi mới, chúc em luôn giữ vững niềm tin và sự kiên định trên con đường mình đã chọn.
-Cuộc đời là một hành trình dài của trải nghiệm và trưởng thành, không cần phải vội vã so mình với bất kỳ ai, bởi mỗi loài hoa đều có thời khắc rực rỡ của riêng mình.
+Bước sang một tuổi mới, chúc em trên chặng đường phía trước luôn giữ trọn ngọn lửa niềm tin và sự kiên định vững vàng với con đường mà bản thân đã lựa chọn.
+Cuộc đời vốn dĩ là một hành trình dài của những trải nghiệm, những bài học và sự trưởng thành; em không cần phải hối hả ép mình chạy theo nhịp bước của thế giới ngoài kia, cũng đừng bao giờ đặt mình lên bàn cân so sánh với bất kỳ ai, bởi giữa khu vườn rộng lớn này, mỗi loài hoa đều sở hữu một thời khắc trổ bông và nét kiêu hãnh rực rỡ của riêng mình.
 
-Và hơn hết, em đừng ép bản thân mình trở nên hoàn hảo theo bất kỳ thước đo hay kỳ vọng nào. Có những ngày rực rỡ, nhưng cũng sẽ có những lúc chông chênh, mệt mỏi có thể dừng lại nghỉ ngơi, khi lắng lo hãy cứ kiên nhẫn và bao dung với chính mình. Được là một phiên bản chân thực, tự tại và biết trân quý bản thân đã là một điều vô cùng đáng tự hào.
+Và hơn hết thảy, mong em đừng bao giờ tự trói buộc bản thân vào những khuôn mẫu hoàn hảo hay bất kỳ thước đo kỳ vọng nào của người khác. Có những ngày rực rỡ ngập tràn ánh nắng, nhưng cũng sẽ có những lúc chông chênh, những khoảng lặng mỏi mệt khi mọi điều chẳng như mong ước. Những khi ấy, em hãy cứ cho phép mình được dừng chân nghỉ ngơi, thả lỏng tâm trí; khi đối diện với những lắng lo hay chênh vênh, hãy dành cho chính mình sự kiên nhẫn, thấu hiểu và lòng bao dung dịu dàng nhất. Được sống là một phiên bản chân thật, tự do tự tại, dũng cảm với cảm xúc của mình và biết nâng niu, trân quý bản thân đã là một điều phi thường vô cùng đáng tự hào.
 
-Mong em mỗi ngày trôi qua đều tìm thấy ý nghĩa trong những điều bình dị, luôn an nhiên trước mọi biến chuyển, can đảm đón nhận mọi thử thách, và tự tin tỏa sáng bằng chính bản lĩnh, sự tự do cùng nguồn năng lượng rạng ngời nhất của em.`,
+Mong em mỗi ngày trôi qua đều tìm thấy những niềm hạnh phúc lấp lánh trong những điều nhỏ bé và bình dị nhất, luôn giữ được một tâm thế an nhiên, thanh thản trước mọi biến chuyển của dòng đời, can đảm và vững vàng đón nhận mọi thử thách phía trước. Chúc em luôn tự tin làm chủ cuộc đời mình, tự do sải cánh và tỏa sáng lộng lẫy bằng chính bản lĩnh độc lập cùng nguồn năng lượng rạng ngời, ấm áp nhất của em.`,
 
   // 3. Thông điệp trên hộp quà ban đầu
   giftPrompt: "Có một món quà dành cho bạn!",
