@@ -2193,107 +2193,29 @@ body {
   font-size: 0.9rem;
 }
 
-/* Kết quả sau khi gửi điều ước */
-.wishing-result {
-  background: rgba(255, 255, 255, 0.85);
+/* Thông báo nhẹ nhàng sau khi gửi điều ước */
+.wishing-sent-notice {
+  margin-top: 14px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--rose-dark);
+  background: linear-gradient(135deg, rgba(254, 243, 226, 0.95), rgba(251, 235, 238, 0.95));
   border: 1.5px solid rgba(216, 162, 67, 0.45);
   border-radius: 16px;
-  padding: 18px;
+  padding: 12px 18px;
   text-align: center;
-  box-shadow: 0 6px 18px rgba(184, 74, 101, 0.08);
+  box-shadow: 0 4px 15px rgba(184, 74, 101, 0.1);
+  animation: noticeFadeIn 0.5s ease-out;
 }
 
-.wishing-success-badge {
-  display: inline-block;
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--gold-warm);
-  background: rgba(254, 243, 226, 0.95);
-  border: 1px solid rgba(216, 162, 67, 0.4);
-  padding: 4px 14px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
+@keyframes noticeFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.sent-wish-quote {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 6px;
-  margin: 4px 0 8px;
-}
-
-.sent-wish-quote .quote-symbol {
-  font-family: var(--font-serif);
-  font-size: 1.6rem;
-  color: var(--rose-primary);
-  line-height: 1;
-}
-
-.sent-wish-text {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--rose-deep);
-  margin: 0;
-  max-width: 460px;
-}
-
-.sent-wish-time {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-bottom: 10px;
-}
-
-.wishing-blessing-note {
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  line-height: 1.45;
-  margin-bottom: 14px;
-}
-
-.wishing-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.btn-download-wish {
-  background: linear-gradient(135deg, #f7d2dc 0%, #fad5df 100%);
-  color: var(--rose-deep);
-  border: 1px solid rgba(184, 74, 101, 0.35);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-}
-
-.btn-download-wish:hover {
-  background: linear-gradient(135deg, #f2bdcc 0%, #f7cad6 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(184, 74, 101, 0.15);
-}
-
-.btn-rewrite-wish {
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--text-secondary);
-  border: 1px solid rgba(184, 74, 101, 0.25);
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 0.82rem;
-  cursor: pointer;
-  transition: var(--transition-smooth);
-}
-
-.btn-rewrite-wish:hover {
-  background: rgba(251, 235, 238, 0.95);
-  color: var(--rose-dark);
+.wishing-sent-notice.hidden {
+  display: none !important;
 }
 
 .oracle-actions {

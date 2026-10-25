@@ -593,21 +593,19 @@ function playOracleCardChime() {
 
 /* ============================================================================
    CHIẾC LỌ ĐOM ĐÓM ĐIỀU ƯỚC (ENCHANTED FIREFLY WISHING JAR)
-   Lưu vào localStorage, tự động tải file .txt kỷ niệm và gửi âm thầm qua Formspree về Gmail
+   Đom đóm mang điều ước bay lên bầu trời và gửi trực tiếp về email thanhcong772003@gmail.com
    ============================================================================ */
-let currentSavedWishText = "";
-let currentSavedWishTime = "";
-
 function initFireflyWishingJar() {
   const wishingInput = document.getElementById('wishing-input');
   const charCount = document.getElementById('wishing-char-num');
   const btnSendWish = document.getElementById('btn-send-wish');
-  const wishingForm = document.getElementById('wishing-form');
-  const wishingResult = document.getElementById('wishing-result');
-  const sentWishTextEl = document.getElementById('sent-wish-text');
-  const sentWishTimeEl = document.getElementById('sent-wish-time');
-  const btnRewriteWish = document.getElementById('btn-rewrite-wish');
   const magicJar = document.getElementById('magic-jar');
+  const sentNotice = document.getElementById('wishing-sent-notice');
+
+  // Xóa sạch dữ liệu điều ước cũ trên localStorage nếu có
+  try {
+    localStorage.removeItem('hpbd_wish_bao_tran');
+  } catch (e) {}
 
   // Đếm ký tự realtime
   if (wishingInput && charCount) {
@@ -644,8 +642,6 @@ function initFireflyWishingJar() {
       // Tạo thời gian gửi
       const now = new Date();
       const timeStr = `${now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })} • Ngày ${now.toLocaleDateString('vi-VN')}`;
-      currentSavedWishText = wishText;
-      currentSavedWishTime = timeStr;
 
       // 1. Kích hoạt bầy đom đóm bay vút lên bầu trời sao
       launchFlyingWishFireflies();
@@ -656,62 +652,32 @@ function initFireflyWishingJar() {
         triggerGrandFireworks();
       }
 
-      // 3. Lưu vào localStorage an toàn trên máy
-      try {
-        localStorage.setItem('hpbd_wish_bao_tran', JSON.stringify({
-          wish: wishText,
-          time: timeStr
-        }));
-      } catch (e) {}
-
-      // 4. Gửi email tự động về thanhcong772003@gmail.com
+      // 3. Gửi email tự động về thanhcong772003@gmail.com
       sendWishEmail(wishText, timeStr);
 
-      // 5. Hiển thị kết quả thành công
-      if (sentWishTextEl) sentWishTextEl.textContent = wishText;
-      if (sentWishTimeEl) sentWishTimeEl.textContent = `Thắp sáng lúc: ${timeStr}`;
-      if (wishingForm) wishingForm.classList.add('hidden');
-      if (wishingResult) wishingResult.classList.remove('hidden');
-    });
-  }
-
-  // Nút viết thêm điều ước khác
-  if (btnRewriteWish) {
-    btnRewriteWish.addEventListener('click', () => {
-      if (wishingForm) wishingForm.classList.remove('hidden');
-      if (wishingResult) wishingResult.classList.add('hidden');
+      // 4. Xóa trắng ô nhập
       if (wishingInput) {
         wishingInput.value = '';
         if (charCount) charCount.textContent = '0';
-        wishingInput.focus();
       }
+
+      // 5. Hiển thị thông báo nhẹ nhàng và đổi trạng thái nút tạm thời
+      if (sentNotice) {
+        sentNotice.classList.remove('hidden');
+        setTimeout(() => {
+          sentNotice.classList.add('hidden');
+        }, 6000);
+      }
+
+      const originalHtml = btnSendWish.innerHTML;
+      btnSendWish.innerHTML = '<span class="btn-icon">✨</span><span class="btn-text">Đã thả đom đóm gửi điều ước! 🌸</span>';
+      btnSendWish.disabled = true;
+      setTimeout(() => {
+        btnSendWish.innerHTML = originalHtml;
+        btnSendWish.disabled = false;
+      }, 3500);
     });
   }
-
-  // Kiểm tra nếu trước đó đã lưu điều ước
-  checkSavedWish();
-}
-
-function checkSavedWish() {
-  try {
-    const raw = localStorage.getItem('hpbd_wish_bao_tran');
-    if (raw) {
-      const data = JSON.parse(raw);
-      if (data && data.wish) {
-        currentSavedWishText = data.wish;
-        currentSavedWishTime = data.time || 'Đã lưu';
-        const wishingForm = document.getElementById('wishing-form');
-        const wishingResult = document.getElementById('wishing-result');
-        const sentWishTextEl = document.getElementById('sent-wish-text');
-        const sentWishTimeEl = document.getElementById('sent-wish-time');
-
-        if (sentWishTextEl) sentWishTextEl.textContent = data.wish;
-        if (sentWishTimeEl) sentWishTimeEl.textContent = `Thắp sáng lúc: ${currentSavedWishTime}`;
-        if (wishingForm) wishingForm.classList.add('hidden');
-        if (wishingResult) wishingResult.classList.remove('hidden');
-      }
-    }
-  } catch (e) {}
 }
 
 function launchFlyingWishFireflies() {
@@ -860,11 +826,7 @@ function initStageInteractions() {
         drawScratchCover();
       }, 180);
     } else if (targetStep === 5) {
-      setTimeout(() => {
-        if (typeof checkSavedWish === 'function') {
-          checkSavedWish();
-        }
-      }, 180);
+      // Bước 5: 3 Lá bài Tarot & Lọ Đom Đóm Điều Ước
     } else if (targetStep === 6) {
       setTimeout(() => {
         if (window.onGardenStageActivated) {

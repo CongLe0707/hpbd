@@ -604,26 +604,9 @@
               </button>
             </div>
 
-            <!-- Thông báo sau khi đã gửi điều ước -->
-            <div class="wishing-result hidden" id="wishing-result" role="status" aria-live="polite">
-              <div class="wishing-success-badge">✨ ĐIỀU ƯỚC ĐÃ ĐƯỢC THẮP SÁNG ✨</div>
-              <div class="sent-wish-quote">
-                <span class="quote-symbol">“</span>
-                <p class="sent-wish-text" id="sent-wish-text"></p>
-                <span class="quote-symbol">”</span>
-              </div>
-              <p class="sent-wish-time" id="sent-wish-time"></p>
-              <p class="wishing-blessing-note">
-                Những chú đom đóm đã mang điều ước của Bảo Trân bay vút lên bầu trời sao. Mong rằng mọi ước nguyện tốt đẹp nhất sẽ sớm thành hiện thực! 🌸
-              </p>
-
-              <div class="wishing-actions">
-                <button type="button" class="btn btn-rewrite-wish" id="btn-rewrite-wish"
-                  aria-label="Viết thêm điều ước khác">
-                  <span class="btn-icon">✍️</span>
-                  <span class="btn-text">Viết thêm điều ước khác</span>
-                </button>
-              </div>
+            <!-- Thông báo nhẹ nhàng khi gửi điều ước thành công -->
+            <div class="wishing-sent-notice hidden" id="wishing-sent-notice" role="status" aria-live="polite">
+              ✨ Đom đóm đã mang điều ước của em bay vào bầu trời sao rồi nhé! 🌸
             </div>
           </div>
         </div>
@@ -800,7 +783,7 @@
   <!-- Canvas vườn hoa chồi lên tiền cảnh (lớp trước viền dưới) -->
   <canvas id="garden-canvas-front" aria-hidden="true"></canvas>
 
-  <script src="script.js?v=10.0"></script>
+  <script src="script.js?v=11.0"></script>
 </body>
 
 </html>
